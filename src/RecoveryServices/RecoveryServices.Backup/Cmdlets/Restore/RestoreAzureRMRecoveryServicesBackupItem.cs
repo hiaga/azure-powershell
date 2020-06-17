@@ -17,6 +17,7 @@ using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using Microsoft.Azure.Management.Internal.Resources.Utilities.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
@@ -201,6 +202,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             HelpMessage = ParamHelpMsgs.RestoreVM.RestoreAsUnmanagedDisks)]
         public SwitchParameter RestoreAsUnmanagedDisks { get; set; }
 
+        /// <summary>
+        /// Switch param to trigger restore to secondary region (Cross Region Restore).
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.RestoreDisk.UseSecondaryReg)]
+        [ValidateNotNullOrEmpty]
+        public SwitchParameter RestoreToSecondaryRegion { get; set; }
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -211,6 +219,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string vaultName = resourceIdentifier.ResourceName;
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
                 Dictionary<Enum, object> providerParameters = new Dictionary<Enum, object>();
+                
+                string secondaryRegion = "";
+                if (RestoreToSecondaryRegion.IsPresent)
+                {
+                    ARSVault vault = ServiceClientAdapter.GetVault(resourceGroupName, vaultName);
+                    secondaryRegion = BackupUtils.regionMap[vault.Location];
+                    providerParameters.Add(CRRParams.SecondaryRegion, secondaryRegion);
+                }
 
                 providerParameters.Add(VaultParams.VaultName, vaultName);
                 providerParameters.Add(VaultParams.ResourceGroupName, resourceGroupName);
@@ -226,6 +242,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 providerParameters.Add(RestoreVMBackupItemParams.RestoreDiskList, RestoreDiskList);
                 providerParameters.Add(RestoreVMBackupItemParams.RestoreOnlyOSDisk, RestoreOnlyOSDisk);
                 providerParameters.Add(RestoreVMBackupItemParams.RestoreAsUnmanagedDisks, RestoreAsUnmanagedDisks);
+                providerParameters.Add(CRRParams.UseSecondaryRegion, RestoreToSecondaryRegion.IsPresent);
+
+                Logger.Instance.WriteDebug("Restore to  Secondary Region :        " + RestoreToSecondaryRegion.IsPresent);
 
                 if (StorageAccountName != null)
                 {
@@ -265,13 +284,31 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     psBackupProvider = providerManager.GetProviderInstance(
                         WorkloadType.MSSQL, BackupManagementType.AzureWorkload);
                 }
+                Logger.Instance.WriteDebug("############## Trigger Restore"); 
                 var jobResponse = psBackupProvider.TriggerRestore();
-                WriteDebug(string.Format("Restore submitted"));
-                HandleCreatedJob(
+                WriteDebug("########################################################################################################       Restore submitted");
+                // WriteDebug("job response : " +  JsonConvert.SerializeObject(jobResponse));
+
+                /*if (RestoreToSecondaryRegion.IsPresent)
+                {
+                    Logger.Instance.WriteDebug("###############################" +
+                        "#########################################################################     Handle CRR Job");
+                    HandleCreatedCRRJob(
+                    jobResponse,
+                    Resources.RestoreOperation,
+                    secondaryRegion,
+                    vaultName: vaultName,
+                    resourceGroupName: resourceGroupName);
+                }
+                else
+                {
+                    HandleCreatedJob(
                     jobResponse,
                     Resources.RestoreOperation,
                     vaultName: vaultName,
                     resourceGroupName: resourceGroupName);
+                }*/
+
             }, ShouldProcess(RecoveryPoint != null ? RecoveryPoint.ItemName : WLRecoveryConfig.ToString(), VerbsData.Restore));
         }
     }

@@ -13,12 +13,9 @@
 // ----------------------------------------------------------------------------------
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Management.Automation;
 using Microsoft.Azure.Commands.RecoveryServices.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
-using Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.WindowsAzure.Commands.Common.CustomAttributes;
 
 namespace Microsoft.Azure.Commands.RecoveryServices
@@ -44,6 +41,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         [Parameter(Mandatory = false)]
         public AzureRmRecoveryServicesBackupStorageRedundancyType? BackupStorageRedundancy { get; set; }
 
+        /// <summary>
+        /// Gets or sets CrossRegionRestore flag.
+        /// </summary>
+        [Parameter(Mandatory = false)]
+        public SwitchParameter EnableCrossRegionRestore { get; set; }
+
         #endregion Parameters
 
         /// <summary>
@@ -55,13 +58,27 @@ namespace Microsoft.Azure.Commands.RecoveryServices
             {
                 try
                 {
-                    if (this.BackupStorageRedundancy.HasValue)
+                    if (this.BackupStorageRedundancy.HasValue) 
+                    {
+                        BackupResourceConfigResource vaultStorageRequest = new BackupResourceConfigResource();                        
+                        BackupResourceConfig properties = new BackupResourceConfig();
+                        vaultStorageRequest.Properties = properties;
+                        vaultStorageRequest.Properties.StorageModelType = BackupStorageRedundancy.ToString();
+                        if (this.EnableCrossRegionRestore.IsPresent)
+                        {
+                            vaultStorageRequest.Properties.CrossRegionRestoreFlag = true;
+                        }
+                        RecoveryServicesClient.UpdateVaultStorageType(
+                            this.Vault.ResourceGroupName, this.Vault.Name, vaultStorageRequest);
+                    }
+                    else if(this.EnableCrossRegionRestore.IsPresent) 
                     {
                         BackupResourceConfigResource vaultStorageRequest = new BackupResourceConfigResource();
                         BackupResourceConfig properties = new BackupResourceConfig();
                         vaultStorageRequest.Properties = properties;
-                        vaultStorageRequest.Properties.StorageModelType = BackupStorageRedundancy.ToString();
-                        RecoveryServicesClient.UpdateVaultStorageType(
+                        vaultStorageRequest.Properties.CrossRegionRestoreFlag = true;
+
+                        RecoveryServicesClient.PatchVaultStorageConfigProperties(
                             this.Vault.ResourceGroupName, this.Vault.Name, vaultStorageRequest);
                     }
                     else

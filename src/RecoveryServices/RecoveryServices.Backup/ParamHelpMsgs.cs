@@ -46,6 +46,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string WorkloadType = "Workload type of the resource. The current supported values are ";
             public const string ConfirmationMessage = "Don't ask for confirmation.";
             public const string BackupManagementType = "The class of resources being protected. Currently the values supported for this cmdlet are ";
+            public const string UseSecondaryReg = "Filters from Secondary Region for Cross Region Restore";
         }
 
         internal static class Policy
@@ -140,6 +141,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string StorageAccountName = "Storage account name where the disks need to be recovered";
             public const string StorageAccountResourceGroupName = "Resource group name of Storage account name where the disks need to be recovered";
             public const string RecoveryConfig = "Recovery config";
+            public const string UseSecondaryReg = "Trigger restore to secondary region (Cross Region Restore)";
         }
 
         internal static class RestoreVM

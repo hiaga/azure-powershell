@@ -1,6 +1,8 @@
-﻿using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
+﻿using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
+using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Management.Automation;
@@ -33,6 +35,30 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         }
 
         /// <summary>
+        /// Get the job PS model after fetching the job object from the service given the job ID.
+        /// </summary>
+        /// <param name="jobId">ID of the job to be fetched</param>
+        /// <returns></returns>
+        public CmdletModel.JobBase GetCrrJobObject(string jobId, string vaultName = null, string resourceGroupName = null)
+        {
+            CrrJobRequest jobRequest = new CrrJobRequest();
+            ARSVault vault = ServiceClientAdapter.GetVault(resourceGroupName, vaultName);
+
+            jobRequest.JobName = jobId;            
+            jobRequest.ResourceId = vault.ID;
+
+            string secondaryRegion = BackupUtils.regionMap[vault.Location];
+
+            JobBase job = JobConversions.GetPSJob(ServiceClientAdapter.GetCRRJobDetails(
+                secondaryRegion,
+                jobRequest));
+            
+            Logger.Instance.WriteDebug("############# fetched job is   " + JsonConvert.SerializeObject(job));
+            
+            return job;
+        }
+
+        /// <summary>
         /// Gets list of job PS models after fetching the job objects from the service given the list of job IDs.
         /// </summary>
         /// <param name="jobIds">List of IDs of jobs to be fetched</param>
@@ -48,6 +74,70 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     resourceGroupName: resourceGroupName));
             }
             return result;
+        }
+
+        /// <summary>
+        /// Based on the response from the service, handles the CRR job created in the service appropriately.
+        /// </summary>
+        /// <param name="response">Response from service</param>
+        /// <param name="operationName">Name of the operation</param>
+        protected void HandleCreatedCRRJob(
+            AzureRestNS.AzureOperationResponse response,
+            string operationName,
+            string secondaryRegion,
+            string vaultName = null,
+            string resourceGroupName = null)
+        {
+            Logger.Instance.WriteDebug("Getting CRR operation Status");
+
+            /*WriteDebug(Resources.TrackingOperationStatusURLForCompletion +
+                            response.Response.Headers.GetAzureAsyncOperationHeader());*/
+
+            WriteDebug(Resources.TrackingOperationStatusURLForCompletion +
+                            response.Response.Headers.GetAzureAsyncOperationHeader());
+
+            var operationStatus = TrackingHelpers.GetOperationStatus(
+                response,
+                operationId => ServiceClientAdapter.GetCrrOperationStatus(
+                    secondaryRegion,
+                    operationId));
+
+            if (response != null && operationStatus != null)
+            {
+                WriteDebug(Resources.FinalOperationStatus + operationStatus.Status);
+
+                if (operationStatus.Properties != null)
+                {
+                    var jobExtendedInfo =
+                        (OperationStatusJobExtendedInfo)operationStatus.Properties;
+                    
+                    Logger.Instance.WriteDebug(" \n\n Job Extended Info(JobId ) :  " + JsonConvert.SerializeObject(jobExtendedInfo));
+
+                    if (jobExtendedInfo.JobId != null)
+                    {
+                        var jobStatusResponse =
+                            (OperationStatusJobExtendedInfo)operationStatus.Properties;
+
+                        Logger.Instance.WriteDebug(" \n\n Job Status Response(JobId ) :  " + JsonConvert.SerializeObject(jobStatusResponse));
+
+                        WriteObject(GetCrrJobObject(
+                            jobStatusResponse.JobId,
+                            vaultName: vaultName,
+                            resourceGroupName: resourceGroupName));
+                    }
+                }
+
+                if (operationStatus.Status == OperationStatusValues.Failed &&
+                    operationStatus.Error != null)
+                {
+                    var errorMessage = string.Format(
+                        Resources.OperationFailed,
+                        operationName,
+                        operationStatus.Error.Code,
+                        operationStatus.Error.Message);
+                    throw new Exception(errorMessage);
+                }
+            }
         }
 
         /// <summary>

@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using Newtonsoft.Json;
 using RestAzureNS = Microsoft.Rest.Azure;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 
@@ -34,6 +35,21 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             return BmsAdapter.Client.BackupOperationStatuses.GetWithHttpMessagesAsync(
                 vaultName ?? BmsAdapter.GetResourceName(),
                 resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
+                operationId).Result;
+        }
+
+        /// <summary>
+        /// Gets result of a generic operation on the protected item using the operation ID
+        /// </summary>
+        /// <param name="operationId">ID of the operation in progress</param>
+        /// <returns>Operation status response returned by the service</returns>
+        public RestAzureNS.AzureOperationResponse<ServiceClientModel.OperationStatus>
+            GetCrrOperationStatus(
+                string secondaryRegion,
+                string operationId)
+        {
+            return BmsAdapter.Client.CrrOperationStatus.GetWithHttpMessagesAsync(
+                secondaryRegion,
                 operationId).Result;
         }
 
@@ -128,12 +144,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string vaultName = null,
             string resourceGroupName = null)
         {
-            PrepareDataMoveResponse prepareResponse = BmsAdapter.Client.BMSPrepareDataMoveOperationResult.BeginGetWithHttpMessagesAsync(
+            var prepareResponseBase = BmsAdapter.Client.BMSPrepareDataMoveOperationResult.BeginGetWithHttpMessagesAsync(
                                 vaultName,
                                 resourceGroupName,
-                                operationId).Result.Body;            
-            
-            return  prepareResponse;
+                                operationId).Result.Body;
+
+            var prepareResponseSerialized = JsonConvert.SerializeObject(prepareResponseBase);
+            // Logger.Instance.WriteDebug("VSCORR Serialized:  " + prepareResponseDeserialized);
+            PrepareDataMoveResponse prepareResponseDerived = JsonConvert.DeserializeObject<PrepareDataMoveResponse>(prepareResponseSerialized);
+            // Logger.Instance.WriteDebug(" PDMR  " + JsonConvert.SerializeObject(prepareResponseDerived));
+
+            return prepareResponseDerived;
         }
 
         /// <summary>
