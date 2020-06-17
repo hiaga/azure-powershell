@@ -29,14 +29,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         public BackupResourceVaultConfigResource SetVaultProperty(string vaultName, string resourceGroupName,
             BackupResourceVaultConfigResource param)
         {
-            return BmsAdapter.Client.BackupResourceVaultConfigs.UpdateWithHttpMessagesAsync(
-                vaultName, resourceGroupName, param).Result.Body;
+            return null; /* BmsAdapter.Client.BackupResourceVaultConfigs.UpdateWithHttpMessagesAsync(
+                vaultName, resourceGroupName, param).Result.Body;*/
         }
 
         public BackupResourceVaultConfigResource GetVaultProperty(string vaultName, string resourceGroupName)
         {
-            return BmsAdapter.Client.BackupResourceVaultConfigs.GetWithHttpMessagesAsync(
-                vaultName, resourceGroupName).Result.Body;
+            return null; /* BmsAdapter.Client.BackupResourceVaultConfigs.GetWithHttpMessagesAsync(
+                vaultName, resourceGroupName).Result.Body;*/
         }
 
         /// <summary>  
@@ -49,6 +49,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         {
             return BmsAdapter.Client.BackupResourceStorageConfigs.GetWithHttpMessagesAsync(
                 vaultName, resouceGroupName).Result.Body;
+        }
+
+        /// <summary>
+        /// Method to get Azure Recovery Services Vault
+        /// </summary>
+        /// <param name="resouceGroupName">Name of the resouce group</param>
+        /// <param name="resourceName">Name of the resource</param>
+        /// <returns>vault response object.</returns>
+        public ARSVault GetVault(string resouceGroupName, string resourceName)
+        {
+            return new ARSVault(RSAdapter.Client.Vaults.GetWithHttpMessagesAsync(
+                resouceGroupName, resourceName).Result.Body);
         }
     }
 }

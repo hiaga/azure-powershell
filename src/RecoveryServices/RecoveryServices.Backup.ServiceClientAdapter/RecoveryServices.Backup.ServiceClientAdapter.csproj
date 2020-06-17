@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <PsModuleName>RecoveryServices</PsModuleName>
@@ -13,7 +13,9 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Azure.Management.RecoveryServices" Version="4.3.0-preview" />
-	<PackageReference Include="Microsoft.Azure.Management.RecoveryServices.Backup" Version="4.1.2-preview" />
+	<Reference Include="Microsoft.Azure.Management.RecoveryServices.Backup">
+		<HintPath>..\finalSDK\Microsoft.Azure.Management.RecoveryServices.Backup.dll</HintPath>
+	</Reference>
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
   </ItemGroup>
 

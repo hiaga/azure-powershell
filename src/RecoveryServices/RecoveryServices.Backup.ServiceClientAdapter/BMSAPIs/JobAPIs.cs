@@ -15,8 +15,10 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
+using Microsoft.Azure.Management.RecoveryServices.Backup;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Rest.Azure.OData;
+using Newtonsoft.Json;
 using RestAzureNS = Microsoft.Rest.Azure;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
@@ -40,6 +42,54 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
         }
 
+        /// <summary>
+        /// Gets a CRR job details
+        /// </summary>
+        /// <param name="jobId">ID of the job</param>
+        /// <returns>Job response returned by the service</returns>
+        public JobResource GetCRRJobDetails(
+            string region,
+            CrrJobRequest jobRequest
+            )
+        {
+            Logger.Instance.WriteDebug("###############  Fetching JD now  .....");
+            var crrJobDetails =  BmsAdapter.Client.BackupCrrJobDetails.GetWithHttpMessagesAsync(region, jobRequest).Result.Body; // return
+
+            Logger.Instance.WriteDebug("############### Done Fetching JD  ..... jd == " + JsonConvert.SerializeObject(crrJobDetails));
+            return crrJobDetails;
+        }
+
+        public List<JobResource> GetCrrJobs(string vaultId,
+            string jobId,
+            string status,
+            string operation,
+            DateTime startTime,
+            DateTime endTime,
+            string backupManagementType, 
+            string azureRegion = null)
+        {
+            ODataQuery<JobQueryObject> queryFilter = GetQueryObject(
+                backupManagementType,
+                startTime,
+                endTime,
+                jobId,
+                status, 
+                operation);
+            
+            CrrJobRequest crrJobRequest = new CrrJobRequest();
+            crrJobRequest.ResourceId = vaultId;
+            
+            Func<RestAzureNS.IPage<JobResource>> listAsync =
+                () => BmsAdapter.Client.BackupCrrJobs.ListWithHttpMessagesAsync(azureRegion, crrJobRequest, queryFilter,  cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;   //  , crrJobRequest , queryFilter
+
+            Func<string, RestAzureNS.IPage<JobResource>> listNextAsync =
+                nextLink => BmsAdapter.Client.BackupJobs.ListNextWithHttpMessagesAsync(
+                    nextLink,
+                    cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
+
+            return HelperUtils.GetPagedList(listAsync, listNextAsync);
+        }
+                
         /// <summary>
         /// Lists jobs according to the parameters
         /// </summary>

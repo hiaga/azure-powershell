@@ -21,6 +21,7 @@ using Microsoft.Azure.Management.Internal.Resources.Models;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Rest;
 using Microsoft.Rest.Azure.OData;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -389,6 +390,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             string[] restoreDiskList = (string[])ProviderData[RestoreVMBackupItemParams.RestoreDiskList];
             SwitchParameter restoreOnlyOSDisk = (SwitchParameter)ProviderData[RestoreVMBackupItemParams.RestoreOnlyOSDisk];
             SwitchParameter restoreAsUnmanagedDisks = (SwitchParameter)ProviderData[RestoreVMBackupItemParams.RestoreAsUnmanagedDisks];
+            bool useSecondaryRegion = (bool)ProviderData[CRRParams.UseSecondaryRegion];                        
+            String secondaryRegion = useSecondaryRegion ? (string)ProviderData[CRRParams.SecondaryRegion]: null;
+
+            Logger.Instance.WriteDebug("#### Sec reg received :    " + useSecondaryRegion);
 
             Dictionary<UriEnums, string> uriDict = HelperUtils.ParseUri(rp.Id);
             string containerUri = HelperUtils.GetContainerUri(uriDict, rp.Id);
@@ -450,15 +455,49 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
             RestoreRequestResource triggerRestoreRequest = new RestoreRequestResource();
             triggerRestoreRequest.Properties = restoreRequest;
+            
+            if (useSecondaryRegion)
+            {
+                // get access token
+                CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken( rp, vaultName: vaultName, resourceGroupName: resourceGroupName);
 
-            var response = ServiceClientAdapter.RestoreDisk(
-                rp,
-                storageAccountResource.Location,
-                triggerRestoreRequest,
-                vaultName: vaultName,
-                resourceGroupName: resourceGroupName,
-                vaultLocation: vaultLocation ?? ServiceClientAdapter.BmsAdapter.GetResourceLocation());
-            return response;
+                // Iaas VM CRR Request
+                Logger.Instance.WriteDebug(" Triggering Restore to secondary region: " + secondaryRegion);
+                restoreRequest.Region = secondaryRegion;
+                restoreRequest.AffinityGroup = "";                 
+                
+                //CrossRegionRestoreRequestResource triggerCRRRestoreRequest = new CrossRegionRestoreRequestResource();
+                CrossRegionRestoreRequest crrRestoreRequest = new CrossRegionRestoreRequest();
+                crrRestoreRequest.CrossRegionRestoreAccessDetails = accessToken;
+                crrRestoreRequest.RestoreRequest = restoreRequest;
+                
+                //triggerCRRRestoreRequest.Properties = crrRestoreRequest;
+
+                //Logger.Instance.WriteDebug("#################### trigger CRR with :  " + JsonConvert.SerializeObject(triggerCRRRestoreRequest));
+
+                var response = ServiceClientAdapter.RestoreDiskSecondryRegion(
+                    rp,
+                    storageAccountResource.Location,
+                    crrRestoreRequest,
+                    vaultName: vaultName,
+                    resourceGroupName: resourceGroupName,
+                    secondaryRegion: secondaryRegion);
+                /*Logger.Instance.WriteDebug("\n \n\n ############################################################" +
+                    " Restore response received : "  + JsonConvert.SerializeObject(response) + "\n\n\n\n");*/
+                return response;
+            }
+            else
+            {
+                Logger.Instance.WriteDebug("################################################  Going into normal Restore");
+                var response = ServiceClientAdapter.RestoreDisk(
+                    rp,
+                    storageAccountResource.Location,
+                    triggerRestoreRequest,
+                    vaultName: vaultName,
+                    resourceGroupName: resourceGroupName,
+                    vaultLocation: vaultLocation ?? ServiceClientAdapter.BmsAdapter.GetResourceLocation());
+                return response;
+            }    
         }
 
         public ProtectedItemResource GetProtectedItem()
@@ -824,9 +863,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 (CmdletModel.WorkloadType)ProviderData[ItemParams.WorkloadType];
             ItemDeleteState deleteState =
                (ItemDeleteState)ProviderData[ItemParams.DeleteState];
-
+            bool UseSecondaryRegion = (bool)ProviderData[CRRParams.UseSecondaryRegion];            
             PolicyBase policy = (PolicyBase)ProviderData[PolicyParams.ProtectionPolicy];
 
+            Logger.Instance.WriteDebug("#######   Use Secondary Region :        " + UseSecondaryRegion);
             // 1. Filter by container
             List<ProtectedItemResource> protectedItems = AzureWorkloadProviderHelper.ListProtectedItemsByContainer(
                 vaultName,
@@ -834,7 +874,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 container,
                 policy,
                 ServiceClientModel.BackupManagementType.AzureIaasVM,
-                DataSourceType.VM);
+                DataSourceType.VM,
+                UseSecondaryRegion);
 
             // 2. Filter by item name
             List<ItemBase> itemModels = AzureWorkloadProviderHelper.ListProtectedItemsByItemName(
