@@ -29,6 +29,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     [Cmdlet("Disable", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesBackupAutoProtection", SupportsShouldProcess = true), OutputType(typeof(bool))]
     public class DisableAzureRmRecoveryServicesBackupAutoProtection : RSBackupVaultCmdletBase
     {
+        private const string validBMTypes = "AzureWorkload";
+        private const string validWorkloadTypes = "MSSQL";
+
         /// <summary>
         /// Name of the Azure VM whose representative item needs to be protected.
         /// </summary>
@@ -39,14 +42,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <summary>
         /// Backup management type of the items to be returned.
         /// </summary>
-        [Parameter(Mandatory = true, Position = 1, HelpMessage = ParamHelpMsgs.Common.BackupManagementType)]
+        [Parameter(Mandatory = true, Position = 1, HelpMessage = ParamHelpMsgs.Common.BackupManagementType + validBMTypes)]
         [ValidateNotNullOrEmpty]
         public Models.BackupManagementType BackupManagementType { get; set; }
 
         /// <summary>
         /// Backup management type of the items to be returned.
         /// </summary>
-        [Parameter(Mandatory = true, Position = 2, HelpMessage = ParamHelpMsgs.Common.WorkloadType)]
+        [Parameter(Mandatory = true, Position = 2, HelpMessage = ParamHelpMsgs.Common.WorkloadType + validWorkloadTypes)]
         [ValidateNotNullOrEmpty]
         public Models.WorkloadType WorkloadType { get; set; }
 

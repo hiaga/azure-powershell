@@ -27,11 +27,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesBackupRetentionPolicyObject"),OutputType(typeof(RetentionPolicyBase))]
     public class GetAzureRmRecoveryServicesBackupRetentionPolicyObject : RecoveryServicesBackupCmdletBase
     {
+        private const string validBMTypes = "AzureVM, AzureWorkload, AzureStorage";
+        private const string validWorkloadTypes = "AzureVM, MSSQL, AzureFiles";
+
         /// <summary>
         /// Workload type of the policy to be created.
         /// </summary>
         [Parameter(Mandatory = true, Position = 0,
-            HelpMessage = ParamHelpMsgs.Common.WorkloadType)]
+            HelpMessage = ParamHelpMsgs.Common.WorkloadType + validWorkloadTypes)]
         [ValidateNotNullOrEmpty]
         public WorkloadType WorkloadType { get; set; }
 
@@ -39,7 +42,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Backup management type of the policy to be created.
         /// </summary>
         [Parameter(Mandatory = false, Position = 1,
-            HelpMessage = ParamHelpMsgs.Common.BackupManagementType)]
+            HelpMessage = ParamHelpMsgs.Common.BackupManagementType + validBMTypes)]
         [ValidateNotNullOrEmpty]
         public BackupManagementType? BackupManagementType { get; set; }
 

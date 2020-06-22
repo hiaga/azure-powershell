@@ -31,6 +31,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         OutputType(typeof(ContainerBase))]
     public class InitializeAzureRmRecoveryServicesBackupProtectableItem : RSBackupVaultCmdletBase
     {
+        private const string validWorkloadTypes = "AzureVM, WindowsServer, AzureFiles, MSSQL";
+
         /// <summary>
         /// Container base
         /// </summary>
@@ -43,14 +45,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Workload type of the item to be returned.
         /// </summary>
         [Parameter(Mandatory = true, Position = 1,
-            HelpMessage = ParamHelpMsgs.Common.WorkloadType)]
+            HelpMessage = ParamHelpMsgs.Common.WorkloadType + validWorkloadTypes )]
         [ValidateNotNullOrEmpty]
         public Models.WorkloadType WorkloadType { get; set; }
 
         /// <summary>
         /// Return the container to be deleted
         /// </summary>
-        [Parameter(Mandatory = false, HelpMessage = "Return the container to be deleted.")]
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.ProtectableItem.ItemContainer)]
         public SwitchParameter PassThru { get; set; }
 
         public override void ExecuteCmdlet()
