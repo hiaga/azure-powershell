@@ -62,7 +62,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string vaultName = null,
             string resourceGroupName = null)
         {
-            ODataQuery<JobQueryObject> queryFilter = GetQueryObject(
+             ODataQuery<JobQueryObject> queryFilter = GetQueryObject(
                 backupManagementType,
                 startTime,
                 endTime,
