@@ -148,8 +148,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     To,
                     Status,
                     Operation,
-                    ServiceClientHelpers.GetServiceClientBackupManagementType(
-                        BackupManagementType)));
+                    BackupManagementType));
 
                 int resultCount = 0;
 
@@ -163,8 +162,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         BackupManagementType),
                     vaultName: vaultName,
                     resourceGroupName: resourceGroupName);
-
-                WriteDebug(string.Format("################## Adapter Response  - {0} " , adapterResponse));
 
                 JobConversions.AddServiceClientJobsToPSList(
                     adapterResponse, result, ref resultCount);

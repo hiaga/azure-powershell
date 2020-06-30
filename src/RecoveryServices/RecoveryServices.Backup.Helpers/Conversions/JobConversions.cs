@@ -160,6 +160,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             return response;
         }
 
+        /// <summary>
+        /// Creates the powershell MabJob object from service response.
+        /// </summary>
         private static CmdletModel.JobBase GetPSMabJob(JobResource serviceClientJob)
         {
             CmdletModel.MabJob response;
@@ -174,7 +177,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             {
                 response = new CmdletModel.MabJob();
             }
-
+            
+            // Transfer values from service job object to powershell job object. 
             response.JobId = GetLastIdFromFullId(serviceClientJob.Id);
             response.StartTime = GetJobStartTime(mabJob.StartTime);
             response.EndTime = mabJob.EndTime;

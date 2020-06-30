@@ -28,7 +28,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     {
         /// <summary>
         /// Context sensitive error message that might be helpful in debugging the issue. 
-        /// Mostly this contains trace dumps from File Share.
         /// </summary>
         public string DynamicErrorMessage { get; set; }
 
