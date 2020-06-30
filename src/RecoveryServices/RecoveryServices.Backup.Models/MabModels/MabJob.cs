@@ -19,7 +19,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     /// <summary>
     /// Represents MAB specific job class.
     /// </summary>
-    public class MabJob : AzureJob { }
+    public class MabJob : AzureJob { 
+
+        /// <summary>
+        /// Holds the error message string returned from Service.
+        /// </summary>
+        public string ErrorMessage { get; set; }
+    
+    }
 
     /// <summary>
     /// MAB specific job details class.

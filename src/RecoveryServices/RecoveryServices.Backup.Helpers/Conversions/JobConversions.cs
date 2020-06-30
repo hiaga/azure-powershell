@@ -196,6 +196,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 foreach (var mabError in mabJob.ErrorDetails)
                 {
                     response.ErrorDetails.Add(GetPSMabErrorInfo(mabError));
+                    response.ErrorMessage =  (response.ErrorMessage != null)?  response.ErrorMessage + ("\n " + mabError.ErrorString) : mabError.ErrorString ;
                 }
             }
 
