@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using Newtonsoft.Json;
 using RestAzureNS = Microsoft.Rest.Azure;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 
@@ -128,12 +129,31 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string vaultName = null,
             string resourceGroupName = null)
         {
-            PrepareDataMoveResponse prepareResponse = BmsAdapter.Client.BMSPrepareDataMoveOperationResult.BeginGetWithHttpMessagesAsync(
+            var prepareResponse = BmsAdapter.Client.BMSPrepareDataMoveOperationResult.BeginGetWithHttpMessagesAsync(
                                 vaultName,
                                 resourceGroupName,
-                                operationId).Result.Body;            
-            
-            return  prepareResponse;
+                                operationId).Result.Body;
+
+            var json = JsonConvert.SerializeObject(prepareResponse);
+            Logger.Instance.WriteDebug("json:  " + json);
+            Logger.Instance.WriteDebug("type: " + prepareResponse.GetType());
+
+            if (prepareResponse is PrepareDataMoveResponse)
+            {
+                Logger.Instance.WriteDebug("PrepareDataMoveResponse");
+            }
+            if (prepareResponse is VaultStorageConfigOperationResultResponse)
+            {
+                Logger.Instance.WriteDebug("VaultStorageConfigOperationResultResponse");
+            }
+
+            PrepareDataMoveResponse derived = JsonConvert.DeserializeObject<PrepareDataMoveResponse>(json);
+            Logger.Instance.WriteDebug(" " + JsonConvert.SerializeObject(derived));
+
+            PrepareDataMoveResponse prepareDataMoveResponse = (PrepareDataMoveResponse)prepareResponse;
+            Logger.Instance.WriteDebug("CorrelationId:  " + prepareDataMoveResponse.CorrelationId);
+
+            return  derived;
         }
 
         /// <summary>
