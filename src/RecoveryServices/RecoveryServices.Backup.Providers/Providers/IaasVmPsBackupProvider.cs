@@ -389,6 +389,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             string[] restoreDiskList = (string[])ProviderData[RestoreVMBackupItemParams.RestoreDiskList];
             SwitchParameter restoreOnlyOSDisk = (SwitchParameter)ProviderData[RestoreVMBackupItemParams.RestoreOnlyOSDisk];
             SwitchParameter restoreAsUnmanagedDisks = (SwitchParameter)ProviderData[RestoreVMBackupItemParams.RestoreAsUnmanagedDisks];
+            String DiskEncryptionSet = (string)ProviderData[RestoreVMBackupItemParams.DiskEncryptionSetId];
 
             Dictionary<UriEnums, string> uriDict = HelperUtils.ParseUri(rp.Id);
             string containerUri = HelperUtils.GetContainerUri(uriDict, rp.Id);
@@ -445,7 +446,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     "/subscriptions/" + ServiceClientAdapter.SubscriptionId + "/resourceGroups/" + targetResourceGroupName :
                     null,
                 OriginalStorageAccountOption = useOsa,
-                RestoreDiskLunList = restoreDiskLUNS
+                RestoreDiskLunList = restoreDiskLUNS,
+                DiskEncryptionSetId = DiskEncryptionSet
             };
 
             RestoreRequestResource triggerRestoreRequest = new RestoreRequestResource();

@@ -331,7 +331,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// <summary>
         /// Data move between source and target vaults
         /// </summary>
-        BackupDataMove
+        BackupDataMove,
+
+        /// <summary>
+        /// update the customer managed key
+        /// </summary>
+        UpdateCustomerManagedKey
     }
 
     /// <summary>

@@ -12,6 +12,35 @@
 # limitations under the License.
 # ----------------------------------------------------------------------------------
 
+function Test-AzureRSVaultMSI
+{
+	$location = "southeastasia"
+	$resourceGroup = Create-ResourceGroup $location 22
+	
+	# $vm = Create-VM $resourceGroup $location 4
+	$vault = Create-RecoveryServicesVault $resourceGroup $location
+	
+	# Enable-Protection $vault $vm
+		
+	# disable soft delete for successful cleanup
+	Set-AzRecoveryServicesVaultProperty -VaultId $vault.ID -SoftDeleteFeatureState "Disable"
+	
+	# get Identity - verify Empty 
+	$msi = Get-AzRecoveryServicesVaultIdentity -IdentityType SystemAssigned -VaultId $vault.ID
+	Assert-Empty { $msi }
+	# Assert-True { $msi -eq "" }
+	# $out = $msi ?? "msi is empty"
+	# Assert-True {$out -contains "msi is empty"}
+
+	# set Identity - verify System assigned
+	$vault1 = Add-AzRecoveryServicesVaultIdentity -IdentityType "SystemAssigned" -VaultId $vault.ID
+	Assert-True { $vault1.Identity.Type -eq "SystemAssigned" }
+	
+	# remove Identity - verify empty again 
+	$rm = Remove-AzRecoveryServicesVaultIdentity -VaultId $vault.ID
+	Assert-True { $rm.Type -eq "None" }	
+}
+
 function Test-AzureBackupDataMove
 {
 	$sourceLocation = "eastus2euap"

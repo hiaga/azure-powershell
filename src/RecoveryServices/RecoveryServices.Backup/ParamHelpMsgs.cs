@@ -46,6 +46,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string WorkloadType = "Workload type of the resource. The current supported values are ";
             public const string ConfirmationMessage = "Don't ask for confirmation.";
             public const string BackupManagementType = "The class of resources being protected. Currently the values supported for this cmdlet are ";
+            public const string IdentityType = "The MSI type assigned to Recovery Services Vault"; 
         }
 
         internal static class Policy
@@ -190,6 +191,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string ForceOption = "Forces the data move operation (prevents confirmation dialog). This parameter is optional.";
             public const string CmdletOutput = "Please monitor the operation using Get-AzRecoveryServicesBackupJob cmdlet";
             public const string RetryOnlyFailed = "Switch parameter to try data move only for containers in the source vault which are not yet moved.";
+        }
+
+        internal static class Encryption
+        {
+            public const string EncryptionKeyName = "Name of the encryption key to be used.";
+            public const string EncryptionKeyVaultName = "Name of the Key vault where encryption key is stored.";
+            public const string EncryptionKeyVersion  = "Version of the encryption key. Required only if auto-update is to be disabled.";
+            public const string KeyVaultSubscriptionId = "Subscription Id where the key vault is created.";
+            public const string InfrastructureEncryption = "Enables the Infrastructure level encryption.";
+
         }
     }
 }

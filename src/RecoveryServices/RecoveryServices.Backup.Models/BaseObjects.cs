@@ -38,7 +38,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// <summary>
         /// Type of the backup management agent.
         /// </summary>
-        public BackupManagementType BackupManagementType { get; set; }
+        public BackupManagementType? BackupManagementType { get; set; }
 
         public ManagementContext() { }
 
