@@ -16,6 +16,7 @@ using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using RestAzureNS = Microsoft.Rest.Azure;
@@ -61,6 +62,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                 recoveryPointId,
                 triggerRestoreRequest,
                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
+
+            Logger.Instance.WriteDebug("##############  Trigger Restore Response "+ JsonConvert.SerializeObject(response));
 
             return response;
         }
