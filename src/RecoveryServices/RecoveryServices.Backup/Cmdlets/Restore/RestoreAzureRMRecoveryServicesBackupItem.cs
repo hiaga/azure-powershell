@@ -210,10 +210,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Disk Encryption Set to encrypt the restored VM   // add more param sets 
         /// </summary>
         [Parameter(Mandatory = false, ParameterSetName = AzureVMParameterSet, 
-            HelpMessage = ParamHelpMsgs.RestoreFS.MultipleSourceFilePath)]
+            HelpMessage = ParamHelpMsgs.Encryption.DES)]
         [Parameter(Mandatory = false, ParameterSetName = AzureVMManagedDiskParameterSet,
-            HelpMessage = ParamHelpMsgs.RestoreFS.MultipleSourceFilePath)]
-      /*  [Parameter(Mandatory = false, ParameterSetName = AzureVMRestoreManagedAsUnmanaged,
+            HelpMessage = ParamHelpMsgs.Encryption.DES)]
+        /* [Parameter(Mandatory = false, ParameterSetName = AzureVMRestoreManagedAsUnmanaged,
             HelpMessage = ParamHelpMsgs.RestoreFS.MultipleSourceFilePath)]*/
         public string DiskEncryptionSetId { get; set; }
 

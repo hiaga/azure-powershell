@@ -24,9 +24,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     /// <summary>
     /// Used to get RecoveryServices Vault properties
     /// </summary>
-    [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesVaultProperty"), OutputType(typeof(BackupResourceVaultConfig))]
+    [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesVaultProperty"), OutputType(typeof(Object))]
     public class GetAzureRmRecoveryServicesVaultProperties : RSBackupVaultCmdletBase
     {
+        [Parameter(Mandatory = false, ValueFromPipeline = false, Position = 0, HelpMessage = ParamHelpMsgs.Encryption.EncryptionSettings)]
+        [ValidateNotNullOrEmpty]
+        public SwitchParameter EncryptionSettings;
+
         public override void ExecuteCmdlet()
         {
             try
@@ -35,8 +39,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string vaultName = resourceIdentifier.ResourceName;
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
-                BackupResourceVaultConfigResource result = ServiceClientAdapter.GetVaultProperty(vaultName, resourceGroupName);
-                WriteObject(result.Properties);
+                if(EncryptionSettings.IsPresent)
+                {
+                    BackupResourceEncryptionConfigResource vaultEncryptionSettings = ServiceClientAdapter.GetVaultEncryptionConfig(resourceGroupName, vaultName);
+                    WriteObject(vaultEncryptionSettings);
+                }
+                else
+                {
+                    BackupResourceVaultConfigResource result = ServiceClientAdapter.GetVaultProperty(vaultName, resourceGroupName);
+                    WriteObject(result.Properties);
+                }                
             }
             catch (Exception exception)
             {

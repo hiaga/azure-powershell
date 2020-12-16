@@ -12,6 +12,7 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using Microsoft.Azure.Management.WebSites.Version2016_09_01.Models;
 using System;
 using System.Configuration.Internal;
 using System.Runtime.CompilerServices;
@@ -46,7 +47,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string WorkloadType = "Workload type of the resource. The current supported values are ";
             public const string ConfirmationMessage = "Don't ask for confirmation.";
             public const string BackupManagementType = "The class of resources being protected. Currently the values supported for this cmdlet are ";
-            public const string IdentityType = "The MSI type assigned to Recovery Services Vault"; 
+            public const string IdentityType = "The MSI type assigned to Recovery Services Vault. Input 'None' if MSI has to be removed."; 
         }
 
         internal static class Policy
@@ -198,9 +199,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string EncryptionKeyName = "Name of the encryption key to be used.";
             public const string EncryptionKeyVaultName = "Name of the Key vault where encryption key is stored.";
             public const string EncryptionKeyVersion  = "Version of the encryption key. Required only if auto-update is to be disabled.";
-            public const string KeyVaultSubscriptionId = "Subscription Id where the key vault is created.";
-            public const string InfrastructureEncryption = "Enables the Infrastructure level encryption.";
 
+            public const string EncryptionSettings = "Get CMK vault encryption settings."; 
+            public const string EncryptionKeyID = "KeyID of the encryption key to be used for CMK.";
+            public const string KeyVaultSubscriptionId = "Subscription Id where the key vault is created.";
+            public const string InfrastructureEncryption = "Enables infrastructure encryption on this vault. Infrastructure encryption must be enabled when configuring encryption" +
+                " of the vault for the first time. Once enabled, infrastructure encryption cannot be disabled. ";
+            public const string DES = "The disk encryption set is used to encrypt disks at rest when they are created from vault-based recovery points. Please ensure that the disk encryption" +
+                " set also has access to the relevant key vault. For instant restores, where data is restored from snapshot recovery points, the currently active disk encryption set is automatically" +
+                " used to encrypt newly created disks.";
         }
     }
 }

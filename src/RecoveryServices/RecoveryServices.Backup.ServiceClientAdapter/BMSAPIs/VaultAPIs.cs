@@ -79,21 +79,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             return BmsAdapter.Client.BackupResourceEncryptionConfigs.UpdateWithHttpMessagesAsync(
                 vaultName, resouceGroupName, encryptionConfigResource).Result;
         }
-
-        /// <summary>  
-        /// Method to create or update Recovery Services Vault.
-        /// </summary>  
-        /// <param name="resouceGroupName">Name of the resouce group</param>  
-        /// <param name="vaultName">Name of the vault</param>  
-        /// <param name="vault">patch vault object to patch the recovery services Vault</param>
-        /// <returns>Azure Recovery Services Vault.</returns> 
-        public Vault UpdateRSVault(string resouceGroupName, string vaultName, PatchVault vault)
-        {
-            var response = RSAdapter.Client.Vaults.UpdateWithHttpMessagesAsync(resouceGroupName, vaultName, vault,
-                cancellationToken: RSAdapter.CmdletCancellationToken).Result;
-            return response.Body;
-        }
-
+        
         /// <summary>  
         /// Method to get Recovery Services Vault.
         /// </summary>  
