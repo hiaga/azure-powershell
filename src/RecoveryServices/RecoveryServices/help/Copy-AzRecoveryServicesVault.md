@@ -37,7 +37,6 @@ The second command triggers a complete data move from vault1 to vault2.
 PS C:\> $sourceVault = Get-AzRecoveryServicesVault -ResourceGroupName "rgName1" -Name "vault1"
 PS C:\> $targetVault = Get-AzRecoveryServicesVault -ResourceGroupName "rgName2" -Name "vault2"
 PS C:\> Copy-AzRecoveryServicesVault -SourceVault $sourceVault -TargetVault $targetVault -RetryOnlyFailed
-<<<<<<< HEAD
 ```
 
 The first two cmdlets fetch Recovery Services Vault - vault1 and vault2 respectively.

@@ -22,7 +22,6 @@ using Microsoft.Rest.Azure.OData;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Management.Automation;
 using BackupManagementType = Microsoft.Azure.Management.RecoveryServices.Backup.Models.BackupManagementType;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using ScheduleRunType = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models.ScheduleRunType;
@@ -116,9 +115,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 new ODataQuery<ProtectedItemQueryObject>(
                     q => q.BackupManagementType
                             == backupManagementType &&
-                         q.ItemType == dataSourceType);
-
-            
+                         q.ItemType == dataSourceType);            
 
             List<ProtectedItemResource> protectedItems = new List<ProtectedItemResource>();
             string skipToken = null;
@@ -126,7 +123,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             // fetching backup items from secondary region
             if (UseSecondaryRegion)
             {
-                Logger.Instance.WriteDebug("#######   CRRRRRRRRRRRRRRRR");
                 var listResponse = ServiceClientAdapter.ListCrrProtectedItem(
                 queryParams,
                 skipToken,
@@ -136,7 +132,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             }
             else
             {
-                Logger.Instance.WriteDebug("#######   Backup Item ... ");
                 var listResponse = ServiceClientAdapter.ListProtectedItem(
                 queryParams,
                 skipToken,

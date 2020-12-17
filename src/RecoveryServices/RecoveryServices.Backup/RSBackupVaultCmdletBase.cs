@@ -53,8 +53,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 secondaryRegion,
                 jobRequest));
             
-            Logger.Instance.WriteDebug("############# fetched job is   " + JsonConvert.SerializeObject(job));
-            
             return job;
         }
 

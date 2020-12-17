@@ -468,12 +468,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 AzureRecoveryPoint rp = (AzureRecoveryPoint)wLRecoveryConfig.RecoveryPoint;
 
                 // get access token
-                CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, vaultName: vaultName, resourceGroupName: resourceGroupName);
+                CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, secondaryRegion, vaultName: vaultName, resourceGroupName: resourceGroupName);
 
                 // AzureWorkload  CRR Request
-                Logger.Instance.WriteDebug(" Triggering Restore to secondary region: " + secondaryRegion);
-                /*triggerRestoreRequest.Properties.Region = secondaryRegion;
-                triggerRestoreRequest.Properties.AffinityGroup = "";*/                
+                Logger.Instance.WriteDebug("Triggering Restore to secondary region: " + secondaryRegion);
 
                 CrossRegionRestoreRequest crrRestoreRequest = new CrossRegionRestoreRequest();
                 crrRestoreRequest.CrossRegionRestoreAccessDetails = accessToken;

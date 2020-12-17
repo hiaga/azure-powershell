@@ -150,10 +150,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                                 operationId).Result.Body;
 
             var prepareResponseSerialized = JsonConvert.SerializeObject(prepareResponseBase);
-            // Logger.Instance.WriteDebug("VSCORR Serialized:  " + prepareResponseDeserialized);
             PrepareDataMoveResponse prepareResponseDerived = JsonConvert.DeserializeObject<PrepareDataMoveResponse>(prepareResponseSerialized);
-            // Logger.Instance.WriteDebug(" PDMR  " + JsonConvert.SerializeObject(prepareResponseDerived));
-
+            
             return prepareResponseDerived;
         }
 

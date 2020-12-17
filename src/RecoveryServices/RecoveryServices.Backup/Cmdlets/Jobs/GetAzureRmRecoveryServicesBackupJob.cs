@@ -155,7 +155,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 List<JobBase> result = new List<JobBase>();
 
                 WriteDebug(string.Format("Filters provided are: StartTime - {0} " +
-                    "EndTime - {1} Status - {2} Operation - {3} Type - {4} UseSecondaryRegion -{5}", 
+                    "EndTime - {1} Status - {2} Operation - {3} Type - {4} UseSecondaryRegion - {5}", 
                     From,
                     To,
                     Status,
@@ -168,8 +168,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 if (UseSecondaryRegion.IsPresent)
                 {
                     ARSVault vault = ServiceClientAdapter.GetVault(resourceGroupName, vaultName);
+                    string secondaryRegion = BackupUtils.regionMap[vault.Location];
 
-                    WriteDebug(" Getting CRR jobs from secondary region: " + BackupUtils.regionMap[vault.Location] + " \n");
+                    WriteDebug(" Getting CRR jobs from secondary region: " + secondaryRegion);
                     var adapterResponse = ServiceClientAdapter.GetCrrJobs(VaultId,
                         JobId,
                         ServiceClientHelpers.GetServiceClientJobStatus(Status),
@@ -177,14 +178,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         rangeStart,
                         rangeEnd,
                         ServiceClientHelpers.GetServiceClientBackupManagementType(BackupManagementType),
-                        BackupUtils.regionMap[vault.Location]);
-                    Logger.Instance.WriteDebug("###################   Jobs received " + adapterResponse);
+                        secondaryRegion);
+                    
                     JobConversions.AddServiceClientJobsToPSList(
                     adapterResponse, result, ref resultCount);
                 }
                 else
                 {
-
                     var adapterResponse = ServiceClientAdapter.GetJobs(
                         JobId,
                         ServiceClientHelpers.GetServiceClientJobStatus(Status),

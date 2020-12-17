@@ -150,11 +150,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 
                 IPsBackupProvider psBackupProvider = null;
                 List<ItemBase> itemModels = null;
-                
-                
-                Logger.Instance.WriteDebug("#######   Use Secondary Region :        " + UseSecondaryRegion.IsPresent);
-                
-                
                 if (BackupManagementType == BackupManagementType.MAB)
                 {
                     AzureWorkloadProviderHelper provider = new AzureWorkloadProviderHelper(ServiceClientAdapter);
@@ -176,9 +171,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     {
                         psBackupProvider = providerManager.GetProviderInstance(Policy.WorkloadType);
                     }
-
-                    Logger.Instance.WriteDebug("providerType" +psBackupProvider.GetType());
-
                     itemModels = psBackupProvider.ListProtectedItems();
                 }
 

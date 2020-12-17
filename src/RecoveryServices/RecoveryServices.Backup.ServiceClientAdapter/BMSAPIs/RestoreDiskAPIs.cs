@@ -19,7 +19,6 @@ using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
-using System.Management.Automation;
 using RestAzureNS = Microsoft.Rest.Azure;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
@@ -78,35 +77,27 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>Job created by this operation</returns>
         public CrrAccessToken GetCRRAccessToken(
             AzureRecoveryPoint rp,
+            string secondaryRegion,
             string vaultName = null,
             string resourceGroupName = null)
         {
-
             Dictionary<UriEnums, string> uriDict = HelperUtils.ParseUri(rp.Id);
             string containerUri = HelperUtils.GetContainerUri(uriDict, rp.Id);
             string protectedItemUri = HelperUtils.GetProtectedItemUri(uriDict, rp.Id);
             string recoveryPointId = rp.RecoveryPointId;
 
-            // DEBUG
-           /* Logger.Instance.WriteDebug("############  ContainerURI/ NAME  :   " + containerUri);
-            Logger.Instance.WriteDebug("############ protected item URI/ NAME  :   " + protectedItemUri);
-            Logger.Instance.WriteDebug("############ recoveryPoint Name/ID  :   " + recoveryPointId);*/
+            AADPropertiesResource userInfo = GetAADProperties(secondaryRegion);
 
-            AADPropertiesResource userInfo = new AADPropertiesResource();
-            userInfo.Properties = new AADProperties();
-            
-            //change
-            userInfo.Properties.ServicePrincipalObjectId = "82aa95c9-20ee-4472-905a-4ba4996d94fa";
-            userInfo.Properties.TenantId = "33e01921-4d64-4f8c-a055-5bdaffd5e33d";
+            //remove
+            //= new AADPropertiesResource();
+            // userInfo.Properties = new AADProperties();
+            /*userInfo.Properties.ServicePrincipalObjectId = "82aa95c9-20ee-4472-905a-4ba4996d94fa";
+            userInfo.Properties.TenantId = "33e01921-4d64-4f8c-a055-5bdaffd5e33d";*/
 
             var accessToken = BmsAdapter.Client.RecoveryPoints.GetAccessTokenWithHttpMessagesAsync(vaultName ?? BmsAdapter.GetResourceName(), resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
                 AzureFabricName, containerUri, protectedItemUri, recoveryPointId, userInfo).Result.Body; 
 
-            //// remove ..... for debug
             var accessTokenJson = JsonConvert.SerializeObject(accessToken);
-            /*Logger.Instance.WriteDebug("############  Access Token  :   "+ accessToken.Properties);
-            Logger.Instance.WriteDebug("############  Access Token JSON  :   " + accessTokenJson);*/
-
             return accessToken.Properties; 
         }
 
@@ -132,8 +123,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string protectedItemUri = HelperUtils.GetProtectedItemUri(uriDict, rp.Id);
             string recoveryPointId = rp.RecoveryPointId;
 
-            //Logger.Instance.WriteDebug(" #############  trigger CRR request:     "+ JsonConvert.SerializeObject(triggerCRRRestoreRequest));
-
             //validtion block
             if (!triggerCRRRestoreRequest.RestoreRequest.GetType().IsSubclassOf(typeof(AzureWorkloadRestoreRequest)))
             {
@@ -142,9 +131,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                     throw new Exception(Resources.TriggerRestoreIncorrectRegion);
                 }
             }
-            Logger.Instance.WriteDebug(" #########################################################@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ trigger CRR ");
+            
             var response = BmsAdapter.Client.CrossRegionRestore.TriggerWithHttpMessagesAsync(secondaryRegion, triggerCRRRestoreRequest).Result;
-            Logger.Instance.WriteDebug(" ###########################################################################################  trigger response received");
             return response;
         }
     }

@@ -58,11 +58,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices
             {
                 try
                 {
+                    BackupResourceConfigResource vaultStorageRequest = new BackupResourceConfigResource();
+                    BackupResourceConfig properties = new BackupResourceConfig();
+                    vaultStorageRequest.Properties = properties;
+
                     if (this.BackupStorageRedundancy.HasValue) 
-                    {
-                        BackupResourceConfigResource vaultStorageRequest = new BackupResourceConfigResource();                        
-                        BackupResourceConfig properties = new BackupResourceConfig();
-                        vaultStorageRequest.Properties = properties;
+                    {                        
                         vaultStorageRequest.Properties.StorageModelType = BackupStorageRedundancy.ToString();
                         if (this.EnableCrossRegionRestore.IsPresent)
                         {
@@ -72,10 +73,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                             this.Vault.ResourceGroupName, this.Vault.Name, vaultStorageRequest);
                     }
                     else if(this.EnableCrossRegionRestore.IsPresent) 
-                    {
-                        BackupResourceConfigResource vaultStorageRequest = new BackupResourceConfigResource();
-                        BackupResourceConfig properties = new BackupResourceConfig();
-                        vaultStorageRequest.Properties = properties;
+                    {   
                         vaultStorageRequest.Properties.CrossRegionRestoreFlag = true;
 
                         RecoveryServicesClient.PatchVaultStorageConfigProperties(

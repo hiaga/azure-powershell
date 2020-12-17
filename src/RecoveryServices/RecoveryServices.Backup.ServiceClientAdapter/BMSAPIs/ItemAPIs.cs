@@ -38,14 +38,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string vaultName = null,
             string resourceGroupName = null)
         {
-            return null; /*BmsAdapter.Client.ProtectedItems.CreateOrUpdateWithHttpMessagesAsync(
+            return BmsAdapter.Client.ProtectedItems.CreateOrUpdateWithHttpMessagesAsync(
                  vaultName ?? BmsAdapter.GetResourceName(),
                  resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
                  AzureFabricName,
                  containerName,
                  protectedItemName,
                  request,
-                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result;*/
+                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
         }
 
         /// <summary>

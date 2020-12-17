@@ -79,11 +79,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     jobRequest.ResourceId = VaultId;
 
                     ARSVault vault = ServiceClientAdapter.GetVault(resourceGroupName, vaultName);
-                    string azureRegion = BackupUtils.regionMap[vault.Location];
+                    string secondaryRegion = BackupUtils.regionMap[vault.Location];
                     
-                    jobDetails = ServiceClientAdapter.GetCRRJobDetails(azureRegion, jobRequest);
-
-                    Logger.Instance.WriteDebug("########  Got Job Resource ");
+                    jobDetails = ServiceClientAdapter.GetCRRJobDetails(secondaryRegion, jobRequest);
                 }
                 else
                 {

@@ -15,10 +15,8 @@
 using System;
 using System.Collections.Generic;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
-using Microsoft.Azure.Management.RecoveryServices.Backup;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Rest.Azure.OData;
-using Newtonsoft.Json;
 using RestAzureNS = Microsoft.Rest.Azure;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
@@ -43,20 +41,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         }
 
         /// <summary>
-        /// Gets a CRR job details
+        /// Gets CRR job details
         /// </summary>
-        /// <param name="jobId">ID of the job</param>
+        /// <param name="secondaryRegion">secondaryRegion for the vault </param>
+        /// <param name="jobRequest">JobId, ResourceId for the Job to be fetched </param>
         /// <returns>Job response returned by the service</returns>
         public JobResource GetCRRJobDetails(
-            string region,
+            string secondaryRegion,
             CrrJobRequest jobRequest
             )
         {
-            Logger.Instance.WriteDebug("###############  Fetching JD now  .....");
-            var crrJobDetails =  BmsAdapter.Client.BackupCrrJobDetails.GetWithHttpMessagesAsync(region, jobRequest).Result.Body; // return
-
-            Logger.Instance.WriteDebug("############### Done Fetching JD  ..... jd == " + JsonConvert.SerializeObject(crrJobDetails));
-            return crrJobDetails;
+            return BmsAdapter.Client.BackupCrrJobDetails.GetWithHttpMessagesAsync(secondaryRegion, jobRequest).Result.Body;
         }
 
         public List<JobResource> GetCrrJobs(string vaultId,

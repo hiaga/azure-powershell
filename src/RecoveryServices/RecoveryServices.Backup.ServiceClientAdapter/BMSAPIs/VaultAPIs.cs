@@ -29,14 +29,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         public BackupResourceVaultConfigResource SetVaultProperty(string vaultName, string resourceGroupName,
             BackupResourceVaultConfigResource param)
         {
-            return null; /* BmsAdapter.Client.BackupResourceVaultConfigs.UpdateWithHttpMessagesAsync(
-                vaultName, resourceGroupName, param).Result.Body;*/
+            return BmsAdapter.Client.BackupResourceVaultConfigs.UpdateWithHttpMessagesAsync(
+                vaultName, resourceGroupName, param).Result.Body;
         }
 
         public BackupResourceVaultConfigResource GetVaultProperty(string vaultName, string resourceGroupName)
         {
-            return null; /* BmsAdapter.Client.BackupResourceVaultConfigs.GetWithHttpMessagesAsync(
-                vaultName, resourceGroupName).Result.Body;*/
+            return BmsAdapter.Client.BackupResourceVaultConfigs.GetWithHttpMessagesAsync(
+                vaultName, resourceGroupName).Result.Body;
         }
 
         /// <summary>  
@@ -61,6 +61,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         {
             return new ARSVault(RSAdapter.Client.Vaults.GetWithHttpMessagesAsync(
                 resouceGroupName, resourceName).Result.Body);
+        }
+
+        /// <summary>
+        /// Method to get secondary region AAD properties
+        /// </summary>
+        /// <param name="azureRegion">Azure region to fetch AAD properties</param>
+        /// <returns>vault response object.</returns>
+        public AADPropertiesResource GetAADProperties(string azureRegion)
+        {
+            AADPropertiesResource aadProperties =  BmsAdapter.Client.AadProperties.GetWithHttpMessagesAsync(azureRegion).Result.Body;
+            return aadProperties;
         }
     }
 }
