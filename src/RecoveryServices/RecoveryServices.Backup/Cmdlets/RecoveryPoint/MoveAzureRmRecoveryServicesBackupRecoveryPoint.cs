@@ -37,13 +37,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         [ValidateNotNullOrEmpty]
         public RecoveryPointBase RecoveryPoint { get; set; }
 
-        [Parameter(Mandatory = false, ValueFromPipeline = false, Position = 1,
+        [Parameter(Mandatory = true, ValueFromPipeline = false, Position = 1,
             HelpMessage = ParamHelpMsgs.RecoveryPoint.SourceTier)]
         [ValidateNotNullOrEmpty]
         [ValidateSet("VaultStandard")]
         public RecoveryPointTier SourceTier { get; set; }
 
-        [Parameter(Mandatory = false, ValueFromPipeline = false, Position = 2,
+        [Parameter(Mandatory = true, ValueFromPipeline = false, Position = 2,
             HelpMessage = ParamHelpMsgs.RecoveryPoint.DestinationTier)]
         [ValidateNotNullOrEmpty]
         [ValidateSet("VaultArchive")]
