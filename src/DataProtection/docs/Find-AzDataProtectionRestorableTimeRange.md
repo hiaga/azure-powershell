@@ -1,61 +1,50 @@
 ---
 external help file:
 Module Name: Az.DataProtection
-online version: https://docs.microsoft.com/powershell/module/az.dataprotection/update-azdataprotectionbackupinstanceassociatedpolicy
+online version: https://docs.microsoft.com/powershell/module/az.dataprotection/find-azdataprotectionrestorabletimerange
 schema: 2.0.0
 ---
 
-# Update-AzDataProtectionBackupInstanceAssociatedPolicy
+# Find-AzDataProtectionRestorableTimeRange
 
 ## SYNOPSIS
-Updates associated policy for a given backup instance
+
 
 ## SYNTAX
 
 ```
-Update-AzDataProtectionBackupInstanceAssociatedPolicy -BackupInstanceName <String> -PolicyId <String>
- -ResourceGroupName <String> -VaultName <String> [-AsJob] [-DefaultProfile <PSObject>] [-NoWait]
- [-SubscriptionId <String>] [-Confirm] [-WhatIf] [<CommonParameters>]
+Find-AzDataProtectionRestorableTimeRange -BackupInstance <String> -ResourceGroupName <String>
+ -VaultName <String> -EndTime <String> -SourceDataStoreType <RestoreSourceDataStoreType> -StartTime <String>
+ [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Updates associated policy for a given backup instance
+
 
 ## EXAMPLES
 
-### Example 1: Update Associated policy of a backup instance
+### Example 1: {{ Add title here }}
 ```powershell
-PS C:\> $sub = "xxxx-xxxx-xxxx"
-PS C:\> $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $sub -ResourceGroupName sarath-rg -VaultName sarath-vault
-PS C:\> $policy = Get-AzDataProtectionBackupPolicy -SubscriptionId $sub -ResourceGroupName sarath-rg -VaultName sarath-vault
-PS C:\> Update-AzDataProtectionBackupInstanceAssociatedPolicy -SubscriptionId $sub -ResourceGroupName sarath-rg -VaultName sarath-vault -BackupInstanceName $instance[0].Name -PolicyId $policy[1].Id
+PS C:\> {{ Add code here }}
 
-Name                                                         Type                                                  BackupInstanceName
-----                                                         ----                                                  ------------------
-sarathdisk2-sarathdisk2-2ba3c708-3648-45e2-809d-9f75e66d404f Microsoft.DataProtection/backupVaults/backupInstances sarathdisk2-sarathdisk2-2ba3c708-3648-45e2-809d-9f75e66
+{{ Add output here }}
 ```
 
-This command updates the associated policy of a backup instance
+{{ Add description here }}
+
+### Example 2: {{ Add title here }}
+```powershell
+PS C:\> {{ Add code here }}
+
+{{ Add output here }}
+```
+
+{{ Add description here }}
 
 ## PARAMETERS
 
-### -AsJob
-
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -BackupInstanceName
-Unique Name of protected backup instance
+### -BackupInstance
+.
 
 ```yaml
 Type: System.String
@@ -70,7 +59,7 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultProfile
-
+The credentials, account, tenant, and subscription used for communication with Azure.
 
 ```yaml
 Type: System.Management.Automation.PSObject
@@ -84,23 +73,8 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -NoWait
-
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -PolicyId
-Id of the Policy to be associated with the backup instance
+### -EndTime
+End time for the List Restore Ranges request
 
 ```yaml
 Type: System.String
@@ -115,7 +89,37 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceGroupName
-Resource Group of the backup vault
+The name of the resource group where the backup vault is present.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -SourceDataStoreType
+Gets or sets the type of the source data store.
+
+```yaml
+Type: Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.RestoreSourceDataStoreType
+Parameter Sets: (All)
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -StartTime
+Start time for the List Restore Ranges request
 
 ```yaml
 Type: System.String
@@ -130,7 +134,7 @@ Accept wildcard characters: False
 ```
 
 ### -SubscriptionId
-Subscription Id of the vault
+The subscription Id.
 
 ```yaml
 Type: System.String
@@ -139,13 +143,13 @@ Aliases:
 
 Required: False
 Position: Named
-Default value: None
+Default value: (Get-AzContext).Subscription.Id
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
 ### -VaultName
-Name of the backup vault
+The name of the backup vault.
 
 ```yaml
 Type: System.String
@@ -197,7 +201,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.IBackupInstanceResource
+### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.IAzureBackupFindRestorableTimeRangesResponseResource
 
 ## NOTES
 

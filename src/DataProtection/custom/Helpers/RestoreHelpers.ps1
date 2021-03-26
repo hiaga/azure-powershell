@@ -13,6 +13,9 @@ function GetRestoreType {
 		if($type -eq "RecoveryPointBased"){
 			return "AzureBackupRecoveryPointBasedRestoreRequest"
 		}
+		elseif($type -eq "RecoveryTimeBased"){
+			return "AzureBackupRecoveryTimeBasedRestoreRequest"
+		}
 	}
 }
 

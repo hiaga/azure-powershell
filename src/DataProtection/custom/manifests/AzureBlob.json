@@ -1,8 +1,42 @@
 ﻿{
-  "allowedRestoreModes": [ "PointInTimeBased" ],
-  "allowedRestoreTargetTypes": [ "AlternateLocation" ],
+  "allowedRestoreModes": [ "RecoveryTimeBased" ],
+  "allowedRestoreTargetTypes": [ "OriginalLocation", "ItemLevelRecovery"],
   "datasourceType": "Microsoft.Storage/storageAccounts/blobServices",
   "isProxyResource": false,
-  "parentResourceType": "",
-  "resourceType": ""
+  "parentResourceType": "Microsoft.Storage/storageAccounts",
+  "resourceType": "Microsoft.Storage/storageAccounts",
+  "policySettings": {
+    "supportedRetentionTags": [],
+    "supportedDatastoreTypes": [ "OperationalStore" ],
+    "disableAddRetentionRule": true,
+    "disableCustomRetentionTag": true,
+    "backupScheduleSupported": false,
+    "supportedBackupFrequency": [],
+    "defaultPolicy": {
+      "policyRules": [
+        {
+          "lifecycles": [
+            {
+              "deleteAfter": {
+                "objectType": "AbsoluteDeleteOption",
+                "duration": "P30D"
+              },
+              "sourceDataStore": {
+                "dataStoreType": "OperationalStore",
+                "objectType": "DataStoreInfoBase"
+              }
+            }
+          ],
+          "isDefault": true,
+          "name": "Default",
+          "objectType": "AzureRetentionRule"
+        }
+      ],
+      "name": "BlobPolicy1",
+      "datasourceTypes": [
+        "Microsoft.Storage/storageAccounts/blobServices"
+      ],
+      "objectType": "BackupPolicy"
+    }
+  }
 }

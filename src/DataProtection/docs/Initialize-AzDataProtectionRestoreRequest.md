@@ -12,10 +12,19 @@ Initializes Restore Request object for triggering restore on a protected backup 
 
 ## SYNTAX
 
+### RecoveryPointBased (Default)
 ```
 Initialize-AzDataProtectionRestoreRequest -DatasourceType <DatasourceTypes> -RecoveryPoint <String>
  -RestoreLocation <String> -RestoreType <RestoreTargetType> -SourceDataStore <DataStoreType>
  [-TargetResourceId <String>] [<CommonParameters>]
+```
+
+### RecoveryTimeBased
+```
+Initialize-AzDataProtectionRestoreRequest -DatasourceType <DatasourceTypes> -RecoveryPointTime <String>
+ -RestoreLocation <String> -RestoreType <RestoreTargetType> -SourceDataStore <DataStoreType>
+ -TargetResourceId <String> [-ContainersList <String[]>] [-FromPrefixPattern <String[]>]
+ [-ToPrefixPattern <String[]>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -40,6 +49,21 @@ This command initialized a restore request object which can be used to trigger r
 
 ## PARAMETERS
 
+### -ContainersList
+Container names for Item Level Recovery.
+
+```yaml
+Type: System.String[]
+Parameter Sets: RecoveryTimeBased
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -DatasourceType
 Datasource Type
 
@@ -55,12 +79,42 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -FromPrefixPattern
+Minimum matching value for Item Level Recovery.
+
+```yaml
+Type: System.String[]
+Parameter Sets: RecoveryTimeBased
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -RecoveryPoint
 Id of the recovery point to be restored.
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: RecoveryPointBased
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -RecoveryPointTime
+Point In Time for restore.
+
+```yaml
+Type: System.String
+Parameter Sets: RecoveryTimeBased
 Aliases:
 
 Required: True
@@ -123,6 +177,21 @@ Type: System.String
 Parameter Sets: (All)
 Aliases:
 
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ToPrefixPattern
+Maximum matching value for Item Level Recovery.
+
+```yaml
+Type: System.String[]
+Parameter Sets: RecoveryTimeBased
+Aliases:
+
 Required: False
 Position: Named
 Default value: None
@@ -137,7 +206,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20210201Preview.IAzureBackupRestoreRequest
+### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.IAzureBackupRestoreRequest
 
 ## NOTES
 
