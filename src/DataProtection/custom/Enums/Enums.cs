@@ -119,8 +119,7 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support
     public enum RestoreTargetType
     {
         AlternateLocation = 0,
-        OriginalLocation,
-        ItemLevelRecovery // Check with Kartik 
+        OriginalLocation
     }
 
     public enum ProtectionStatus

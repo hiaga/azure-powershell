@@ -119,6 +119,7 @@ directive:
     - InnerError
     - BackupInstance
     - RestoreTargetInfo
+    - ItemLevelRestoreTargetInfo
     - PolicyParameters
     - SystemData
   - from: source-file-csharp

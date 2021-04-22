@@ -11,28 +11,7 @@
   DotNetFrameworkVersion = '4.7.2'
   RequiredAssemblies = './bin/Az.DataProtection.private.dll'
   FormatsToProcess = './Az.DataProtection.format.ps1xml'
-  FunctionsToExport = 'Backup-AzDataProtectionBackupInstanceAdhoc',
-                    'Get-AzDataProtectionBackupInstance',
-                    'Search-AzDataProtectionBackupInstanceInAzGraph',
-                    'Get-AzDataProtectionBackupPolicy',
-                    'Get-AzDataProtectionBackupVault',
-                    'New-AzDataProtectionBackupVaultStorageSettingObject',
-                    'Get-AzDataProtectionJob',
-                    'Search-AzDataProtectionJobInAzGraph',
-                    'Get-AzDataProtectionPolicyTemplate',
-                    'Get-AzDataProtectionRecoveryPoint',
-                    'Initialize-AzDataProtectionBackupInstance', 'Initialize-AzDataProtectionRestoreRequest',
-                    'New-AzDataProtectionPolicyTagCriteriaClientObject',
-                    'New-AzDataProtectionPolicyTriggerScheduleClientObject', 'New-AzDataProtectionRetentionLifeCycleClientObject',
-                    'Remove-AzDataProtectionBackupInstance', 'Remove-AzDataProtectionBackupPolicy',
-                    'Remove-AzDataProtectionBackupVault', 'New-AzDataProtectionBackupInstance',
-                    'New-AzDataProtectionBackupPolicy', 'New-AzDataProtectionBackupVault',
-                    'Start-AzDataProtectionBackupInstanceRestore',
-                    'Update-AzDataProtectionBackupVault',
-                    'Edit-AzDataProtectionPolicyRetentionRuleClientObject', 'Edit-AzDataProtectionPolicyTagClientObject',
-                    'Edit-AzDataProtectionPolicyTriggerClientObject',
-                    'Update-AzDataProtectionBackupInstanceAssociatedPolicy',
-                    'Find-AzDataProtectionRestorableTimeRange'
+  FunctionsToExport = 'Backup-AzDataProtectionBackupInstanceAdhoc', 'Edit-AzDataProtectionPolicyRetentionRuleClientObject', 'Edit-AzDataProtectionPolicyTagClientObject', 'Edit-AzDataProtectionPolicyTriggerClientObject', 'Find-AzDataProtectionRestorableTimeRange', 'Get-AzDataProtectionBackupInstance', 'Get-AzDataProtectionBackupPolicy', 'Get-AzDataProtectionBackupVault', 'Get-AzDataProtectionJob', 'Get-AzDataProtectionPolicyTemplate', 'Get-AzDataProtectionRecoveryPoint', 'Initialize-AzDataProtectionBackupInstance', 'Initialize-AzDataProtectionRestoreRequest', 'New-AzDataProtectionBackupInstance', 'New-AzDataProtectionBackupPolicy', 'New-AzDataProtectionBackupVault', 'New-AzDataProtectionBackupVaultStorageSettingObject', 'New-AzDataProtectionPolicyTagCriteriaClientObject', 'New-AzDataProtectionPolicyTriggerScheduleClientObject', 'New-AzDataProtectionRetentionLifeCycleClientObject', 'Remove-AzDataProtectionBackupInstance', 'Remove-AzDataProtectionBackupPolicy', 'Remove-AzDataProtectionBackupVault', 'Search-AzDataProtectionBackupInstanceInAzGraph', 'Search-AzDataProtectionJobInAzGraph', 'Start-AzDataProtectionBackupInstanceRestore', 'Update-AzDataProtectionBackupInstanceAssociatedPolicy', 'Update-AzDataProtectionBackupVault', '*'
   AliasesToExport = '*'
   PrivateData = @{
     PSData = @{

@@ -1,10 +1,11 @@
 ﻿{
-  "allowedRestoreModes": [ "RecoveryTimeBased" ],
-  "allowedRestoreTargetTypes": [ "OriginalLocation", "ItemLevelRecovery"],
-  "datasourceType": "Microsoft.Storage/storageAccounts/blobServices",
   "isProxyResource": false,
-  "parentResourceType": "Microsoft.Storage/storageAccounts",
   "resourceType": "Microsoft.Storage/storageAccounts",
+  "parentResourceType": "Microsoft.Storage/storageAccounts",
+  "datasourceType": "Microsoft.Storage/storageAccounts/blobServices",
+  "allowedRestoreModes": [ "PointInTimeBased" ],
+  "allowedRestoreTargetTypes": [ "OriginalLocation" ],
+  "itemLevelRecoveyEnabled": true,
   "policySettings": {
     "supportedRetentionTags": [],
     "supportedDatastoreTypes": [ "OperationalStore" ],

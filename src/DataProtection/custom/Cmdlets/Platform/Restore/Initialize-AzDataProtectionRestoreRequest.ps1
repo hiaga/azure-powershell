@@ -5,92 +5,139 @@
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Description('Initializes Restore Request object for triggering restore on a protected backup instance.')]
 
     param(
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory, HelpMessage='Datasource Type')]
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='Datasource Type')]
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='Datasource Type')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='Datasource Type')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Datasource Type')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Datasource Type')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.DatasourceTypes]
         ${DatasourceType},
 
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='DataStore Type of the Recovery point')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.DataStoreType]
         ${SourceDataStore},
 
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory, HelpMessage='Target Restore Location')]
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='Target Restore Location')]
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory=$false, HelpMessage='Id of the recovery point to be restored.')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory=$false, HelpMessage='Id of the recovery point to be restored.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory=$false, HelpMessage='Id of the recovery point to be restored.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory=$false, HelpMessage='Id of the recovery point to be restored.')]
+        [System.String]
+        ${RecoveryPoint},
+        
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory=$false, HelpMessage='Point In Time for restore.')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory=$false, HelpMessage='Point In Time for restore.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory=$false, HelpMessage='Point In Time for restore.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory=$false, HelpMessage='Point In Time for restore.')]
+        [System.String]
+        ${PointInTime},
+
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='Target Restore Location')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='Target Restore Location')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Target Restore Location')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Target Restore Location')]
         [System.String]
         ${RestoreLocation},
 
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory, HelpMessage='Restore Target Type')]
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='Restore Target Type')]
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='Restore Target Type')]
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='Restore Target Type')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Restore Target Type')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Restore Target Type')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.RestoreTargetType]
         ${RestoreType},
 
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory=$false, HelpMessage='Target resource Id to which backup data will be restored.')]
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='Target resource Id to which backup data will be restored.')]
+        #[Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='Switch Parameter to restore to original location.')]
+        #[Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Switch Parameter to restore to original location.')]
+        #[Switch]
+        #${OriginialLocationRestore},
+
+        #[Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='Switch Parameter to restore to alternate location.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Switch Parameter to restore to alternate location.')]
+        #[Switch]
+        #${AlternateLocationRestore},        
+
+        [Parameter(ParameterSetName="OriginalLocationFullRecovery", Mandatory, HelpMessage='Backup Instance object to trigger original localtion restore.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Backup Instance object to trigger original localtion restore.')]
+        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.BackupInstanceResource]
+        ${BackupInstance},
+
+        [Parameter(ParameterSetName="AlternateLocationFullRecovery", Mandatory, HelpMessage='Target resource Id to which backup data will be restored.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Target resource Id to which backup data will be restored.')]
         [System.String]
         ${TargetResourceId},
 
-        [Parameter(ParameterSetName="RecoveryPointBased", Mandatory, HelpMessage='Id of the recovery point to be restored.')]
-        [System.String]
-        ${RecoveryPoint},
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory, HelpMessage='Switch Parameter to enable item level recovery.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory, HelpMessage='Switch parameter to enable item level recovery.')]
+        [Switch]
+        ${ItemLevelRecovery},
 
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory, HelpMessage='Point In Time for restore.')]
-        [System.String]
-        ${RecoveryPointTime},
-
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory=$false, HelpMessage='Container names for Item Level Recovery.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory=$false, HelpMessage='Container names for Item Level Recovery.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory=$false, HelpMessage='Container names for Item Level Recovery.')]
         [System.String[]]
         ${ContainersList},
 
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory=$false, HelpMessage='Minimum matching value for Item Level Recovery.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory=$false, HelpMessage='Minimum matching value for Item Level Recovery.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory=$false, HelpMessage='Minimum matching value for Item Level Recovery.')]
         [System.String[]]
         ${FromPrefixPattern},
 
-        [Parameter(ParameterSetName="RecoveryTimeBased", Mandatory=$false, HelpMessage='Maximum matching value for Item Level Recovery.')]
+        [Parameter(ParameterSetName="OriginalLocationILR", Mandatory=$false, HelpMessage='Maximum matching value for Item Level Recovery.')]
+        # [Parameter(ParameterSetName="AlternateLocationILR", Mandatory=$false, HelpMessage='Maximum matching value for Item Level Recovery.')]
         [System.String[]]
-        ${ToPrefixPattern}
+        ${ToPrefixPattern}    
     )
 
     process
     {         
         # Validations
         $parameterSetName = $PsCmdlet.ParameterSetName
-        
-        # if container Name is given - it should be ILR
-        ValidateRestoreOptions -DatasourceType $DatasourceType -RestoreMode $parameterSetName -RestoreTargetType $RestoreType
 
         $restoreRequest = $null
-        # Choose Restore Request Type Based on Mode
-        if($parameterSetName -eq "RecoveryPointBased")
+        $restoreMode = $null
+
+        # Choose Restore Request Type Based on Recovery Point ID/ Time
+        if($RecoveryPoint -ne $null)
         {
             $restoreRequest = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.AzureBackupRecoveryPointBasedRestoreRequest]::new()
             $restoreRequest.ObjectType = "AzureBackupRecoveryPointBasedRestoreRequest"
             $restoreRequest.RecoveryPointId = $RecoveryPoint
+            $restoreMode = "RecoveryPointBased"
+
         }
-        elseif($parameterSetName -eq "RecoveryTimeBased") # RecoveryTimeBased 
+        elseif($PointInTime -ne $null) # RecoveryPointInTimeBasedRestore
         {  
             Write-Debug -Message $RestoreType 
             $restoreRequest = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.AzureBackupRecoveryTimeBasedRestoreRequest]::new()
             $restoreRequest.ObjectType = "AzureBackupRecoveryTimeBasedRestoreRequest"
-            $restoreRequest.RecoveryPointTime = $RecoveryPointTime
-
-            # print the restore object after commenting all below
+            $restoreRequest.RecoveryPointTime = $PointInTime
+            $restoreMode = "PointInTimeBased"
         }
+        else{
+            $errormsg = "Please input either RecoveryPoint or PointInTime parameter"
+    		throw $errormsg
+        }
+                
+        # check RP, PIT support - throw error 
+        # check ILR, OLR, ALR  support
+        # if container Name is given - it should be ILR
+        ValidateRestoreOptions -DatasourceType $DatasourceType -RestoreMode $restoreMode -RestoreTargetType $RestoreType -ItemLevelRecovery $ItemLevelRecovery
 
         # Initialize Restore Target Info based on Type provided
-        if(($RestoreType -eq "AlternateLocation") -or ($RestoreType -eq "OriginalLocation"))
-        {
-            
+        if(!($ItemLevelRecovery))
+        {            
+            # RestoreTargetInfo for OLR ALR Full recovery
             $restoreRequest.RestoreTargetInfo = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.RestoreTargetInfo]::new()
             $restoreRequest.RestoreTargetInfo.ObjectType = "RestoreTargetInfo"
         }
-        if($RestoreType -eq "RestoreAsFiles")
+        # if($RestoreType -eq "RestoreAsFiles") 
+        # {
+        #    $restoreRequest.RestoreTargetInfo = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.RestoreFilesTargetInfo]::new()
+        #    $restoreRequest.RestoreTargetInfo.ObjectType = "RestoreFilesTargetInfo"
+        # }
+        else 
         {
-            $restoreRequest.RestoreTargetInfo = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.RestoreFilesTargetInfo]::new()
-            $restoreRequest.RestoreTargetInfo.ObjectType = "RestoreFilesTargetInfo"
-        }
-        if($RestoreType -eq "ItemLevelRecovery")
-        {
+            # ILR: ItemLevelRestoreTargetInfo
             $restoreRequest.RestoreTargetInfo = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202101.ItemLevelRestoreTargetInfo]::new()
             $restoreRequest.RestoreTargetInfo.ObjectType = "ItemLevelRestoreTargetInfo"
 
@@ -140,36 +187,46 @@
         $restoreRequest.SourceDataStoreType = $SourceDataStore
         $restoreRequest.RestoreTargetInfo.RestoreLocation = $RestoreLocation
 
-        if( ($TargetResourceId -ne $null) -and ($TargetResourceId -ne "") )
+        if($RestoreType -eq "AlternateLocation"){
+            $resourceId = $TargetResourceId
+        }
+        elseif($RestoreType -eq "OriginalLocation"){
+            $resourceId = $BackupInstance.Property.DataSourceInfo.ResourceId
+        }
+
+        if( ($resourceId -ne $null) -and ($resourceId -ne "") )
         {
-            if($RestoreType -eq "AlternateLocation")
+            # if($RestoreType -eq "AlternateLocation")
+            # {
+
+            # set DatasourceInfo for OLR, ALR, OriginalLocationILR
+            $restoreRequest.RestoreTargetInfo.DatasourceInfo = GetDatasourceInfo -ResourceId $resourceId -ResourceLocation $RestoreLocation -DatasourceType $DatasourceType
+            $manifest = LoadManifest -DatasourceType $DatasourceType.ToString()
+            if($manifest.isProxyResource -eq $true)  
             {
-                $restoreRequest.RestoreTargetInfo.DatasourceInfo = GetDatasourceInfo -ResourceId $TargetResourceId -ResourceLocation $RestoreLocation -DatasourceType $DatasourceType
-                $manifest = LoadManifest -DatasourceType $DatasourceType.ToString()
-                if($manifest.isProxyResource -eq $true)  # check with Sambit if this is needed for Blobs
-                {
-                    $restoreRequest.RestoreTargetInfo.DatasourceSetInfo = GetDatasourceSetInfo -DatasourceInfo $restoreRequest.RestoreTargetInfo.DatasourceInfo
-                }
+                $restoreRequest.RestoreTargetInfo.DatasourceSetInfo = GetDatasourceSetInfo -DatasourceInfo $restoreRequest.RestoreTargetInfo.DatasourceInfo
             }
+            
+            # }
 
             # if blobs workload,original Location or ILR - get DatasourceInfo and assign
-            if($DatasourceType.ToString() -eq "AzureBlob")
-            {   
-                $dsInfo = GetDatasourceInfo -ResourceId $TargetResourceId -ResourceLocation $RestoreLocation -DatasourceType $DatasourceType      
-                
-                if($RestoreType -eq "ItemLevelRecovery"){
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoObjectType = $dsInfo.ObjectType
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceId = $dsInfo.ResourceId
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceLocation = $dsInfo.ResourceLocation
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceName = $dsInfo.ResourceName
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceType = $dsInfo.ResourceType
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceUri = $dsInfo.ResourceUri
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfoDatasourceType = $dsInfo.Type
-                }                
-                else{ # for OLR
-                    $restoreRequest.RestoreTargetInfo.DatasourceInfo = $dsInfo
-                }                
-            }
+            # if($DatasourceType.ToString() -eq "AzureBlob")
+            # {   
+            #     $dsInfo = GetDatasourceInfo -ResourceId $TargetResourceId -ResourceLocation $RestoreLocation -DatasourceType $DatasourceType      
+            #     
+            #     if($RestoreType -eq "ItemLevelRecovery"){
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoObjectType = $dsInfo.ObjectType
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceId = $dsInfo.ResourceId
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceLocation = $dsInfo.ResourceLocation
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceName = $dsInfo.ResourceName
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceType = $dsInfo.ResourceType
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoResourceUri = $dsInfo.ResourceUri
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfoDatasourceType = $dsInfo.Type
+            #     }                
+            #     else{ # for OLR
+            #         $restoreRequest.RestoreTargetInfo.DatasourceInfo = $dsInfo
+            #     }                
+            # }
         }        
 
         return $restoreRequest

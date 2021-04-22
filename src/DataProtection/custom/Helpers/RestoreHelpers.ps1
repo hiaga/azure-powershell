@@ -36,6 +36,11 @@ function ValidateRestoreOptions {
         [ValidateNotNullOrEmpty()]
         [System.String]
         $RestoreTargetType
+
+		[Parameter(Mandatory=$true)]
+        [ValidateNotNullOrEmpty()]
+        [Switch]
+        $ItemLevelRecovery
 	)
 
 	process
@@ -47,11 +52,33 @@ function ValidateRestoreOptions {
 			$errormsg = "Specified Restore Mode is not supported for DatasourceType " + $DatasourceType
 			throw $errormsg
 		}
+		
+		#if($RecoveryType -eq "OriginalLocationFullRecovery"){
+		#	$RestoreTargetType = "OriginalLocation"
+		#	$ItemLevelRecovery = $false
+		#}
+		#elseif($RecoveryType -eq "AlternateLocationFullRecovery"){
+		#	$RestoreTargetType = "AlternateLocation"
+		#	$ItemLevelRecovery = $false
+		#}
+		#elseif($RecoveryType -eq "OriginalLocationILR"){
+		#	$RestoreTargetType = "OriginalLocation"
+		#	$ItemLevelRecovery = $true
+		#}
+		#elseif($RecoveryType -eq "AlternateLocationILR"){
+		#	$RestoreTargetType = "AlternateLocation"
+		#	$ItemLevelRecovery = $true
+		#}		
 
 		if($manifest.allowedRestoreTargetTypes.Contains($RestoreTargetType) -eq $false)
 		{
 			$allowedValues = [System.String]::Join(', ', $manifest.allowedRestoreTargetTypes)
 			$errormsg = "Specified Restore Target Type is not supported for DatasourceType " + $DatasourceType + ". Allowed Values are " + $allowedValues
+			throw $errormsg
+		}
+
+		if(!($manifest.itemLevelRecoveyEnabled) -and $ItemLevelRecovery){
+			$errormsg = "Specified DatasourceType " + $DatasourceType + " doesn't support Item Level Recovery"
 			throw $errormsg
 		}
 	}
