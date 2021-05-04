@@ -98,6 +98,19 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             return vault;
         }
 
+        /// <summary>  
+        /// Method to create or update Recovery Services Vault.
+        /// </summary>  
+        /// <param name="resouceGroupName">Name of the resouce group</param>  
+        /// <param name="vaultName">Name of the vault</param>  
+        /// <param name="patchVault">patch vault object to patch the recovery services Vault</param>
+        /// <returns>Azure Recovery Services Vault.</returns> 
+        public Vault UpdateRSVault(string resouceGroupName, string vaultName, PatchVault patchVault)
+        {
+            var response = RSAdapter.Client.Vaults.UpdateWithHttpMessagesAsync(resouceGroupName, vaultName, patchVault).Result;
+            return response.Body;
+        }
+
         /// <summary>
         /// Method to get secondary region AAD properties
         /// </summary>

@@ -17,6 +17,7 @@ using System.Management.Automation;
 using Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Properties;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
+using System.Collections.Generic;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 {
@@ -48,8 +49,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// </summary>
         [Parameter(Mandatory = true, ValueFromPipeline = false)] // , HelpMessage = ParamHelpMsgs.Common.IdentityType
         [ValidateNotNullOrEmpty]
-        [ValidateSet("SystemAssigned", "None")]
+        [ValidateSet("SystemAssigned", "None", "UserAssigned")]
         public MSIdentity IdentityType { get; set; }
+
+
+        /// <summary>
+        /// The UserAssigned Identity assigned to Recovery Services Vault. 
+        /// </summary>
+        [Parameter(Mandatory = false, ValueFromPipeline = false)]
+        [ValidateNotNullOrEmpty]        
+        public string IdentityId { get; set; }
 
         #endregion
 
@@ -58,17 +67,45 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             if (ShouldProcess(Resources.VaultTarget, "set"))
             {
                 try
-                {                                                            
-                    Vault vault = null;
+                {   
                     IdentityData MSI = new IdentityData();
+                    Vault vault = RecoveryServicesClient.GetVault(this.ResourceGroupName, this.Name);
 
                     if (IdentityType == MSIdentity.SystemAssigned)
                     {
-                        MSI.Type = MSIdentity.SystemAssigned.ToString();
+                        // if the vault already contains UserAssigned Identity - then we pass both
+                        if (vault.Identity.Type.ToLower().Contains("userassigned"))
+                        {
+                            MSI.Type = MSIdentity.SystemAssigned.ToString() + ", " + 
+                                MSIdentity.UserAssigned.ToString();
+                        }
+                        else
+                        {
+                            MSI.Type = MSIdentity.SystemAssigned.ToString();
+                        }
                     }
                     else if (IdentityType == MSIdentity.None)
                     {
                         MSI.Type = MSIdentity.None.ToString();
+                    }
+                    else if(IdentityType == MSIdentity.UserAssigned)
+                    {
+                        if(IdentityId == null)
+                        {
+                            throw new ArgumentException("IdentityId can't be null");
+                        }
+                        // if the vault already contains SystemAssigned Identity - then we pass both
+                        if (vault.Identity.Type.ToLower().Contains("systemassigned"))
+                        {
+                            MSI.Type = MSIdentity.SystemAssigned.ToString() + ", " +
+                                MSIdentity.UserAssigned.ToString();
+                        }
+                        else
+                        {
+                            MSI.Type = MSIdentity.UserAssigned.ToString();
+                        }                        
+                        MSI.UserAssignedIdentities = new Dictionary<string, UserIdentity>();
+                        MSI.UserAssignedIdentities.Add(IdentityId, new UserIdentity());
                     }
                     PatchVault patchVault = new PatchVault();
                     patchVault.Identity = MSI;
