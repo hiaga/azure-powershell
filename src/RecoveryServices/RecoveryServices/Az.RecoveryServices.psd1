@@ -192,7 +192,10 @@ CmdletsToExport = 'Get-AzRecoveryServicesBackupProperty',
                'Undo-AzRecoveryServicesBackupItemDeletion', 
                'Set-AzRecoveryServicesVaultProperty', 
                'Get-AzRecoveryServicesVaultProperty', 
-               'Copy-AzRecoveryServicesVault', 'Update-AzRecoveryServicesVault'
+               'Copy-AzRecoveryServicesVault',
+               'Update-AzRecoveryServicesVault',
+               'Test-AzRecoveryServicesDSMove',
+               'Initialize-AzRecoveryServicesDSMove'
 
 # Variables to export from this module
 # VariablesToExport = @()
@@ -238,8 +241,7 @@ AliasesToExport = 'Get-AzRecoveryServicesBackupProperties',
                'Update-ASRProtectionContainerMapping', 
                'Update-ASRProtectionDirection', 'Update-ASRRecoveryPlan', 
                'Update-ASRServicesProvider', 'Update-ASRvCenter', 
-               'Set-AzRecoveryServicesBackupProperties', 
-               'Get-AzRecoveryServicesBackupJobDetails'
+               'Set-AzRecoveryServicesBackupProperties'               
 
 # DSC resources to export from this module
 # DscResourcesToExport = @()
