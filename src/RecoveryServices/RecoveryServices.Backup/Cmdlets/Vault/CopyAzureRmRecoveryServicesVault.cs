@@ -63,6 +63,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Prevents the confirmation dialog when specified.
         /// </summary>
         [Parameter(Mandatory = false, ParameterSetName = AzureRSVaultDataMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
+        [Parameter(Mandatory = false, ParameterSetName = AzureRSVaultTriggerMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
         public SwitchParameter Force { get; set; }
 
         /// <summary>
