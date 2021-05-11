@@ -13,9 +13,7 @@
 
   <ItemGroup>
 	  <PackageReference Include="Microsoft.Azure.Management.RecoveryServices" Version="4.3.1-preview" />
-	  <Reference Include="Microsoft.Azure.Management.RecoveryServices.Backup">
-		  <HintPath>..\SDK2\Microsoft.Azure.Management.RecoveryServices.Backup.dll</HintPath>
-	  </Reference>
+	  <PackageReference Include="Microsoft.Azure.Management.RecoveryServices.Backup" Version="4.1.6-preview" />
 	  <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
   </ItemGroup>
 

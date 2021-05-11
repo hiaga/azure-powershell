@@ -12,9 +12,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <Reference Include="Microsoft.Azure.Management.RecoveryServices.Backup">
-		  <HintPath>..\SDK2\Microsoft.Azure.Management.RecoveryServices.Backup.dll</HintPath>
-	  </Reference>
+	  <PackageReference Include="Microsoft.Azure.Management.RecoveryServices.Backup" Version="4.1.6-preview" />
   </ItemGroup>
 
   <ItemGroup>
