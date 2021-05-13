@@ -83,16 +83,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 }
 
                 // Confirm the target vault storage type
-                BackupResourceConfigResource getStorageResponse = ServiceClientAdapter.GetVaultStorageType(
+                /*BackupResourceConfigResource getStorageResponse = ServiceClientAdapter.GetVaultStorageType(
                                                                         TargetVault.ResourceGroupName, TargetVault.Name);
 
                 Logger.Instance.WriteDebug("Target vault storage type: " + getStorageResponse.Properties.StorageType);
-
+*/
                 ConfirmAction(
                     Force.IsPresent,
-                    string.Format(Resources.TargetVaultStorageRedundancy, TargetVault.Name, getStorageResponse.Properties.StorageType), 
+                    string.Format(Resources.TargetVaultStorageRedundancy, TargetVault.Name, ""), //getStorageResponse.Properties.StorageType), 
                     Resources.TargetVaultStorageRedundancy,
-                    getStorageResponse.Properties.StorageType, () => 
+                    "", () => //getStorageResponse.Properties.StorageType, () => 
                     {
                         base.ExecuteCmdlet();
                         

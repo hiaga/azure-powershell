@@ -19,6 +19,8 @@ using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdap
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 using Newtonsoft.Json;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
+using System.Collections.Generic;
+using cmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 {
@@ -78,6 +80,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         {
             ExecutionBlock(() =>
             {
+                Dictionary<cmdletModel.UriEnums, string> SourceVaultDict = HelperUtils.ParseUri(SourceVault.ID);
+                string sourceSub = SourceVaultDict[cmdletModel.UriEnums.Subscriptions];
+
+                Dictionary<cmdletModel.UriEnums, string> TargetVaultDict = HelperUtils.ParseUri(TargetVault.ID);
+                string targetSub =  TargetVaultDict[cmdletModel.UriEnums.Subscriptions];
+
+                string subscriptionContext = ServiceClientAdapter.BmsAdapter.Client.SubscriptionId;
+                ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = targetSub;
+                
                 // Check if the Target vault is empty
                 /// Check the containers count in target vault                
                 var protectionContainersCount = BackupUtils.GetProtectionContainersCount(TargetVault.Name, TargetVault.ResourceGroupName, ServiceClientAdapter);
@@ -101,24 +112,25 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 {
                     throw new ArgumentException(string.Format(Resources.TargetVaultNotEmptyException));
                 }
-
+              
                 // Confirm the target vault storage type
-                BackupResourceConfigResource getStorageResponse = ServiceClientAdapter.GetVaultStorageType(
+                /*BackupResourceConfigResource getStorageResponse = ServiceClientAdapter.GetVaultStorageType(
                                                                         TargetVault.ResourceGroupName, TargetVault.Name);
 
-                Logger.Instance.WriteDebug("Storage Type: " + getStorageResponse.Properties.StorageType);
-
+                Logger.Instance.WriteDebug("Storage Type: " + getStorageResponse.Properties.StorageType);*/
+              
                 ConfirmAction(
                     Force.IsPresent,
-                    string.Format(Resources.TargetVaultStorageRedundancy, TargetVault.Name, getStorageResponse.Properties.StorageType),
+                    string.Format(Resources.TargetVaultStorageRedundancy, TargetVault.Name, ""),//getStorageResponse.Properties.StorageType),
                     Resources.TargetVaultStorageRedundancy,
-                    getStorageResponse.Properties.StorageType, () =>
+                    "", () => //getStorageResponse.Properties.StorageType, () =>
                     {
                         base.ExecuteCmdlet();
 
                         if (string.Compare(ParameterSetName, AzureRSVaultDataMoveParameterSet) == 0)
                         {
                             // Prepare Data Move
+                            ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = sourceSub;
                             PrepareDataMoveRequest prepareMoveRequest = new PrepareDataMoveRequest();
                             prepareMoveRequest.TargetResourceId = TargetVault.ID;
                             prepareMoveRequest.TargetRegion = TargetVault.Location;
@@ -141,6 +153,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             string correlationId = PrepareDataMove(SourceVault.Name, SourceVault.ResourceGroupName, prepareMoveRequest);
 
                             // Trigger Data Move
+                            ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = targetSub;
                             TriggerDataMoveRequest triggerMoveRequest = new TriggerDataMoveRequest();
                             triggerMoveRequest.SourceResourceId = SourceVault.ID;
                             triggerMoveRequest.SourceRegion = SourceVault.Location;
@@ -153,6 +166,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             Logger.Instance.WriteDebug("Location of Source vault: " + SourceVault.Location);
                             TriggerDataMove(TargetVault.Name, TargetVault.ResourceGroupName, triggerMoveRequest);
 
+                            ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = subscriptionContext;
                             WriteObject(ParamHelpMsgs.DSMove.CmdletOutput);
                         }
                         else
@@ -173,7 +187,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             WriteObject(ParamHelpMsgs.DSMove.CmdletOutput);
                         }
                     }
-                );                
+                 );                
             }, ShouldProcess(TargetVault.Name, VerbsCommon.Set));
         }
 
