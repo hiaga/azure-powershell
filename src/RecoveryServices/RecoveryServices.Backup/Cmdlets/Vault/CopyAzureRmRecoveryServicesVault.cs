@@ -31,10 +31,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     {
         #region Parameters
 
+        internal const string AzureRSVaultDataMoveParameterSet = "AzureRSVaultDataMoveParameterSet";
+        internal const string AzureRSVaultTriggerMoveParameterSet = "AzureRSVaultTriggerMoveParameterSet";               
+
         /// <summary>
         /// Source Vault for Data Move Operation
         /// </summary>
-        [Parameter(Position = 1, Mandatory = true, HelpMessage = ParamHelpMsgs.DSMove.SourceVault,
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = AzureRSVaultDataMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.SourceVault,
+            ValueFromPipeline = true)]
+        [Parameter(Position = 1, Mandatory = true, ParameterSetName = AzureRSVaultTriggerMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.SourceVault,
             ValueFromPipeline = true)]
         [ValidateNotNullOrEmpty]
         public ARSVault SourceVault;
@@ -42,7 +47,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <summary>
         /// Target Vault for Data Move Operation
         /// </summary>
-        [Parameter(Position = 2, Mandatory = true, HelpMessage = ParamHelpMsgs.DSMove.TargetVault,
+        [Parameter(Position = 2, Mandatory = true, ParameterSetName = AzureRSVaultDataMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.TargetVault,
+            ValueFromPipeline = true)]
+        [Parameter(Position = 2, Mandatory = true, ParameterSetName = AzureRSVaultTriggerMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.TargetVault,
             ValueFromPipeline = true)]
         [ValidateNotNullOrEmpty]
         public ARSVault TargetVault;
@@ -50,14 +57,21 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <summary>
         /// Retries data move only with unmoved containers in the source vault
         /// </summary>
-        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.DSMove.RetryOnlyFailed)]
+        [Parameter(Mandatory = false, ParameterSetName = AzureRSVaultDataMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.RetryOnlyFailed)]
         public SwitchParameter RetryOnlyFailed;
 
         /// <summary>
         /// Prevents the confirmation dialog when specified.
         /// </summary>
-        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
+        [Parameter(Mandatory = false, ParameterSetName = AzureRSVaultDataMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
+        [Parameter(Mandatory = false, ParameterSetName = AzureRSVaultTriggerMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
         public SwitchParameter Force { get; set; }
+
+        /// <summary>
+        /// Prevents the confirmation dialog when specified.
+        /// </summary>
+        [Parameter(Mandatory = true, ParameterSetName = AzureRSVaultTriggerMoveParameterSet, HelpMessage = ParamHelpMsgs.DSMove.ForceOption)]
+        public String CorrelationIdForCrossSubCopy { get; set; }
 
         #endregion Parameters
 
@@ -114,11 +128,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     {
                         base.ExecuteCmdlet();
 
-                        // Prepare Data Move
-                        ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = sourceSub; // set source subscription 
-                        PrepareDataMoveRequest prepareMoveRequest = new PrepareDataMoveRequest();
-                        prepareMoveRequest.TargetResourceId = TargetVault.ID;
-                        prepareMoveRequest.TargetRegion = TargetVault.Location;
+                        if (string.Compare(ParameterSetName, AzureRSVaultDataMoveParameterSet) == 0)
+                        {
+                            // Prepare Data Move
+                            ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = sourceSub; // set source subscription 
+                            PrepareDataMoveRequest prepareMoveRequest = new PrepareDataMoveRequest();
+                            prepareMoveRequest.TargetResourceId = TargetVault.ID;
+                            prepareMoveRequest.TargetRegion = TargetVault.Location;
 
                         /// currently only allowing vault level data move
                         prepareMoveRequest.DataMoveLevel = "Vault";
@@ -151,10 +167,28 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         Logger.Instance.WriteDebug("Location of Source vault: " + SourceVault.Location);
                         TriggerDataMove(TargetVault.Name, TargetVault.ResourceGroupName, triggerMoveRequest);
 
-                        ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = subscriptionContext; // set subscription to original
-                        WriteObject(ParamHelpMsgs.DSMove.CmdletOutput);                        
+                            ServiceClientAdapter.BmsAdapter.Client.SubscriptionId = subscriptionContext;
+                            WriteObject(ParamHelpMsgs.DSMove.CmdletOutput);
+                        }
+                        else
+                        {
+                            // Trigger Data Move
+                            TriggerDataMoveRequest triggerMoveRequest = new TriggerDataMoveRequest();
+                            triggerMoveRequest.SourceResourceId = SourceVault.ID;
+                            triggerMoveRequest.SourceRegion = SourceVault.Location;
+
+                            /// currently only allowing vault level data move
+                            triggerMoveRequest.DataMoveLevel = "Vault";
+                            triggerMoveRequest.CorrelationId = CorrelationIdForCrossSubCopy;
+                            triggerMoveRequest.PauseGC = false;
+
+                            Logger.Instance.WriteDebug("Location of Source vault: " + SourceVault.Location);
+                            TriggerDataMove(TargetVault.Name, TargetVault.ResourceGroupName, triggerMoveRequest);
+
+                            WriteObject(ParamHelpMsgs.DSMove.CmdletOutput);
+                        }
                     }
-                );                
+                 );                
             }, ShouldProcess(TargetVault.Name, VerbsCommon.Set));
         }
 
