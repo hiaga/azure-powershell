@@ -18,6 +18,7 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+* Added cross tenant DS Move.
 * Added Archive for V1 vaults.
 
 ## Version 4.1.0
