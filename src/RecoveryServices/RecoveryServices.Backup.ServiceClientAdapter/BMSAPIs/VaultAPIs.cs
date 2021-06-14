@@ -53,7 +53,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>Azure Resource Storage response object.</returns>  
         public BackupResourceConfigResource GetVaultStorageType(string resouceGroupName, string vaultName)
         {
-            return BmsAdapter.Client.BackupResourceStorageConfigs.GetWithHttpMessagesAsync(
+            return BmsAdapter.Client.BackupResourceStorageConfigsCRR.GetWithHttpMessagesAsync(
                 vaultName, resouceGroupName).Result.Body;
         }
 
@@ -65,8 +65,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <returns>Azure Resource Encryption response object.</returns>  
         public BackupResourceEncryptionConfigResource GetVaultEncryptionConfig(string resouceGroupName, string vaultName)
         {
-            return BmsAdapter.Client.BackupResourceEncryptionConfigs.GetWithHttpMessagesAsync(
-                vaultName, resouceGroupName).Result.Body;
+            return null;   /*BmsAdapter.Client.BackupResourceEncryptionConfigs.GetWithHttpMessagesAsync(
+                vaultName, resouceGroupName).Result.Body;*/
         }
 
         /// <summary>  

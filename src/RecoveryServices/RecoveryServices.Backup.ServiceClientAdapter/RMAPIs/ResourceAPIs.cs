@@ -23,8 +23,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
 {
     public partial class ServiceClientAdapter
     {
-
-
         /// <summary>
         /// Get azure resource
         /// </summary>
