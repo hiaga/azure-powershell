@@ -39,13 +39,22 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         [ValidateNotNullOrEmpty]
         public string EncryptionKeyId;
 
-        [Parameter(Mandatory = true, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.KeyVaultSubscriptionId)]
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.KeyVaultSubscriptionId)]
         [ValidateNotNullOrEmpty]
         public string KeyVaultSubscriptionId;
 
         [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.InfrastructureEncryption)]
         [ValidateNotNullOrEmpty]
         public SwitchParameter InfrastructureEncryption;
+
+        // make this parameter mandatory in breaking release
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.InfrastructureEncryption)]
+        [ValidateNotNullOrEmpty]
+        public Boolean UseSystemAssignedIdentity = true;
+
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.InfrastructureEncryption)]
+        [ValidateNotNullOrEmpty]
+        public string UserAssignedIdentity;
 
         public override void ExecuteCmdlet()
         {
@@ -73,25 +82,37 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         BackupResourceEncryptionConfigResource vaultEncryptionSettings = new BackupResourceEncryptionConfigResource();                        
                         vaultEncryptionSettings.Properties = new BackupResourceEncryptionConfig();
 
-                        vaultEncryptionSettings.Properties.EncryptionAtRestType = "CustomerManaged";
-                        vaultEncryptionSettings.Properties.KeyUri = EncryptionKeyId;
+                        PatchVault patchVault = new PatchVault();
+                        patchVault.Properties = new VaultProperties();
+                        VaultPropertiesEncryption vaultEncryption = new VaultPropertiesEncryption();
+                        vaultEncryption.KeyVaultProperties = new CmkKeyVaultProperties();
+                        vaultEncryption.KekIdentity = new CmkKekIdentity();
+
+                        vaultEncryption.KeyVaultProperties.KeyUri = EncryptionKeyId;
+
                         if (InfrastructureEncryption.IsPresent)
                         {
-                            vaultEncryptionSettings.Properties.InfrastructureEncryptionState = "Enabled";
+                            // If reset to Enable - service doesn't throw error - Great. 
+                            // have to check what happens on - Enable --> Disable or opposite.
+                            vaultEncryption.InfrastructureEncryption = "Enabled";
                         }
-                        vaultEncryptionSettings.Properties.SubscriptionId = KeyVaultSubscriptionId;
-                        vaultEncryptionSettings.Properties.LastUpdateStatus = null;
                         
-                        // var response = ServiceClientAdapter.UpdateVaultEncryptionConfig(resourceGroupName, vaultName, vaultEncryptionSettings);
+                        vaultEncryption.KekIdentity.UseSystemAssignedIdentity = UseSystemAssignedIdentity;
 
-                        PatchVault patchVault = new PatchVault();
+                        if(!UseSystemAssignedIdentity && (UserAssignedIdentity == null || UserAssignedIdentity == ""))
+                        {
+                            throw new ArgumentException("Please input a valid UserAssignedIdentity.");
+                        }
+                        else if (!UseSystemAssignedIdentity)
+                        {
+                            vaultEncryption.KekIdentity.UserAssignedIdentity = UserAssignedIdentity;
+                        }
 
-                        patchVault.Properties = new VaultProperties();
-
-                        // what is the REST Api call ? 
-                        patchVault.Properties.Encryption = new VaultPropertiesEncryption();
+                        patchVault.Properties.Encryption = vaultEncryption;                                               
+                        
                         ServiceClientAdapter.UpdateRSVault(resourceGroupName, vaultName, patchVault);
 
+                        // have to track this operation ... 
                     }
                 }
                 catch (Exception exception)

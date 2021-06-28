@@ -27,7 +27,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     [Cmdlet("Update", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesVault", SupportsShouldProcess = true), OutputType(typeof(ARSVault))]
     public class UpdateAzureRmRecoveryServicesVault : RecoveryServicesCmdletBase
     {
-        #region parameters      
+        #region parameters    
+
+        internal const string AzureRSVaultAddMSIdentity = "AzureRSVaultAddMSIdentity";
+        internal const string AzureRSVaultRemoveMSIdentity = "AzureRSVaultRemoveMSIdentity";
 
         /// <summary>
         /// Gets or sets the resource group name.
@@ -45,20 +48,34 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         public string Name { get; set; }
 
         /// <summary>
-        /// The MSI type assigned to Recovery Services Vault. Input 'None' if MSI has to be removed.
+        /// The MSI type assigned to Recovery Services Vault. Input 'None' if all MSIs have to be removed.
         /// </summary>
-        [Parameter(Mandatory = true, ValueFromPipeline = false)] // , HelpMessage = ParamHelpMsgs.Common.IdentityType
+        [Parameter(Mandatory = true, ValueFromPipeline = false, ParameterSetName = AzureRSVaultAddMSIdentity)] // , HelpMessage = ParamHelpMsgs.Common.IdentityType
         [ValidateNotNullOrEmpty]
         [ValidateSet("SystemAssigned", "None", "UserAssigned")]
         public MSIdentity IdentityType { get; set; }
 
+        /// <summary>
+        /// The UserAssigned Identity assigned to Recovery Services Vault. 
+        /// </summary>
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultAddMSIdentity)]
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultRemoveMSIdentity)]
+        [ValidateNotNullOrEmpty]        
+        public string[] IdentityId { get; set; } 
 
         /// <summary>
         /// The UserAssigned Identity assigned to Recovery Services Vault. 
         /// </summary>
-        [Parameter(Mandatory = false, ValueFromPipeline = false)]
-        [ValidateNotNullOrEmpty]        
-        public string IdentityId { get; set; }
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultRemoveMSIdentity)]  
+        [ValidateNotNullOrEmpty]
+        public SwitchParameter RemoveUserAssigned { get; set; } 
+
+        /// <summary>
+        /// The UserAssigned Identity assigned to Recovery Services Vault. 
+        /// </summary>
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultRemoveMSIdentity)]
+        [ValidateNotNullOrEmpty]
+        public SwitchParameter RemoveSystemAssigned { get; set; }
 
         #endregion
 
@@ -71,45 +88,133 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     IdentityData MSI = new IdentityData();
                     Vault vault = RecoveryServicesClient.GetVault(this.ResourceGroupName, this.Name);
 
-                    if (IdentityType == MSIdentity.SystemAssigned)
+                    if (ParameterSetName == AzureRSVaultAddMSIdentity) 
                     {
-                        // if the vault already contains UserAssigned Identity - then we pass both
-                        if (vault.Identity.Type.ToLower().Contains("userassigned"))
+                        if (IdentityType == MSIdentity.SystemAssigned)
                         {
-                            MSI.Type = MSIdentity.SystemAssigned.ToString() + ", " + 
-                                MSIdentity.UserAssigned.ToString();
+                            if (IdentityId != null)
+                            {
+                                throw new ArgumentException("Invalid parameter IdentityId. IdentityId can't be set for SystemAssigned Identites.");
+                            }
+
+                            Logger.Instance.WriteDebug("reached... 1");
+
+                            if (vault.Identity != null && vault.Identity.Type.ToLower().Contains("userassigned"))
+                            {
+                                Logger.Instance.WriteDebug("reached... 3");
+                                MSI.Type = MSIdentity.SystemAssigned.ToString() + "," + MSIdentity.UserAssigned.ToString();
+                            }
+                            else
+                            {
+                                Logger.Instance.WriteDebug("reached... 4");
+                                MSI.Type = MSIdentity.SystemAssigned.ToString();
+                            }
+                            Logger.Instance.WriteDebug("reached... 2");
+
+                        }
+                        else if (IdentityType == MSIdentity.None)
+                        {
+                            MSI.Type = MSIdentity.None.ToString();
+                        }
+                        else if (IdentityType == MSIdentity.UserAssigned)
+                        {
+                            if (IdentityId == null)
+                            {
+                                throw new ArgumentException("IdentityId can't be null for UserAssigned Identities");
+                            }
+
+                            if (vault.Identity != null && vault.Identity.Type.ToLower().Contains("systemassigned"))
+                            {
+                                MSI.Type = MSIdentity.SystemAssigned.ToString() + "," + MSIdentity.UserAssigned.ToString();
+                            }
+                            else
+                            {
+                                MSI.Type = MSIdentity.UserAssigned.ToString();
+                            }
+
+                            MSI.UserAssignedIdentities = new Dictionary<string, UserIdentity>();
+                            foreach (string userIdentityId in IdentityId)
+                            {
+                                MSI.UserAssignedIdentities.Add(userIdentityId, new UserIdentity());
+                            }
+                        }
+                    }
+                    else
+                    {
+                        if (RemoveSystemAssigned.IsPresent)
+                        {
+                            if (vault.Identity != null && vault.Identity.Type.ToLower().Contains("systemassigned"))
+                            {
+                                if (vault.Identity.Type.ToLower().Contains("userassigned"))
+                                {
+                                    MSI.Type = MSIdentity.UserAssigned.ToString();
+                                }
+                                else
+                                {
+                                    MSI.Type = MSIdentity.None.ToString();
+                                }
+                            }
+                        }
+                        else if (RemoveUserAssigned.IsPresent)
+                        {
+                            if (IdentityId == null)
+                            {
+                                throw new ArgumentException("IdentityId can't be null for UserAssigned Identities");
+                            }
+
+                            foreach (string identity in IdentityId)
+                            {
+                                if (!vault.Identity.UserAssignedIdentities.ContainsKey(identity))
+                                {
+                                    throw new ArgumentException("Identity ID \"" + identity + "\" is invalid.");
+                                }
+                            }
+
+                            if (vault.Identity != null && vault.Identity.Type.ToLower().Contains("userassigned"))
+                            {
+                                if (vault.Identity.Type.ToLower().Contains("systemassigned"))
+                                {
+                                    if(vault.Identity.UserAssignedIdentities.Keys.Count == IdentityId.Length)
+                                    {
+                                        MSI.Type = MSIdentity.SystemAssigned.ToString();
+                                    }
+                                    else
+                                    {
+                                        MSI.Type = MSIdentity.SystemAssigned.ToString() + "," + MSIdentity.UserAssigned.ToString();
+                                    }                                    
+                                }
+                                else
+                                {
+                                    if (vault.Identity.UserAssignedIdentities.Keys.Count == IdentityId.Length) 
+                                    {
+                                        MSI.Type = MSIdentity.None.ToString();
+                                    }
+                                    else
+                                    {
+                                        MSI.Type = MSIdentity.UserAssigned.ToString();
+                                    }                                        
+                                }
+
+                                if(MSI.Type != "SystemAssigned" && MSI.Type != "None")
+                                {
+                                    MSI.UserAssignedIdentities = new Dictionary<string, UserIdentity>();
+                                    foreach (string userIdentityId in IdentityId)
+                                    {
+                                        MSI.UserAssignedIdentities.Add(userIdentityId, null);
+                                    }
+                                }                                
+                            }
                         }
                         else
                         {
-                            MSI.Type = MSIdentity.SystemAssigned.ToString();
+                            throw new ArgumentException("Invalid parameter set.");
                         }
                     }
-                    else if (IdentityType == MSIdentity.None)
-                    {
-                        MSI.Type = MSIdentity.None.ToString();
-                    }
-                    else if(IdentityType == MSIdentity.UserAssigned)
-                    {
-                        if(IdentityId == null)
-                        {
-                            throw new ArgumentException("IdentityId can't be null");
-                        }
-                        // if the vault already contains SystemAssigned Identity - then we pass both
-                        if (vault.Identity.Type.ToLower().Contains("systemassigned"))
-                        {
-                            MSI.Type = MSIdentity.SystemAssigned.ToString() + ", " +
-                                MSIdentity.UserAssigned.ToString();
-                        }
-                        else
-                        {
-                            MSI.Type = MSIdentity.UserAssigned.ToString();
-                        }                        
-                        MSI.UserAssignedIdentities = new Dictionary<string, UserIdentity>();
-                        MSI.UserAssignedIdentities.Add(IdentityId, new UserIdentity());
-                    }
+
                     PatchVault patchVault = new PatchVault();
                     patchVault.Identity = MSI;
                     vault = RecoveryServicesClient.UpdateRSVault(this.ResourceGroupName, this.Name, patchVault);
+                    // have to track this operation ... 
                                         
                     WriteObject(new ARSVault(vault));
                 }
