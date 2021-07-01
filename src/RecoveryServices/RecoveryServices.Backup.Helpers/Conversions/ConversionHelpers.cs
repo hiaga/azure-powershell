@@ -670,6 +670,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             foreach (var protectableItem in protectableItems)
             {
+                // process the list for SQL AGs and Instances
                 itemModels.Add(GetProtectableItemModel(protectableItem));
             }
 

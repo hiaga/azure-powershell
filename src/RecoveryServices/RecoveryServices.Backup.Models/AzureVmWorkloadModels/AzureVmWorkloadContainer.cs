@@ -38,6 +38,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         public string HealthStatus { get; set; }
 
         /// <summary>
+        ///  Gets or sets host server name of the container.
+        /// </summary>
+        public string HostServer { get; set; }
+
+        /// <summary>
         ///  Gets or sets additional details of a workload container.
         /// </summary>
         public List<AzureVmWorkloadContainerExtendedInfo> ExtendedInfo { get; set; }
@@ -56,6 +61,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             Id = protectionContainerResource.Id;
             SourceResourceId = protectionContainer.SourceResourceId;
             HealthStatus = protectionContainer.HealthStatus;
+            HostServer = protectionContainer.ExtendedInfo.HostServerName;
             ExtendedInfo = new List<AzureVmWorkloadContainerExtendedInfo>();
             WorkloadsPresent = "";
             foreach (var inquiryDetail in protectionContainer.ExtendedInfo.InquiryInfo.InquiryDetails)
