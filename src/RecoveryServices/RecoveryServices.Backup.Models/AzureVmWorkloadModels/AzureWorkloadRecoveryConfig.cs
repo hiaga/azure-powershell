@@ -63,6 +63,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// <summary>
         /// Full RP on which log backups will be applied
         /// </summary>
+        /// This can be made read-only ... by removing set; 
         public RecoveryPointBase FullRP { get; set; }
 
 

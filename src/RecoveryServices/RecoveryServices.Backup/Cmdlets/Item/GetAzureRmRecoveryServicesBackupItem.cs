@@ -18,6 +18,7 @@ using System.Management.Automation;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel;
 using Microsoft.Azure.Management.Internal.Resources.Utilities.Models;
+using Newtonsoft.Json;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 {
@@ -40,7 +41,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <summary>
         /// List of supported WorkloadTypes for this cmdlet. Used in help text creation.
         /// </summary>
-        private const string validWorkloadTypes = "AzureVM, AzureFiles, MSSQL";
+        private const string validWorkloadTypes = "AzureVM, AzureFiles, MSSQL, FileFolder";
 
         /// <summary>
         /// When this option is specified, only those items which belong to this container will be returned.
@@ -131,6 +132,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string vaultName = resourceIdentifier.ResourceName;
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
+                Logger.Instance.WriteDebug("Reached ... 1");
+
                 PsBackupProviderManager providerManager =
                     new PsBackupProviderManager(new Dictionary<Enum, object>()
                     {
@@ -148,12 +151,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         { CRRParams.UseSecondaryRegion, UseSecondaryRegion.IsPresent}
                     }, ServiceClientAdapter);
 
+                Logger.Instance.WriteDebug("Reached ... 2");
+
                 IPsBackupProvider psBackupProvider = null;
                 List<ItemBase> itemModels = null;
-                if (BackupManagementType == BackupManagementType.MAB)
+                if (BackupManagementType == BackupManagementType.MAB || 
+                  (this.ParameterSetName == GetItemsForContainerParamSet &&  (Container as ContainerContext).ContainerType == ContainerType.Windows))
                 {
+                    Logger.Instance.WriteDebug("#####    Container Info  =  " + JsonConvert.SerializeObject(Container));
+                    
                     AzureWorkloadProviderHelper provider = new AzureWorkloadProviderHelper(ServiceClientAdapter);
-                    itemModels = provider.GetMABProtectedItems(vaultName, resourceGroupName);
+                    itemModels = provider.GetMABProtectedItems(vaultName, resourceGroupName, Container);
                 }
                 else
                 {
