@@ -13,7 +13,9 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using System.Collections.Generic;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
+// using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
 {
@@ -64,6 +66,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         public bool? IsAutoProtected { get; set; }
 
         /// <summary>
+        /// Auto protection policy for protectable item
+        /// </summary>
+        public string AutoProtectionPolicy { get; set; }
+
+        /// <summary>
         /// for instance or AG, indicates number of DB's present
         /// </summary>
         public int? Subinquireditemcount { get; set; }
@@ -77,6 +84,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// pre-backup validation for protectable objects
         /// </summary>
         public PreBackupValidation Prebackupvalidation { get; set; }
+
+        /// <summary>
+        /// NodesList for SQLAG protectable objects
+        /// </summary>
+        public IList<DistributedNodesInfo> NodesList { get; set; }
 
         /// <summary>
         /// Constructor. Takes the service client object representing the protected item 
@@ -100,7 +112,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             Subinquireditemcount = protectedItem.Subinquireditemcount;
             Subprotectableitemcount = protectedItem.Subprotectableitemcount;
             Prebackupvalidation = protectedItem.Prebackupvalidation;
-            ProtectableItemType = workloadProtectableItemResource.Properties.GetType().ToString();
+            ProtectableItemType = workloadProtectableItemResource.Properties.GetType().ToString();            
+
             if (workloadProtectableItemResource.Properties.GetType() == typeof(AzureVmWorkloadSQLAvailabilityGroupProtectableItem))
             {
                 ProtectableItemType = CmdletModel.ProtectableItemType.SQLAvailabilityGroup.ToString();
@@ -112,7 +125,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             else if (workloadProtectableItemResource.Properties.GetType() == typeof(AzureVmWorkloadSQLDatabaseProtectableItem))
             {
                 ProtectableItemType = CmdletModel.ProtectableItemType.SQLDataBase.ToString();
-            }
+            }            
         }
     }
 }
