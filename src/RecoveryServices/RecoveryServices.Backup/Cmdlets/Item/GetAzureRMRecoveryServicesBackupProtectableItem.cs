@@ -33,7 +33,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     [Cmdlet("Get", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesBackupProtectableItem",
         DefaultParameterSetName = NoFilterParamSet), OutputType(typeof(ProtectableItemBase))]
     public class GetAzureRmRecoveryServicesBackupProtectableItem : RSBackupVaultCmdletBase
-    {        
+    {
         internal const string NoFilterParamSet = "NoFilterParamSet";
         internal const string FilterParamSet = "FilterParamSet";
         internal const string IdParamSet = "IdParamSet";
@@ -106,237 +106,174 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         {
             ExecutionBlock(() =>
             {
-            base.ExecuteCmdlet();
+                base.ExecuteCmdlet();
 
-            ResourceIdentifier resourceIdentifier = new ResourceIdentifier(VaultId);
-            string vaultName = resourceIdentifier.ResourceName;
-            string resourceGroupName = resourceIdentifier.ResourceGroupName;
+                ResourceIdentifier resourceIdentifier = new ResourceIdentifier(VaultId);
+                string vaultName = resourceIdentifier.ResourceName;
+                string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
-            string backupManagementType = "";
-            string workloadType = "";
-            ODataQuery<BMSPOQueryObject> queryParam = null;
-            /* if (ParameterSetName == NodeListParamSet)
-             {
-                 // call NodeList . . . 
-                 // fetch the AG name from the ParentId field - //"sqlagworkloadcontainer;6d9ecb71-d62e-4b9d-9b2c-14dee4c3e078"
-                 ProtectionContainerResource cont = ServiceClientAdapter.GetContainer(vaultName, resourceGroupName, "sqlagworkloadcontainer;6d9ecb71-d62e-4b9d-9b2c-14dee4c3e078");
-                 Logger.Instance.WriteDebug("Container: " + JsonConvert.SerializeObject(cont.Properties));
+                string backupManagementType = "";
+                string workloadType = "";
+                ODataQuery<BMSPOQueryObject> queryParam = null;
 
-                 // fetch policy Id with backup Intent 
-                 string itemType = "";
-                 string itemName = "";
-                 string containerUri = "";
-
-                 Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(ParentID);
-                 itemType = HelperUtils.GetProtectableItemUri(keyValueDict, ParentID).Split(';')[0];
-                 itemName = HelperUtils.GetProtectableItemUri(keyValueDict, ParentID).Split(';')[1];
-                 containerUri = HelperUtils.GetContainerUri(keyValueDict, ParentID);     
-
-                 ODataQuery<ServiceClientModel.ProtectionIntentQueryObject> queryParams = null;
-                 backupManagementType = ServiceClientModel.BackupManagementType.AzureWorkload;
-
-                 queryParams = new ODataQuery<ServiceClientModel.ProtectionIntentQueryObject>(
-                 q => q.ItemType == itemType &&
-                 q.ItemName == itemName &&
-                 q.ParentName == containerUri &&
-                 q.BackupManagementType == backupManagementType);
-
-                 var itemResponses = ServiceClientAdapter.ListProtectionIntent(
-                 queryParams,
-                 vaultName: vaultName,
-                 resourceGroupName: resourceGroupName);
-
-                 string intentName = null;
-                 foreach (var itemResponse in itemResponses)
-                 {
-                     string itemNameResponse = "";
-                     string containerNameResponse = "";
-
-                     Dictionary<UriEnums, string> keyValueDictResponse =
-                     HelperUtils.ParseUri(itemResponse.Properties.ItemId);
-                     itemNameResponse = HelperUtils.GetProtectableItemUri(
-                     keyValueDictResponse, itemResponse.Properties.ItemId).ToLower();
-                     containerNameResponse = HelperUtils.GetContainerUri(
-                     keyValueDictResponse, itemResponse.Properties.ItemId);
-
-                     if ((String.Compare(itemNameResponse, itemName, true) == 0) &&
-                         ((itemType.Contains("sqlavailabilitygroup") && String.Compare(containerUri.Split(';')[1], containerNameResponse, true) == 0)
-                            || (String.Compare(containerUri.Split(';')[3], containerNameResponse.Split(';')[2], true) == 0)))
-                     {
-                         intentName = itemResponse.Name;
-                         break;
-                     }
-                 } 
-
-                 WriteObject(itemResponses, enumerateCollection: true);
-                 WriteObject(cont, enumerateCollection: true);
-             }*/
-            //else {
-            if (ParameterSetName == IdParamSet)
-            {
-                string containerName = "";
-                Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(ParentID);
-                containerName = HelperUtils.GetContainerUri(keyValueDict, ParentID);
-                backupManagementType = ServiceClientModel.BackupManagementType.AzureWorkload;
-                string protectableItem = HelperUtils.GetProtectableItemUri(keyValueDict, ParentID);
-                if (protectableItem.Split(new string[] { ";" }, System.StringSplitOptions.None)[0].ToLower() == "sqlinstance" ||
-                protectableItem.Split(new string[] { ";" }, System.StringSplitOptions.None)[0].ToLower() == "sqlavailabilitygroupcontainer")
-                {
-                    workloadType = ServiceClientModel.WorkloadType.SQLDataBase;
-                }
-                queryParam = new ODataQuery<BMSPOQueryObject>(
-                q => q.BackupManagementType
-                 == backupManagementType &&
-                 q.WorkloadType == workloadType &&
-                 q.ContainerName == containerName);
-            }
-            else
-            {
-                if (Container != null)
+                if (ParameterSetName == IdParamSet)
                 {
                     string containerName = "";
-                    backupManagementType = Container.BackupManagementType.ToString();
-                    workloadType = ConversionUtils.GetServiceClientWorkloadType(WorkloadType.ToString());
-                    containerName = Container.Name;
-                    queryParam = new ODataQuery<BMSPOQueryObject>(
-                    q => q.BackupManagementType
-                        == backupManagementType &&
-                        q.WorkloadType == workloadType &&
-                        q.ContainerName == containerName);
-                }
-                else
-                {
-                    backupManagementType = "AzureWorkload";
-                    workloadType = ConversionUtils.GetServiceClientWorkloadType(WorkloadType.ToString());
+                    Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(ParentID);
+                    containerName = HelperUtils.GetContainerUri(keyValueDict, ParentID);
+                    backupManagementType = ServiceClientModel.BackupManagementType.AzureWorkload;
+                    string protectableItem = HelperUtils.GetProtectableItemUri(keyValueDict, ParentID);
+                    if (protectableItem.Split(new string[] { ";" }, System.StringSplitOptions.None)[0].ToLower() == "sqlinstance" ||
+                    protectableItem.Split(new string[] { ";" }, System.StringSplitOptions.None)[0].ToLower() == "sqlavailabilitygroupcontainer")
+                    {
+                        workloadType = ServiceClientModel.WorkloadType.SQLDataBase;
+                    }
                     queryParam = new ODataQuery<BMSPOQueryObject>(
                     q => q.BackupManagementType
                      == backupManagementType &&
-                     q.WorkloadType == workloadType);
+                     q.WorkloadType == workloadType &&
+                     q.ContainerName == containerName);
                 }
-            }
-
-            WriteDebug("going to query service to get list of protectable items");
-            List<WorkloadProtectableItemResource> protectableItems =
-                ServiceClientAdapter.ListProtectableItem(
-                    queryParam,
-                    vaultName: vaultName,
-                    resourceGroupName: resourceGroupName);
-            WriteDebug("Successfully got response from service");
-
-            // process the list for SQL AGs and Instances 
-
-            List<ProtectableItemBase> itemModels = ConversionHelpers.GetProtectableItemModelList(protectableItems);
-            
-            foreach (var itemModel in itemModels)
-            {
-                AzureWorkloadProtectableItem protectableItem = ((AzureWorkloadProtectableItem)itemModel);
-
-                string itemType = "";
-                string itemName = "";
-                string containerUri = "";
-
-                Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(protectableItem.Id);
-
-                itemType = HelperUtils.GetProtectableItemUri(keyValueDict, protectableItem.Id).Split(';')[0];
-                itemName = HelperUtils.GetProtectableItemUri(keyValueDict, protectableItem.Id).Split(';')[1];
-                containerUri = HelperUtils.GetContainerUri(keyValueDict, protectableItem.Id);
-
-                // fetch AutoProtectionPolicy non DBs 
-                if (protectableItem.ProtectableItemType != "SQLDataBase")
+                else
                 {
-                    // fetch the policy using backup intent 
-                    ODataQuery<ServiceClientModel.ProtectionIntentQueryObject> queryParams = null;
-                    backupManagementType = ServiceClientModel.BackupManagementType.AzureWorkload;
-
-                    queryParams = new ODataQuery<ServiceClientModel.ProtectionIntentQueryObject>(
-                    q => q.ItemType == itemType &&
-                    q.ItemName == itemName &&
-                    q.ParentName == containerUri &&
-                    q.BackupManagementType == backupManagementType);
-
-                    var intentList = ServiceClientAdapter.ListProtectionIntent(
-                        queryParams,
-                        vaultName: vaultName,
-                        resourceGroupName: resourceGroupName);
-
-                    /*string intentName = null;
-                    foreach (var intent in intentList)
+                    if (Container != null)
                     {
-                        string itemNameResponse = "";
-                        string containerNameResponse = "";
-
-                        Dictionary<UriEnums, string> keyValueDictResponse = HelperUtils.ParseUri(intent.Properties.ItemId);
-                        itemNameResponse = HelperUtils.GetProtectableItemUri(keyValueDictResponse, intent.Properties.ItemId).ToLower();
-
-                        containerNameResponse = HelperUtils.GetContainerUri(keyValueDictResponse, intent.Properties.ItemId);
-
-                        if ((String.Compare(itemNameResponse, itemName, true) == 0) &&
-                            ((itemType.Contains("sqlavailabilitygroup") && String.Compare(containerUri.Split(';')[1], containerNameResponse, true) == 0)
-                                || (String.Compare(containerUri.Split(';')[3], containerNameResponse.Split(';')[2], true) == 0)))
-                        {
-                            intentName = intent.Name;
-                            break;
-                        }
-                    }*/
-
-                    // Logger.Instance.WriteDebug("Protection Policy for proitem: " + protectableItem.Id + "  is ");
-                    // protectableItem.AutoProtectionPolicy = intentList[0].Properties.PolicyId;
-
-                    foreach (var intent in intentList)
+                        string containerName = "";
+                        backupManagementType = Container.BackupManagementType.ToString();
+                        workloadType = ConversionUtils.GetServiceClientWorkloadType(WorkloadType.ToString());
+                        containerName = Container.Name;
+                        queryParam = new ODataQuery<BMSPOQueryObject>(
+                        q => q.BackupManagementType
+                            == backupManagementType &&
+                            q.WorkloadType == workloadType &&
+                            q.ContainerName == containerName);
+                    }
+                    else
                     {
-                        protectableItem.AutoProtectionPolicy = intent.Properties.PolicyId;
-                        // Logger.Instance.WriteDebug("PolicyId : " + intent.Properties.PolicyId);
+                        backupManagementType = "AzureWorkload";
+                        workloadType = ConversionUtils.GetServiceClientWorkloadType(WorkloadType.ToString());
+                        queryParam = new ODataQuery<BMSPOQueryObject>(
+                        q => q.BackupManagementType
+                         == backupManagementType &&
+                         q.WorkloadType == workloadType);
                     }
                 }
 
-                //  fetch Nodelist for SQLAGs 
-                if (protectableItem.ProtectableItemType == "SQLAvailabilityGroup")
+                WriteDebug("going to query service to get list of protectable items");
+                List<WorkloadProtectableItemResource> protectableItems =
+                    ServiceClientAdapter.ListProtectableItem(
+                        queryParam,
+                        vaultName: vaultName,
+                        resourceGroupName: resourceGroupName);
+                WriteDebug("Successfully got response from service");
+
+                // process the list for SQL AGs and Instances 
+
+                List<ProtectableItemBase> itemModels = ConversionHelpers.GetProtectableItemModelList(protectableItems);
+
+                foreach (var itemModel in itemModels)
                 {
-                    // add the NodeList
+                    AzureWorkloadProtectableItem protectableItem = ((AzureWorkloadProtectableItem)itemModel);
 
-                    // ProtectionContainerResource cont = ServiceClientAdapter.GetContainer(vaultName, resourceGroupName, "sqlagworkloadcontainer;6d9ecb71-d62e-4b9d-9b2c-14dee4c3e078");
+                    string itemType = "";
+                    string itemName = "";
+                    string containerUri = "";
 
-                    ProtectionContainerResource cont = ServiceClientAdapter.GetContainer(vaultName, resourceGroupName, containerUri);
-                    AzureSQLAGWorkloadContainerProtectionContainer protectionContainer = (AzureSQLAGWorkloadContainerProtectionContainer)cont.Properties;
+                    Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(protectableItem.Id);
 
-                    protectableItem.NodesList = protectionContainer.ExtendedInfo.NodesList;
+                    itemType = HelperUtils.GetProtectableItemUri(keyValueDict, protectableItem.Id).Split(';')[0];
+                    itemName = HelperUtils.GetProtectableItemUri(keyValueDict, protectableItem.Id).Split(';')[1];
+                    containerUri = HelperUtils.GetContainerUri(keyValueDict, protectableItem.Id);
 
-                }
-            }
-                
-            if (ParameterSetName == FilterParamSet || ParameterSetName == IdParamSet)
-            {
-                if (ItemType != 0)
-                {
-                    string protectableItemType = ItemType.ToString();
-                    itemModels = itemModels.Where(itemModel =>
+                    // fetch AutoProtectionPolicy non DBs 
+                    if (protectableItem.ProtectableItemType != "SQLDataBase")
                     {
-                        return ((AzureWorkloadProtectableItem)itemModel).ProtectableItemType == protectableItemType;
-                    }).ToList();
-                }
+                        // fetch the policy using backup intent 
+                        ODataQuery<ServiceClientModel.ProtectionIntentQueryObject> queryParams = null;
+                        backupManagementType = ServiceClientModel.BackupManagementType.AzureWorkload;
 
-                if (Name != null)
-                {
-                    itemModels = itemModels.Where(itemModel =>
+                        queryParams = new ODataQuery<ServiceClientModel.ProtectionIntentQueryObject>(
+                        q => q.ItemType == itemType &&
+                        q.ItemName == itemName &&
+                        q.ParentName == containerUri &&
+                        q.BackupManagementType == backupManagementType);
+
+                        var intentList = ServiceClientAdapter.ListProtectionIntent(
+                            queryParams,
+                            vaultName: vaultName,
+                            resourceGroupName: resourceGroupName);
+
+                        /*string intentName = null;
+                        foreach (var intent in intentList)
+                        {
+                            string itemNameResponse = "";
+                            string containerNameResponse = "";
+
+                            Dictionary<UriEnums, string> keyValueDictResponse = HelperUtils.ParseUri(intent.Properties.ItemId);
+                            itemNameResponse = HelperUtils.GetProtectableItemUri(keyValueDictResponse, intent.Properties.ItemId).ToLower();
+
+                            containerNameResponse = HelperUtils.GetContainerUri(keyValueDictResponse, intent.Properties.ItemId);
+
+                            if ((String.Compare(itemNameResponse, itemName, true) == 0) &&
+                                ((itemType.Contains("sqlavailabilitygroup") && String.Compare(containerUri.Split(';')[1], containerNameResponse, true) == 0)
+                                    || (String.Compare(containerUri.Split(';')[3], containerNameResponse.Split(';')[2], true) == 0)))
+                            {
+                                intentName = intent.Name;
+                                break;
+                            }
+                        }*/
+
+                        // Logger.Instance.WriteDebug("Protection Policy for proitem: " + protectableItem.Id + "  is ");
+                        // protectableItem.AutoProtectionPolicy = intentList[0].Properties.PolicyId;
+
+                        foreach (var intent in intentList)
+                        {
+                            protectableItem.AutoProtectionPolicy = intent.Properties.PolicyId;
+                        }
+                    }
+
+                    //  fetch Nodelist for SQLAGs 
+                    if (protectableItem.ProtectableItemType == "SQLAvailabilityGroup")
                     {
-                        return ((AzureWorkloadProtectableItem)itemModel).Name == Name;
-                    }).ToList();
+                        // add the NodeList
+                        ProtectionContainerResource cont = ServiceClientAdapter.GetContainer(vaultName, resourceGroupName, containerUri);
+                        AzureSQLAGWorkloadContainerProtectionContainer protectionContainer = (AzureSQLAGWorkloadContainerProtectionContainer)cont.Properties;
+
+                        protectableItem.NodesList = protectionContainer.ExtendedInfo.NodesList;
+
+                    }
                 }
 
-                if (ServerName != null)
+                if (ParameterSetName == FilterParamSet || ParameterSetName == IdParamSet)
                 {
-                    itemModels = itemModels.Where(itemModel =>
+                    if (ItemType != 0)
                     {
-                        return ((AzureWorkloadProtectableItem)itemModel).ServerName == ServerName;
-                    }).ToList();
-                }
-            }
-            
-            WriteObject(itemModels, enumerateCollection: true);
+                        string protectableItemType = ItemType.ToString();
+                        itemModels = itemModels.Where(itemModel =>
+                        {
+                            return ((AzureWorkloadProtectableItem)itemModel).ProtectableItemType == protectableItemType;
+                        }).ToList();
+                    }
 
-            //}
-                
-                
+                    if (Name != null)
+                    {
+                        itemModels = itemModels.Where(itemModel =>
+                        {
+                            return ((AzureWorkloadProtectableItem)itemModel).Name == Name;
+                        }).ToList();
+                    }
+
+                    if (ServerName != null)
+                    {
+                        itemModels = itemModels.Where(itemModel =>
+                        {
+                            return ((AzureWorkloadProtectableItem)itemModel).ServerName == ServerName;
+                        }).ToList();
+                    }
+                }
+
+                WriteObject(itemModels, enumerateCollection: true);
+
             });
         }
     }
