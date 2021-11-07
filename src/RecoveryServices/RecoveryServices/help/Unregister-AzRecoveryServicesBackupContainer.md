@@ -28,7 +28,7 @@ Set the vault context by using the Set-AzRecoveryServicesVaultContext cmdlet bef
 
 ### Example 1: Unregister a Windows Server from the vault
 ```powershell
-PS C:\>$Cont = Get-AzRecoveryServicesBackupContainer -ContainerType "Windows" -BackupManagementType MARS -Name "server01.contoso.com"
+PS C:\>$Cont = Get-AzRecoveryServicesBackupContainer -ContainerType "Windows" -BackupManagementType MAB -Name "server01.contoso.com"
 PS C:\> Unregister-AzRecoveryServicesBackupContainer -Container $Cont
 ```
 

@@ -1612,7 +1612,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to Please provide Container of containerType as Windows and backupManagementType as MARS or Container of containerType as AzureSQL and backupManagementType as AzureSQL or Container of containerType as AzureStorage and backupManagementType as AzureStorage. Provided Container has containerType {0} and backupManagementType {1} which is invalid..
+        ///   Looks up a localized string similar to Please provide Container of containerType as Windows and backupManagementType as MAB or Container of containerType as AzureSQL and backupManagementType as AzureSQL or Container of containerType as AzureStorage and backupManagementType as AzureStorage. Provided Container has containerType {0} and backupManagementType {1} which is invalid..
         /// </summary>
         public static string UnsupportedContainerException
         {
