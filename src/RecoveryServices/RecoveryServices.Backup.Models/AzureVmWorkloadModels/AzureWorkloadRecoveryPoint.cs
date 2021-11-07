@@ -15,6 +15,7 @@
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using System;
 using System.Collections.Generic;
+using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
 {
@@ -24,6 +25,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     public class AzureWorkloadRecoveryPoint : AzureRecoveryPoint
     {
         public IList<SQLDataDirectory> DataDirectoryPaths { get; set; }
+
+        public IList<CrrModel.SQLDataDirectory> DataDirectoryPathsFromSecondaryRegion { get; set; }
 
         /// <summary>
         /// Recovery Type information for Recovery point: "Vault", "Snapshot", "Snapshot and Vault" 
