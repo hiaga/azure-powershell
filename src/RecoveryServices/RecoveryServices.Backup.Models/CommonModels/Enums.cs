@@ -56,11 +56,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         AzureVM = 1,
 
         /// <summary>
-        /// Represents the Microsoft Azure Recovery Services agent.
-        /// </summary>
-        MARS,
-
-        /// <summary>
         /// Represents the Service Center Data Protection Manager agent.
         /// </summary>
         SCDPM,

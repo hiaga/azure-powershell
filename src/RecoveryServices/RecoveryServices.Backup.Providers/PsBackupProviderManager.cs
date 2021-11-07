@@ -73,7 +73,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     }
                     break;
                 case ContainerType.Windows:
-                    if (backupManagementType == BackupManagementType.MARS || backupManagementType == BackupManagementType.MAB)
+                    if (backupManagementType == BackupManagementType.MAB)
                     {
                         providerType = PsBackupProviderTypes.Mab;
                     }

@@ -54,7 +54,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
                 if (!((Container.ContainerType == ContainerType.Windows &&
-                       Container.BackupManagementType == BackupManagementType.MARS) ||
+                       Container.BackupManagementType == BackupManagementType.MAB) ||
                     (Container.ContainerType == ContainerType.AzureSQL &&
                      Container.BackupManagementType == BackupManagementType.AzureSQL) ||
                      (Container.ContainerType == ContainerType.AzureStorage &&
