@@ -264,7 +264,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
         }
 
         public void ValidateSimpleSchedulePolicy(CmdletModel.SchedulePolicyBase policy, string backupManagementType = "")
-        {
+        {            
             if (policy == null || policy.GetType() != typeof(CmdletModel.SimpleSchedulePolicy))
             {
                 throw new ArgumentException(string.Format(Resources.InvalidSchedulePolicyException,
@@ -293,7 +293,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             policy.Validate();
         }
 
-        public void ValidateLongTermRetentionPolicy(CmdletModel.RetentionPolicyBase policy, string backupManagementType = "")
+        public void ValidateLongTermRetentionPolicy(CmdletModel.RetentionPolicyBase policy, string backupManagementType = "", ScheduleRunType ScheduleRunFrequency = 0)
         {
             if (policy == null || policy.GetType() != typeof(CmdletModel.LongTermRetentionPolicy))
             {
@@ -302,9 +302,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                         Resources.InvalidRetentionPolicyException,
                         typeof(CmdletModel.LongTermRetentionPolicy).ToString()));
             }
-
-            // perform validation
-            policy.Validate();
+            
+            ((CmdletModel.LongTermRetentionPolicy)policy).Validate(ScheduleRunFrequency);
         }
 
         public void ValidateSQLRetentionPolicy(CmdletModel.RetentionPolicyBase policy)

@@ -250,7 +250,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                  ((ServiceClientModel.AzureFileShareProtectionPolicy)serviceClientResponse.Properties).SchedulePolicy,
                  ((ServiceClientModel.AzureFileShareProtectionPolicy)serviceClientResponse.Properties).TimeZone);
             fileSharePolicyModel.ProtectedItemsCount = ((ServiceClientModel.AzureFileShareProtectionPolicy)serviceClientResponse.
-                Properties).ProtectedItemsCount;
+                Properties).ProtectedItemsCount;            
             return policyModel;
         }
 
@@ -360,7 +360,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             }
             else if (serviceClientResponse.Properties.GetType() ==
                 typeof(ServiceClientModel.AzureFileShareProtectionPolicy))
-            {
+            {   
                 policyModel = GetPolicyModelForAzureFileShare(serviceClientResponse, policyModel);
             }
             else if (serviceClientResponse.Properties.GetType() ==
