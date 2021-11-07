@@ -679,4 +679,22 @@ Please contact Microsoft for further assistance.</value>
   <data name="UnregisterContainer" xml:space="preserve">
     <value>Unregister container</value>
   </data>
+  <data name="DailyRetentionPointsLimitExceeded" xml:space="preserve">
+    <value>Number of restore points are more than {0}, please reduce the retention duration count for Daily Schedule or reduce number of backups per day</value>
+  </data>
+  <data name="HourlyScheduleNullValueException" xml:space="preserve">
+    <value>ScheduleInterval, ScheduleWindowStartTime, ScheduleWindowDuration, ScheduleRunTimeZone can't be null for Hourly policy</value>
+  </data>
+  <data name="InvalidLastBackupTime" xml:space="preserve">
+    <value>ScheduleWindowDuration should be less than or equal to (23:30 - ScheduleWindowStartTime)</value>
+  </data>
+  <data name="InvalidScheduleInterval" xml:space="preserve">
+    <value>Incorrect value for ScheduleInterval, allowed values are {0}</value>
+  </data>
+  <data name="InvalidScheduleWindowDuration" xml:space="preserve">
+    <value>ScheduleWindowDuration can't be lesser than ScheduleInterval and should exist in range from {0} to {1}</value>
+  </data>
+  <data name="ScheduleWindowStartTimeOutOfRange" xml:space="preserve">
+    <value>ScheduleWindowStartTime is out of range, valid range is from 00:00 to 19:30</value>
+  </data>
 </root>
