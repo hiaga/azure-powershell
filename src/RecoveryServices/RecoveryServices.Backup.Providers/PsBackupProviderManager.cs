@@ -232,7 +232,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     }
                     psProviderType = PsBackupProviderTypes.AzureFiles;
                     break;
-                case WorkloadType.MSSQL:
+                // same case for SAPHANA and MSSQL
+                case WorkloadType.SAPHanaDatabase: 
+                case WorkloadType.MSSQL:                
                     if (backupManagementType.HasValue &&
                         backupManagementType != BackupManagementType.AzureWorkload)
                     {

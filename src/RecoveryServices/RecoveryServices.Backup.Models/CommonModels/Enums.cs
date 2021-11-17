@@ -136,7 +136,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// Represents MSSQL in Azure VM.
         /// </summary>
         MSSQL,
-        FileFolder
+
+        /// <summary>
+        /// Represents MARS agent.
+        /// </summary>
+        FileFolder,
+
+        /// <summary>
+        /// Represents SAPHANA in Azure VM.
+        /// </summary>
+        SAPHanaDatabase
     }
 
     /// <summary>

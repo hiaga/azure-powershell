@@ -92,7 +92,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 
                         if(DeleteBackupData)
                         {
-                            #region Archived RPS 
+                            #region Archived RPs 
                             // Fetch RecoveryPoints in Archive Tier, if yes throw warning and confirmation prompt
                             Dictionary<UriEnums, string> uriDict = HelperUtils.ParseUri(Item.Id);
                             string containerUri = HelperUtils.GetContainerUri(uriDict, Item.Id);
@@ -118,9 +118,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                                queryFilter,
                                vaultName: vaultName,
                                resourceGroupName: resourceGroupName);
-                            
-                            var recoveryPointList = RecoveryPointConversions.GetPSAzureRecoveryPoints(rpListResponse, Item);                            
+
+                            Logger.Instance.WriteDebug("\n \n reached .... 1" + JsonConvert.SerializeObject(rpListResponse));
+                            Logger.Instance.WriteDebug("\n \n reached .... 1B" + JsonConvert.SerializeObject(Item));
+                            var recoveryPointList = RecoveryPointConversions.GetPSAzureRecoveryPoints(rpListResponse, Item);
+
+                            Logger.Instance.WriteDebug("\n reached .... 2");
+
                             recoveryPointList = RecoveryPointConversions.FilterRPsBasedOnTier(recoveryPointList, RecoveryPointTier.VaultArchive);
+
+                            Logger.Instance.WriteDebug("reached .... 3");
 
                             #endregion
 
@@ -142,8 +149,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             }
                             else
                             {
+                                Logger.Instance.WriteDebug("reached .... 4");
                                 var itemResponse = psBackupProvider.DisableProtectionWithDeleteData();
                                 Logger.Instance.WriteDebug("item Response " + JsonConvert.SerializeObject(itemResponse));
+
+                                Logger.Instance.WriteDebug("reached .... 5");
+
                                 // Track Response and display job details
                                 HandleCreatedJob(
                                         itemResponse,

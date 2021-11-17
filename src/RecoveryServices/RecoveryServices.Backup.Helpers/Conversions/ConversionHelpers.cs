@@ -14,6 +14,7 @@
 
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
@@ -444,13 +445,20 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                     itemModel = GetAzureFileShareItemModel(protectedItem);
                 }
 
-                if (protectedItem.Properties.GetType() ==
+                if (protectedItem.Properties.GetType() == 
                     typeof(ServiceClientModel.AzureVmWorkloadSQLDatabaseProtectedItem))
                 {
                     itemModel = GetAzureVmWorkloadItemModel(protectedItem);
                 }
 
-                if(protectedItem.Properties.GetType() ==
+                if (protectedItem.Properties.GetType() == 
+                    typeof(ServiceClientModel.AzureVmWorkloadSAPHanaDatabaseProtectedItem))
+                {
+                    Logger.Instance.WriteDebug("reached here ...");
+                    itemModel = GetAzureVmWorkloadSAPHanaItemModel(protectedItem);
+                }
+
+                if (protectedItem.Properties.GetType() ==
                     typeof(ServiceClientModel.MabFileFolderProtectedItem))
                 {
                     itemModel = GetMabItemModel(protectedItem);
@@ -481,6 +489,36 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 containerUri,
                 ContainerType.AzureVMAppContainer,
                 policyName);
+            return itemModel;
+        }
+
+        private static ItemBase GetAzureVmWorkloadSAPHanaItemModel(ServiceClientModel.ProtectedItemResource protectedItem)
+        {
+            ItemBase itemModel;
+            string policyName = null;
+            // can try changing it to AzureVmWorkloadProtectedItem
+            string policyId = ((ServiceClientModel.AzureVmWorkloadSAPHanaDatabaseProtectedItem)protectedItem.Properties).PolicyId;
+            if (!string.IsNullOrEmpty(policyId))
+            {
+                Dictionary<UriEnums, string> keyValueDict =
+                HelperUtils.ParseUri(policyId);
+                policyName = HelperUtils.GetPolicyNameFromPolicyId(keyValueDict, policyId);
+            }
+
+            string containerUri = HelperUtils.GetContainerUri(
+                HelperUtils.ParseUri(protectedItem.Id),
+                protectedItem.Id);
+
+            Logger.Instance.WriteDebug("reached at ... 2");
+
+            itemModel = new AzureWorkloadSAPHanaDatabaseProtectedItem(
+                protectedItem,
+                containerUri,
+                ContainerType.AzureVMAppContainer,
+                policyName);
+
+            Logger.Instance.WriteDebug("reached at ... 3");
+
             return itemModel;
         }
 
@@ -616,7 +654,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             foreach (var protectedItem in protectedItems)
             {
-                itemModels.Add(GetItemModel(protectedItem));
+                var iModel = GetItemModel(protectedItem);
+                Logger.Instance.WriteDebug("\n \n iModel : " + JsonConvert.SerializeObject(iModel));
+                itemModels.Add(iModel);
+                // itemModels.Add(GetItemModel(protectedItem));
             }
 
             return itemModels;

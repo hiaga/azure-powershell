@@ -304,6 +304,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             {
                 return WorkloadType.MSSQL;
             }
+            else if (workloadType == ServiceClientModel.WorkloadType.SAPHanaDatabase)
+            {
+                return WorkloadType.SAPHanaDatabase;
+            }
             else if (workloadType == ServiceClientModel.WorkloadType.FileFolder)
             {
                 return WorkloadType.FileFolder;
