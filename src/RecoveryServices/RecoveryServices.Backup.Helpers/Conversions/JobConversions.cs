@@ -16,6 +16,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
@@ -52,6 +53,42 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 response = GetPSAzureWorkloadJob(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(MabJob)) 
+            {
+                response = GetPSMabJob(serviceClientJob);
+            }
+            else if (serviceClientJob.Properties.GetType() == typeof(VaultJob))
+            {
+                response = GetPSAzureVaultJob(serviceClientJob);
+            }
+
+            return response;
+        }
+
+        /// <summary>
+        /// Helper function to convert ps backup job model from service response.
+        /// </summary>
+        public static CmdletModel.JobBase GetPSJobCrr(CrrModel.JobResource serviceClientJob)
+        {
+            CmdletModel.JobBase response = null;
+
+            // ServiceClient doesn't initialize Properties if the type of job is not known to current version of ServiceClient.
+            if (serviceClientJob.Properties == null)
+            {
+                Logger.Instance.WriteWarning(Resources.UnsupportedJobWarning);
+            }
+            else if (serviceClientJob.Properties.GetType() == typeof(AzureIaaSVMJob))
+            {
+                response = GetPSAzureVmJob(serviceClientJob);
+            }
+            else if (serviceClientJob.Properties.GetType() == typeof(AzureStorageJob))
+            {
+                response = GetPSAzureFileShareJob(serviceClientJob);
+            }
+            else if (serviceClientJob.Properties.GetType() == typeof(AzureWorkloadJob))
+            {
+                response = GetPSAzureWorkloadJob(serviceClientJob);
+            }
+            else if (serviceClientJob.Properties.GetType() == typeof(MabJob))
             {
                 response = GetPSMabJob(serviceClientJob);
             }

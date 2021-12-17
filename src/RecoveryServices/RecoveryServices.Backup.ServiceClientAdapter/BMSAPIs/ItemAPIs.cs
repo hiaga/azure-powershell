@@ -15,6 +15,7 @@
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 using Microsoft.Rest.Azure.OData;
 using System;
 using System.Collections.Generic;
@@ -129,26 +130,26 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <param name="queryFilter">Query params</param>
         /// <param name="skipToken">Skip token used for pagination</param>
         /// <returns>List of protected items</returns>
-        public List<ProtectedItemResource> ListCrrProtectedItem(
-            ODataQuery<ProtectedItemQueryObject> queryFilter,
+        public List<CrrModel.ProtectedItemResource> ListCrrProtectedItem(
+            ODataQuery<CrrModel.ProtectedItemQueryObject> queryFilter,
             string skipToken = default(string),
             string vaultName = null,
             string resourceGroupName = null)
         {
-            Func<RestAzureNS.IPage<ProtectedItemResource>> listAsync =
-                () => BmsAdapter.Client.BackupProtectedItemsCrr.ListWithHttpMessagesAsync(
+            Func<RestAzureNS.IPage<CrrModel.ProtectedItemResource>> listAsync =
+                () => CrrAdapter.Client.BackupProtectedItemsCrr.ListWithHttpMessagesAsync(
                     vaultName ?? BmsAdapter.GetResourceName(),
                     resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
                     queryFilter,
                     skipToken,
                     cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
 
-            Func<string, RestAzureNS.IPage<ProtectedItemResource>> listNextAsync =
-                nextLink => BmsAdapter.Client.BackupProtectedItemsCrr.ListNextWithHttpMessagesAsync(
+            Func<string, RestAzureNS.IPage<CrrModel.ProtectedItemResource>> listNextAsync =
+                nextLink => CrrAdapter.Client.BackupProtectedItemsCrr.ListNextWithHttpMessagesAsync(
                     nextLink,
                     cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
 
-            return HelperUtils.GetPagedList(listAsync, listNextAsync);
+            return HelperUtils.GetPagedListCrr(listAsync, listNextAsync);
         }       
 
         /// <summary>

@@ -25,6 +25,7 @@ using System.Linq;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using RestAzureNS = Microsoft.Rest.Azure;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 {
@@ -534,14 +535,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 AzureRecoveryPoint rp = (AzureRecoveryPoint)wLRecoveryConfig.RecoveryPoint;
 
                 // get access token
-                CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, secondaryRegion, vaultName: vaultName, resourceGroupName: resourceGroupName, ServiceClientModel.BackupManagementType.AzureWorkload);
+                CrrModel.CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, secondaryRegion, vaultName: vaultName, resourceGroupName: resourceGroupName, ServiceClientModel.BackupManagementType.AzureWorkload);
 
                 // AzureWorkload  CRR Request
                 Logger.Instance.WriteDebug("Triggering Restore to secondary region: " + secondaryRegion);
 
-                CrossRegionRestoreRequest crrRestoreRequest = new CrossRegionRestoreRequest();
+                CrrModel.CrossRegionRestoreRequest crrRestoreRequest = new CrrModel.CrossRegionRestoreRequest();
                 crrRestoreRequest.CrossRegionRestoreAccessDetails = accessToken;
-                crrRestoreRequest.RestoreRequest = triggerRestoreRequest.Properties;
+                // Convert; should we create a separate function 
+                crrRestoreRequest.RestoreRequest = null; // triggerRestoreRequest.Properties;
 
                 // storage account location isn't required in case of workload restore
                 var response = ServiceClientAdapter.RestoreDiskSecondryRegion(

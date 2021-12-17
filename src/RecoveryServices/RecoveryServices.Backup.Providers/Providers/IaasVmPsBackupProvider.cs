@@ -32,6 +32,7 @@ using System.Text.RegularExpressions;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
 using RestAzureNS = Microsoft.Rest.Azure;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
+using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 using SystemNet = System.Net;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
@@ -511,16 +512,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             if (useSecondaryRegion)
             {
                 // get access token
-                CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, secondaryRegion, vaultName: vaultName, resourceGroupName: resourceGroupName);
+                CrrModel.CrrAccessToken accessToken = ServiceClientAdapter.GetCRRAccessToken(rp, secondaryRegion, vaultName: vaultName, resourceGroupName: resourceGroupName);
 
                 // Iaas VM CRR Request
                 Logger.Instance.WriteDebug("Triggering Restore to secondary region: " + secondaryRegion);
                 restoreRequest.Region = secondaryRegion;
-                restoreRequest.AffinityGroup = "";                 
-                
-                CrossRegionRestoreRequest crrRestoreRequest = new CrossRegionRestoreRequest();
+                restoreRequest.AffinityGroup = "";
+
+                CrrModel.CrossRegionRestoreRequest crrRestoreRequest = new CrrModel.CrossRegionRestoreRequest();
                 crrRestoreRequest.CrossRegionRestoreAccessDetails = accessToken;
-                crrRestoreRequest.RestoreRequest = restoreRequest;
+                // convert restore request to CRR restore request 
+                crrRestoreRequest.RestoreRequest = null; //  restoreRequest;
                 
                 var response = ServiceClientAdapter.RestoreDiskSecondryRegion(
                     rp,
