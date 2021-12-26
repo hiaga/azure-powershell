@@ -102,19 +102,20 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             else
             {
                 if (ScheduleInterval == null || ScheduleWindowStartTime == null || ScheduleWindowDuration == null || ScheduleRunTimeZone == null)
-                {
-                    // ScheduleInterval, ScheduleWindowStartTime, ScheduleWindowDuration, ScheduleRunTimeZone can't be null for Hourly policy. 
+                {                    
+                    throw new ArgumentException(String.Format(Resources.HourlyScheduleNullValueException));
                 }                
 
-                List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };        
-                if(!(AllowedScheduleIntervals.Contains((int)ScheduleInterval))){
-                    // Incorrect value for ScheduleInterval, allowed values are 4, 6, 8, 12. 
+                List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };                
+                if (!(AllowedScheduleIntervals.Contains((int)ScheduleInterval)))
+                {                    
+                    throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));                    
                 }
 
                 if ((ScheduleWindowDuration < ScheduleInterval) || (ScheduleWindowDuration < PolicyConstants.AfsHourlyWindowDurationMin) ||
                     (ScheduleWindowDuration > PolicyConstants.AfsHourlyWindowDurationMax))
-                {
-                    // ScheduleWindowDuration can't be lesser than ScheduleInterval and should exist in range from 4 to 23.
+                {                    
+                    throw new ArgumentException(String.Format(Resources.InvalidScheduleWindowDuration, PolicyConstants.AfsHourlyWindowDurationMin, PolicyConstants.AfsHourlyWindowDurationMax));
                 }
 
                 DateTime windowStartTime = (DateTime)ScheduleWindowStartTime;
@@ -126,14 +127,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
                 TimeSpan diff = finalBackupTime - windowStartTime;
 
                 if(diff.TotalHours < ScheduleWindowDuration)
-                {
-                    // ScheduleWindowDuration should be less than or equal to (23:30 - ScheduleWindowStartTime)
+                {                    
+                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
                 }
 
                 //validate window start time 
                 if (ScheduleWindowStartTime > maximumStartTime || ScheduleWindowStartTime < minimumStartTime)
                 {
-                    // ScheduleWindowStartTime is out of range (00:00 to  19:30).
+                    throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
                 }
 
                 if (windowStartTime.Minute % 30 != 0 || windowStartTime.Second != 0 || windowStartTime.Millisecond != 0)

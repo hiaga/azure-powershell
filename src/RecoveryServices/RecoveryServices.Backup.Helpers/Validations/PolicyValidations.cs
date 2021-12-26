@@ -257,7 +257,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
                     if(totalNumberOfScheduledPoints > PolicyConstants.AfsDailyRetentionDaysMax)
                     {
-                        // Number of retention points are more than 200. Please reduce the retention duration count for Daily Schedule 
+                        throw new ArgumentException(String.Format(Resources.DailyRetentionPointsLimitExceeded, PolicyConstants.AfsDailyRetentionDaysMax));
                     }
                 }
             }

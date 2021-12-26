@@ -350,7 +350,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 (PolicyBase)ProviderData[PolicyParams.ProtectionPolicy] :
                 null;
 
-            CmdletModel.ScheduleRunType ScheduleRunFrequency = (schedulePolicy != null) ? ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleRunFrequency : 0;                
+            CmdletModel.ScheduleRunType ScheduleRunFrequency = (schedulePolicy != null) ? ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleRunFrequency : 0;
+
+            // convert Window start time to UTC as expected
+            if(schedulePolicy != null && ScheduleRunFrequency == CmdletModel.ScheduleRunType.Hourly &&
+                ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleWindowStartTime != null)
+            {
+                ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleWindowStartTime = ((DateTime)(((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleWindowStartTime)).ToUniversalTime();
+            } 
 
             ProtectionPolicyResource serviceClientRequest = new ProtectionPolicyResource();
             

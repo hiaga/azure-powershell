@@ -2139,7 +2139,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Properties {
         }
 
         /// <summary>
-        ///   Looks up a localized string similar to ScheduleWindowDuration can 't be lesser than ScheduleInterval and should exist in range from MinDuration to MaxDuration
+        ///   Looks up a localized string similar to ScheduleWindowDuration can't be lesser than ScheduleInterval and should exist in range from MinDuration to MaxDuration
         /// </summary>
         public static string InvalidScheduleWindowDuration
         {
