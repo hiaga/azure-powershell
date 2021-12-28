@@ -96,6 +96,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             {
                 base.ExecuteCmdlet();
 
+                Logger.Instance.WriteDebug(string.Format("Running the Cmdlets ..."));
+
                 ResourceIdentifier resourceIdentifier = new ResourceIdentifier(VaultId);
                 string vaultName = resourceIdentifier.ResourceName;
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
@@ -180,7 +182,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         ServiceClientHelpers.GetServiceClientBackupManagementType(BackupManagementType),
                         secondaryRegion);
                     
-                    JobConversions.AddServiceClientJobsToPSList(
+                    JobConversions.AddServiceClientJobsToPSListCrr(
                     adapterResponse, result, ref resultCount);
                 }
                 else

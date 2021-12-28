@@ -78,23 +78,23 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             }
             else if (serviceClientJob.Properties.GetType() == typeof(AzureIaaSVMJob))
             {
-                response = GetPSAzureVmJob(serviceClientJob);
+                response = null; // GetPSAzureVmJob(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(AzureStorageJob))
             {
-                response = GetPSAzureFileShareJob(serviceClientJob);
+                response = null; //GetPSAzureFileShareJob(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(AzureWorkloadJob))
             {
-                response = GetPSAzureWorkloadJob(serviceClientJob);
+                response = null; //GetPSAzureWorkloadJob(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(MabJob))
             {
-                response = GetPSMabJob(serviceClientJob);
+                response = null; //GetPSMabJob(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(VaultJob))
             {
-                response = GetPSAzureVaultJob(serviceClientJob);
+                response = null; //GetPSAzureVaultJob(serviceClientJob);
             }
 
             return response;
@@ -113,6 +113,33 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 foreach (var job in serviceClientJobs)
                 {
                     CmdletModel.JobBase convertedJob = GetPSJob(job);
+                    if (convertedJob != null)
+                    {
+                        jobsCount++;
+                        psJobs.Add(convertedJob);
+                    }
+                    else
+                    {
+                        Logger.Instance.WriteDebug(
+                            "Ignoring some of the unexpected job while conversion");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Helper function to convert ps backup job list model from service response.
+        /// </summary>
+        public static void AddServiceClientJobsToPSListCrr(
+            List<CrrModel.JobResource> serviceClientJobs,
+            List<CmdletModel.JobBase> psJobs,
+            ref int jobsCount)
+        {
+            if (serviceClientJobs != null)
+            {
+                foreach (var job in serviceClientJobs)
+                {
+                    CmdletModel.JobBase convertedJob = GetPSJobCrr(job);
                     if (convertedJob != null)
                     {
                         jobsCount++;

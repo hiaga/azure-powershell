@@ -80,7 +80,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     string secondaryRegion = BackupUtils.regionMap[vault.Location];
 
                     CrrModel.JobResource jobDetailsCrr = ServiceClientAdapter.GetCRRJobDetails(secondaryRegion, jobRequest);
-                    WriteObject(JobConversions.GetPSJob(jobDetailsCrr));
+                    WriteObject(JobConversions.GetPSJobCrr(jobDetailsCrr));
                 }
                 else
                 {
