@@ -126,17 +126,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
                 DateTime finalBackupTime = new DateTime(windowStartTime.Year , windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);                                
                 TimeSpan diff = finalBackupTime - windowStartTime;
 
-                if(diff.TotalHours < ScheduleWindowDuration)
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
-                }
-
                 //validate window start time 
                 if (ScheduleWindowStartTime > maximumStartTime || ScheduleWindowStartTime < minimumStartTime)
                 {
                     throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
                 }
 
+                if (diff.TotalHours < ScheduleWindowDuration)
+                {                    
+                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
+                }                
+
+                // if non-UTC times are allowed then this exception needs to change 
                 if (windowStartTime.Minute % 30 != 0 || windowStartTime.Second != 0 || windowStartTime.Millisecond != 0)
                 {
                     throw new ArgumentException(Resources.InvalidScheduleTimeInScheduleException);
