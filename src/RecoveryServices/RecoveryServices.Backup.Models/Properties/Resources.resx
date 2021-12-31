@@ -680,7 +680,7 @@ Please contact Microsoft for further assistance.</value>
     <value>Unregister container</value>
   </data>
   <data name="DailyRetentionPointsLimitExceeded" xml:space="preserve">
-    <value>Number of retention points are more than {0}, please reduce the retention duration count for Daily Schedule</value>
+    <value>Number of restore points are more than {0}, please reduce the retention duration count for Daily Schedule or reduce number of backups per day</value>
   </data>
   <data name="HourlyScheduleNullValueException" xml:space="preserve">
     <value>ScheduleInterval, ScheduleWindowStartTime, ScheduleWindowDuration, ScheduleRunTimeZone can't be null for Hourly policy</value>

@@ -2094,8 +2094,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Properties {
             }
         }
 
-        /// <summary>
-        ///   Looks up a localized string similar to Number of retention points are more than <Limit>, please reduce the retention duration count for Daily Schedule
+        /// <summary>        
+        ///   Looks up a localized string similar to Number of restore points are more than <Limit>, please reduce the
+        ///   retention duration count for Daily Schedule or reduce number of backups per day
         /// </summary>
         public static string DailyRetentionPointsLimitExceeded
         {
