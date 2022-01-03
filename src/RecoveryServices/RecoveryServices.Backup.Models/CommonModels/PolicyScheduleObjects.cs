@@ -76,7 +76,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             //Currently only one scheduled run time is allowed
             //Validate that the schedule runtime is in multiples of 30 Mins
             if(ScheduleRunFrequency != ScheduleRunType.Hourly)
-            {
+            {                
                 if (ScheduleRunTimes == null || ScheduleRunTimes.Count != 1 ||
                 ScheduleRunTimes[0].Minute % 30 != 0 ||
                 ScheduleRunTimes[0].Second != 0 ||

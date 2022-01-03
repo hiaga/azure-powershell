@@ -90,7 +90,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 psPolicy.ScheduleInterval = null;
                 psPolicy.ScheduleWindowStartTime = null;
                 psPolicy.ScheduleWindowDuration = null;
-                psPolicy.ScheduleRunTimeZone = null;
+                psPolicy.ScheduleRunTimeZone = timeZone;
             }
 
             // safe side validation

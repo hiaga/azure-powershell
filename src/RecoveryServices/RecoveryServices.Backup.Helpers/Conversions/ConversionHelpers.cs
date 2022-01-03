@@ -237,7 +237,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 return null;
             }
 
-
             policyModel = new AzureFileSharePolicy();
             AzureFileSharePolicy fileSharePolicyModel = policyModel as AzureFileSharePolicy;
             fileSharePolicyModel.WorkloadType = WorkloadType.AzureFiles;
