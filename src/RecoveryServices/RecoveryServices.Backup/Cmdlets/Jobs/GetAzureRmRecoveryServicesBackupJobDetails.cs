@@ -76,6 +76,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     jobRequest.JobName = JobId;
                     jobRequest.ResourceId = VaultId;
 
+                    // check this GetVault for rainy day scenario
                     ARSVault vault = ServiceClientAdapter.GetVault(resourceGroupName, vaultName);
                     string secondaryRegion = BackupUtils.regionMap[vault.Location];
 

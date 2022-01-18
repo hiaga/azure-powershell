@@ -94,6 +94,30 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
         }
 
+        /*/// <summary> // remove commented code 
+        /// Gets a protected item from secondary region
+        /// </summary>
+        /// <param name="containerName">Name of the container which this item belongs to</param>
+        /// <param name="protectedItemName">Name of the item</param>
+        /// <param name="queryFilter">Query filter</param>
+        /// <returns>Protected item</returns>
+        public RestAzureNS.AzureOperationResponse<ProtectedItemResource> GetProtectedItemCrr(
+            string containerName,
+            string protectedItemName,
+            ODataQuery<GetProtectedItemQueryObject> queryFilter, // ??
+            string vaultName = null,
+            string resourceGroupName = null)
+        {
+            return CrrAdapter.Client.BackupCrrJobDetails.GetWithHttpMessagesAsync(
+                vaultName ?? BmsAdapter.GetResourceName(),
+                resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
+                AzureFabricName,
+                containerName,
+                protectedItemName,
+                queryFilter,
+                cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
+        }*/
+
         /// <summary>
         /// List protected items protected by the Recovery Services vault according to the query params 
         /// and pagination params.
@@ -130,26 +154,28 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <param name="queryFilter">Query params</param>
         /// <param name="skipToken">Skip token used for pagination</param>
         /// <returns>List of protected items</returns>
-        public List<CrrModel.ProtectedItemResource> ListCrrProtectedItem(
+        public List<CrrModel.ProtectedItemResource> ListProtectedItemCrr(
             ODataQuery<CrrModel.ProtectedItemQueryObject> queryFilter,
             string skipToken = default(string),
             string vaultName = null,
             string resourceGroupName = null)
-        {
+        {            
             Func<RestAzureNS.IPage<CrrModel.ProtectedItemResource>> listAsync =
                 () => CrrAdapter.Client.BackupProtectedItemsCrr.ListWithHttpMessagesAsync(
                     vaultName ?? BmsAdapter.GetResourceName(),
                     resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
                     queryFilter,
                     skipToken,
-                    cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
-
+                    cancellationToken: CrrAdapter.CmdletCancellationToken).Result.Body;
+            
             Func<string, RestAzureNS.IPage<CrrModel.ProtectedItemResource>> listNextAsync =
                 nextLink => CrrAdapter.Client.BackupProtectedItemsCrr.ListNextWithHttpMessagesAsync(
                     nextLink,
-                    cancellationToken: BmsAdapter.CmdletCancellationToken).Result.Body;
-
-            return HelperUtils.GetPagedListCrr(listAsync, listNextAsync);
+                    cancellationToken: CrrAdapter.CmdletCancellationToken).Result.Body;
+            
+            var result = HelperUtils.GetPagedListCrr(listAsync, listNextAsync);
+            
+            return result;
         }       
 
         /// <summary>

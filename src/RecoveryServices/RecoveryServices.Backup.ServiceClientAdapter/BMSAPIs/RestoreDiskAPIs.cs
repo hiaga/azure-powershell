@@ -109,7 +109,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             string secondaryRegion = null)
         {  
             //validation block
-            if (!triggerCRRRestoreRequest.RestoreRequest.GetType().IsSubclassOf(typeof(AzureWorkloadRestoreRequest)))
+            if (!triggerCRRRestoreRequest.RestoreRequest.GetType().IsSubclassOf(typeof(CrrModel.AzureWorkloadRestoreRequest)))
             {
                 if (storageAccountLocation != secondaryRegion)
                 {

@@ -305,28 +305,25 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             where T : CrrModel.Resource
         {
             var resources = new List<T>();
-            string nextLink = null;
-
+            string nextLink = null;            
             var pagedResources = listResources();
-
+            
             foreach (var pagedResource in pagedResources)
             {
                 resources.Add(pagedResource);
-            }
-
+            }            
             nextLink = pagedResources.NextPageLink;
-
+            
             while (!string.IsNullOrEmpty(nextLink))
-            {
+            {               
                 pagedResources = listNext(nextLink);
                 nextLink = pagedResources.NextPageLink;
-
+                
                 foreach (var pagedResource in pagedResources)
-                {
+                {                    
                     resources.Add(pagedResource);
-                }
-            }
-
+                }                
+            }            
             return resources;
         }
 

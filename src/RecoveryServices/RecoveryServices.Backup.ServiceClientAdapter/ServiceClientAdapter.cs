@@ -51,6 +51,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         public ServiceClientAdapter(IAzureContext context)
         {
             BmsAdapter = new ClientProxy<RecoveryServicesBackupNS.RecoveryServicesBackupClient>(context);
+            CrrAdapter = new ClientProxy<RecoveryServicesBackupCRRNS.RecoveryServicesBackupClient>(context);
             RSAdapter = new ClientProxy<RecoveryServicesNS.RecoveryServicesClient>(context);
             RMAdapter = new ClientProxy<ResourcesNS.ResourceManagementClient>(context);
             SubscriptionId = context.Subscription.Id;
