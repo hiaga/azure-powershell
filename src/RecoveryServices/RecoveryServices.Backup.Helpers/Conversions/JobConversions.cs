@@ -136,15 +136,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             ref int jobsCount)
         {
             if (serviceClientJobs != null)
-            {
-                Logger.Instance.WriteDebug("reached crrjob ... 1");
+            {                
                 foreach (var job in serviceClientJobs)
                 {
-                    Logger.Instance.WriteDebug("reached crrjob ... 2");
                     CmdletModel.JobBase convertedJob = GetPSJobCrr(job);
                     if (convertedJob != null)
                     {
-                        Logger.Instance.WriteDebug("reached crrjob ... 3");
                         jobsCount++;
                         psJobs.Add(convertedJob);
                     }

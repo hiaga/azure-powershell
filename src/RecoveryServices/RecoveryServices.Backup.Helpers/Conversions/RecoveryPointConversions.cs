@@ -875,13 +875,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             if (item.WorkloadType == WorkloadType.MSSQL)
             {
-                // remove this Secondary region and change that errorDetail too... 
-                rpBase.DataDirectoryPathsFromSecondaryRegion = ((CrrModel.AzureWorkloadSQLRecoveryPoint)recoveryPoint).ExtendedInfo != null ? ((CrrModel.AzureWorkloadSQLRecoveryPoint)recoveryPoint).ExtendedInfo.DataDirectoryPaths : null;
-
                 rpBase.DataDirectoryPaths = null;
                 CrrModel.AzureWorkloadSQLRecoveryPoint crrRP = (CrrModel.AzureWorkloadSQLRecoveryPoint)recoveryPoint;
                 if(crrRP.ExtendedInfo != null)
                 {
+                    rpBase.DataDirectoryPaths = new List<ServiceClientModel.SQLDataDirectory>();
                     foreach (var dataDirectoryPath in crrRP.ExtendedInfo.DataDirectoryPaths)
                     {
                         ServiceClientModel.SQLDataDirectory sqlDataDirectory = new ServiceClientModel.SQLDataDirectory(dataDirectoryPath.Type, dataDirectoryPath.Path, dataDirectoryPath.LogicalName);

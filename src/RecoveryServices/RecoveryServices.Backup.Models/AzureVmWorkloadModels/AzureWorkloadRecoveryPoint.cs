@@ -26,8 +26,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     {
         public IList<SQLDataDirectory> DataDirectoryPaths { get; set; }
 
-        public IList<CrrModel.SQLDataDirectory> DataDirectoryPathsFromSecondaryRegion { get; set; }
-
         /// <summary>
         /// Recovery Type information for Recovery point: "Vault", "Snapshot", "Snapshot and Vault" 
         /// </summary>

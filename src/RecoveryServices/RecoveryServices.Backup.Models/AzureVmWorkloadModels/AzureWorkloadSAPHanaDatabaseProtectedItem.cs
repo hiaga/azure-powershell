@@ -49,11 +49,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         public ErrorDetail LastBackupErrorDetail { get; set; }
 
         /// <summary>
-        /// error details in last backup
-        /// </summary>
-        public CrrModel.ErrorDetail LastBackupErrorDetailFromSecondaryRegion { get; set; }
-
-        /// <summary>
         ///ID of the protected item.
         /// </summary>
         public string ProtectedItemDataSourceId { get; set; }
@@ -114,7 +109,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             ServerName = protectedItem.ServerName;
             ParentName = protectedItem.ParentName;
             ParentType = protectedItem.ParentType;
-            LastBackupErrorDetailFromSecondaryRegion = protectedItem.LastBackupErrorDetail;
+            
+            LastBackupErrorDetail = new ErrorDetail(protectedItem.LastBackupErrorDetail.Code, protectedItem.LastBackupErrorDetail.Message, protectedItem.LastBackupErrorDetail.Recommendations);
+
             ProtectedItemDataSourceId = protectedItem.ProtectedItemDataSourceId;
             ProtectedItemHealthStatus = protectedItem.ProtectedItemHealthStatus;
             LastBackupStatus = protectedItem.LastBackupStatus;

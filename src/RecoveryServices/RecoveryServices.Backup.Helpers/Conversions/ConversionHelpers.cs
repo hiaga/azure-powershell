@@ -18,7 +18,6 @@ using System;
 using System.Collections.Generic;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
-using Newtonsoft.Json;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 {
@@ -468,7 +467,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         }
 
         /// <summary>
-        /// Helper function to convert ps backup policy item from service response.
+        /// Helper function to convert ps backup item from service response.
         /// </summary>
         public static ItemBase GetItemModelCrr(CrrModel.ProtectedItemResource protectedItem)
         {
@@ -479,7 +478,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             {
                 if (protectedItem.Properties.GetType().IsSubclassOf(typeof(CrrModel.AzureIaaSVMProtectedItem)))
                 {
-                    Logger.Instance.WriteDebug(" \n \n \n fetching VM model for ...  "+ JsonConvert.SerializeObject(protectedItem.Name));
                     itemModel = GetAzureVmItemModelCrr(protectedItem);
                 }
 
@@ -510,7 +508,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             return itemModel;
         }
-
 
         private static ItemBase GetAzureVmWorkloadItemModel(ServiceClientModel.ProtectedItemResource protectedItem)
         {
@@ -589,8 +586,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         {
             ItemBase itemModel;
             string policyName = null;
-            // can try changing it to AzureVmWorkloadProtectedItem
+
+            // can also be type-casted to AzureVmWorkloadProtectedItem
             string policyId = ((CrrModel.AzureVmWorkloadSAPHanaDatabaseProtectedItem)protectedItem.Properties).PolicyId;
+            
             if (!string.IsNullOrEmpty(policyId))
             {
                 Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(policyId);
@@ -609,7 +608,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             return itemModel;
         }
-
 
         private static ItemBase GetAzureFileShareItemModel(ServiceClientModel.ProtectedItemResource protectedItem)
         {
