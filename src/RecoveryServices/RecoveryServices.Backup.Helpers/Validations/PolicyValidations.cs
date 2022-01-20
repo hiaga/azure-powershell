@@ -250,7 +250,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         {
             if (ltrPolicy.DailySchedule != null && ltrPolicy.IsDailyScheduleEnabled == true)
             {
-                if (schPolicy.ScheduleRunFrequency == ScheduleRunType.Hourly)
+                if ( schPolicy != null && schPolicy.ScheduleRunFrequency == ScheduleRunType.Hourly)
                 {
                     int numberOfPointsPerDay = (int)((schPolicy.ScheduleWindowDuration / schPolicy.ScheduleInterval) + 1);
                     int totalNumberOfScheduledPoints = numberOfPointsPerDay * (ltrPolicy.DailySchedule.DurationCountInDays + 1); //Incorporating GC delays for Hourly schedules

@@ -976,8 +976,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     container,
                     policy,
                     ServiceClientModel.BackupManagementType.AzureIaasVM,
-                    DataSourceType.VM,
-                    UseSecondaryRegion);
+                    DataSourceType.VM);
 
                 // 2. Filter by item name
                 itemModels = AzureWorkloadProviderHelper.ListProtectedItemsByItemName(

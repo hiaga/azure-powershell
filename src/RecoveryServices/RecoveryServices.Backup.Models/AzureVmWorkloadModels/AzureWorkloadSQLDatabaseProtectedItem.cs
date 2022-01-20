@@ -49,11 +49,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         public ErrorDetail LastBackupErrorDetail { get; set; }
 
         /// <summary>
-        /// error details in last backup
-        /// </summary>
-        public CrrModel.ErrorDetail LastBackupErrorDetailFromSecondary { get; set; }
-
-        /// <summary>
         ///ID of the protected item.
         /// </summary>
         public string ProtectedItemDataSourceId { get; set; }
@@ -114,13 +109,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             ServerName = protectedItem.ServerName;
             ParentName = protectedItem.ParentName;
             ParentType = protectedItem.ParentType;
-            LastBackupErrorDetailFromSecondary = protectedItem.LastBackupErrorDetail; // is this fine ?
+
+            LastBackupErrorDetail = new ErrorDetail(protectedItem.LastBackupErrorDetail.Code, protectedItem.LastBackupErrorDetail.Message, protectedItem.LastBackupErrorDetail.Recommendations);
+            
             ProtectedItemDataSourceId = protectedItem.ProtectedItemDataSourceId;
             ProtectedItemHealthStatus = protectedItem.ProtectedItemHealthStatus;
             LastBackupStatus = protectedItem.LastBackupStatus;
             LastBackupTime = protectedItem.LastBackupTime;
-            ProtectionState =
-                EnumUtils.GetEnum<ItemProtectionState>(protectedItem.ProtectionState.ToString());
+            ProtectionState = EnumUtils.GetEnum<ItemProtectionState>(protectedItem.ProtectionState.ToString());
             ProtectionStatus = EnumUtils.GetEnum<ItemProtectionStatus>(protectedItem.ProtectionStatus);
             DateOfPurge = null;
             DeleteState = EnumUtils.GetEnum<ItemDeleteState>("NotDeleted");
