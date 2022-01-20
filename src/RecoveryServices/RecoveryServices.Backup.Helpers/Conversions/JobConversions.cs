@@ -18,6 +18,7 @@ using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using CrrModel = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore.Models;
 using CmdletModel = Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models;
+using Newtonsoft.Json;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 {
@@ -71,6 +72,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         {
             CmdletModel.JobBase response = null;
 
+            Logger.Instance.WriteDebug("Jobs .... 3aaa ....   " + serviceClientJob.Properties.GetType().ToString());
+
             // ServiceClient doesn't initialize Properties if the type of job is not known to current version of ServiceClient.
             if (serviceClientJob.Properties == null)
             {
@@ -78,6 +81,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             }
             else if (serviceClientJob.Properties.GetType() == typeof(CrrModel.AzureIaaSVMJob))
             {
+                Logger.Instance.WriteDebug("Jobs .... 3 ....   " + JsonConvert.SerializeObject(serviceClientJob));
                 response = GetPSAzureVmJobCrr(serviceClientJob);
             }
             else if (serviceClientJob.Properties.GetType() == typeof(CrrModel.AzureStorageJob))
@@ -139,6 +143,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             {                
                 foreach (var job in serviceClientJobs)
                 {
+                    Logger.Instance.WriteDebug("Jobs .... 2 ....   " + JsonConvert.SerializeObject(job));
+
                     CmdletModel.JobBase convertedJob = GetPSJobCrr(job);
                     if (convertedJob != null)
                     {
