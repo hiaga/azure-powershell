@@ -359,10 +359,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     });
             }
             
-            // remove ...
-            /*List<ProtectedItemResource> protectedItemGetResponses =
-                new List<ProtectedItemResource>();*/            
-
             // 3. Filter by item's Protection Status
             if (protectionStatus != 0)
             {

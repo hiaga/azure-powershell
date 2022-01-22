@@ -1126,7 +1126,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
         private void ValidateProtectedItemCount(AzureVmPolicy azureVmPolicy)
         {
-            if (azureVmPolicy.ProtectedItemsCount > 1000)
+            if (azureVmPolicy.ProtectedItemsCount > 100)
             {
                 throw new ArgumentException(Resources.ProtectedItemsCountExceededException);
             }

@@ -180,8 +180,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         ServiceClientHelpers.GetServiceClientBackupManagementType(BackupManagementType),
                         secondaryRegion);
 
-                    Logger.Instance.WriteDebug("Jobs .... 1 ....   " + JsonConvert.SerializeObject(adapterResponse));
-
                     JobConversions.AddServiceClientJobsToPSListCrr(adapterResponse, result, ref resultCount);
                 }
                 else

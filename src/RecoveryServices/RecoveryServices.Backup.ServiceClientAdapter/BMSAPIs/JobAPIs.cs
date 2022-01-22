@@ -231,8 +231,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             // build query filters object.
             // currently we don't support any provider specific filters.
             // so we are initializing the object directly
-
-
             var queryFilterString = QueryBuilder.Instance.GetQueryString(new CrrModel.JobQueryObject()
             {
                 BackupManagementType = backupManagementType,

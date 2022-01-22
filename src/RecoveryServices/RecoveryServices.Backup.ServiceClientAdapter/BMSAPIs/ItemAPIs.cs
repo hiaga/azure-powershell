@@ -93,31 +93,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
                 queryFilter,
                 cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
         }
-
-        /*/// <summary> // remove commented code 
-        /// Gets a protected item from secondary region
-        /// </summary>
-        /// <param name="containerName">Name of the container which this item belongs to</param>
-        /// <param name="protectedItemName">Name of the item</param>
-        /// <param name="queryFilter">Query filter</param>
-        /// <returns>Protected item</returns>
-        public RestAzureNS.AzureOperationResponse<ProtectedItemResource> GetProtectedItemCrr(
-            string containerName,
-            string protectedItemName,
-            ODataQuery<GetProtectedItemQueryObject> queryFilter, // ??
-            string vaultName = null,
-            string resourceGroupName = null)
-        {
-            return CrrAdapter.Client.BackupCrrJobDetails.GetWithHttpMessagesAsync(
-                vaultName ?? BmsAdapter.GetResourceName(),
-                resourceGroupName ?? BmsAdapter.GetResourceGroupName(),
-                AzureFabricName,
-                containerName,
-                protectedItemName,
-                queryFilter,
-                cancellationToken: BmsAdapter.CmdletCancellationToken).Result;
-        }*/
-
+        
         /// <summary>
         /// List protected items protected by the Recovery Services vault according to the query params 
         /// and pagination params.

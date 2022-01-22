@@ -62,8 +62,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             CrrModel.CrrJobRequest jobRequest = new CrrModel.CrrJobRequest();
             jobRequest.JobName = jobId;
             jobRequest.ResourceId = vaultId;
-
-            // GetPSJob should accept CrrJob - change here 
+                        
             JobBase job = JobConversions.GetPSJobCrr(ServiceClientAdapter.GetCRRJobDetails(
                 secondaryRegion,
                 jobRequest));

@@ -69,8 +69,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 }
 
                 WriteDebug("Fetching job with ID: " + JobId);
-
-                // jobDetails;
+                                
                 if (UseSecondaryRegion.IsPresent) {
                     CrrModel.CrrJobRequest jobRequest = new CrrModel.CrrJobRequest();
                     jobRequest.JobName = JobId;
