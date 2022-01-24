@@ -15,7 +15,7 @@
     <PackageReference Include="Microsoft.Azure.Management.Network" Version="21.0.0" />
     <PackageReference Include="Microsoft.Azure.Management.RecoveryServices" Version="4.3.2-preview" />
 	<Reference Include="Microsoft.Azure.Management.RecoveryServices.Backup">
-		<HintPath>..\SDK4\Microsoft.Azure.Management.RecoveryServices.Backup.dll</HintPath>
+		<HintPath>..\SDK3\Microsoft.Azure.Management.RecoveryServices.Backup.dll</HintPath>
 	</Reference>
   </ItemGroup>
 
