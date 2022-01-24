@@ -476,8 +476,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             if (protectedItem != null &&
                 protectedItem.Properties != null)
             {
+                Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 1  " + protectedItem.Properties.GetType().ToString());
                 if (protectedItem.Properties.GetType().IsSubclassOf(typeof(CrrModel.AzureIaaSVMProtectedItem)))
                 {
+                    Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 2 ");
                     itemModel = GetAzureVmItemModelCrr(protectedItem);
                 }
 
@@ -490,12 +492,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 if (protectedItem.Properties.GetType() ==
                     typeof(CrrModel.AzureVmWorkloadSQLDatabaseProtectedItem))
                 {
+                    Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 3 ");
                     itemModel = GetAzureVmWorkloadItemModelCrr(protectedItem);
                 }
 
                 if (protectedItem.Properties.GetType() ==
                     typeof(CrrModel.AzureVmWorkloadSAPHanaDatabaseProtectedItem))
                 {
+                    Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 4 ");
                     itemModel = GetAzureVmWorkloadSAPHanaItemModelCrr(protectedItem);
                 }
 
@@ -505,7 +509,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                     itemModel = GetMabItemModel(protectedItem);
                 }*/
             }
-
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 5 ");
             return itemModel;
         }
 
@@ -537,7 +541,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         {
             ItemBase itemModel;
             string policyName = null;
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 3 ... 1");
             string policyId = ((CrrModel.AzureVmWorkloadSQLDatabaseProtectedItem)protectedItem.Properties).PolicyId;
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 3 ... 2");
             if (!string.IsNullOrEmpty(policyId))
             {
                 Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(policyId);
@@ -547,12 +553,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             string containerUri = HelperUtils.GetContainerUri(
                 HelperUtils.ParseUri(protectedItem.Id),
                 protectedItem.Id);
-
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 3 ... 3");
             itemModel = new AzureWorkloadSQLDatabaseProtectedItem(
                 protectedItem,
                 containerUri,
                 ContainerType.AzureVMAppContainer,
                 policyName);
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ... 3 ... 4");
             return itemModel;
         }
 
@@ -778,12 +785,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         public static List<ItemBase> GetItemModelListCrr(IEnumerable<CrrModel.ProtectedItemResource> protectedItems)
         {
             List<ItemBase> itemModels = new List<ItemBase>();
-
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 1 ");
             foreach (var protectedItem in protectedItems)
             {
+                Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 2 ");
                 itemModels.Add(GetItemModelCrr(protectedItem));
+                Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 3 ");
             }
-
+            Logger.Instance.WriteDebug("reached .... 3 ... 3 ... 4 ");
             return itemModels;
         }
 

@@ -109,8 +109,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             ServerName = protectedItem.ServerName;
             ParentName = protectedItem.ParentName;
             ParentType = protectedItem.ParentType;
-            
-            LastBackupErrorDetail = new ErrorDetail(protectedItem.LastBackupErrorDetail.Code, protectedItem.LastBackupErrorDetail.Message, protectedItem.LastBackupErrorDetail.Recommendations);
+
+            if (protectedItem.LastBackupErrorDetail != null)
+            {
+                LastBackupErrorDetail = new ErrorDetail(protectedItem.LastBackupErrorDetail.Code, protectedItem.LastBackupErrorDetail.Message, protectedItem.LastBackupErrorDetail.Recommendations);
+            }
 
             ProtectedItemDataSourceId = protectedItem.ProtectedItemDataSourceId;
             ProtectedItemHealthStatus = protectedItem.ProtectedItemHealthStatus;
