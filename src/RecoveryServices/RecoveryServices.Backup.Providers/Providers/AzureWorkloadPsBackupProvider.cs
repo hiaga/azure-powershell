@@ -289,13 +289,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             PolicyBase policy = (PolicyBase)ProviderData[PolicyParams.ProtectionPolicy];
 
             string dataSourceType = (workloadType == CmdletModel.WorkloadType.SAPHanaDatabase) ? DataSourceType.SAPHanaDatabase : DataSourceType.SQLDataBase;
-            Logger.Instance.WriteDebug("reached .... 1");
+            
             List<CrrModel.ProtectedItemResource> protectedItemsCrr = null;
             List<ProtectedItemResource> protectedItems = null;
             List<ItemBase> itemModels = null;
             if (UseSecondaryRegion)
-            {
-                Logger.Instance.WriteDebug("reached .... 2");
+            {                
                 // 1. Filter by container
                 protectedItemsCrr = AzureWorkloadProviderHelper.ListProtectedItemsByContainerCrr(
                 vaultName,
@@ -304,7 +303,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 policy,
                 ServiceClientModel.BackupManagementType.AzureWorkload,
                 dataSourceType);
-                Logger.Instance.WriteDebug("reached .... 3  " + JsonConvert.SerializeObject(protectedItemsCrr));
+                
                 itemModels = AzureWorkloadProviderHelper.ListProtectedItemsByItemNameCrr(
                 protectedItemsCrr,
                 itemName,
@@ -324,8 +323,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                             serviceClientExtendedInfo.RecoveryPointCount : 0);
                     ((AzureWorkloadSQLDatabaseProtectedItem)itemModel).LatestRecoveryPoint = ((AzureVmWorkloadSQLDatabaseProtectedItem)protectedItemGetResponse.Properties).LastRecoveryPoint;
                     ((AzureWorkloadSQLDatabaseProtectedItem)itemModel).ExtendedInfo = extendedInfo;
-                });
-                Logger.Instance.WriteDebug("reached .... 4");
+                });                
             }
             else
             {

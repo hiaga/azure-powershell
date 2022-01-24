@@ -72,9 +72,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         {
             CmdletModel.JobBase response = null;
 
-            // remove
-            Logger.Instance.WriteDebug("Jobs .... Type  ....   " + serviceClientJob.Properties.GetType().ToString());
-
             // ServiceClient doesn't initialize Properties if the type of job is not known to current version of ServiceClient.
             if (serviceClientJob.Properties == null)
             {

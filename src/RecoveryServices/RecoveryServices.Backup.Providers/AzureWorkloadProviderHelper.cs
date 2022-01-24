@@ -281,10 +281,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             Action<CmdletModel.ItemBase, ProtectedItemResource> extendedInfoProcessor, string friendlyName = null)
         {
             List<ProtectedItemResource> protectedItemGetResponses = new List<ProtectedItemResource>();
-            Logger.Instance.WriteDebug("reached .... 3 ... 1 ");
             if (!string.IsNullOrEmpty(itemName) || !string.IsNullOrEmpty(friendlyName))
             {
-                Logger.Instance.WriteDebug("reached .... 3 ... 2 ");
                 protectedItems = protectedItems.Where(protectedItem =>
                 {
                     Dictionary<CmdletModel.UriEnums, string> dictionary = HelperUtils.ParseUri(protectedItem.Id);
@@ -325,9 +323,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 }
             }
 
-            Logger.Instance.WriteDebug("reached .... 3 ... 3 ");
             List<CmdletModel.ItemBase> itemModels = ConversionHelpers.GetItemModelListCrr(protectedItems);
-            Logger.Instance.WriteDebug("reached .... 3 ... 4 ");
             if (!string.IsNullOrEmpty(itemName))
             {
                 for (int i = 0; i < itemModels.Count; i++)
@@ -335,7 +331,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     extendedInfoProcessor(itemModels[i], protectedItemGetResponses[i]);
                 }
             }
-            Logger.Instance.WriteDebug("reached .... 3 ... 5 ");
             return itemModels;
         }
 
