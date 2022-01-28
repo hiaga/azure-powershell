@@ -771,32 +771,55 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 ProviderData.ContainsKey(PolicyParams.SchedulePolicy) ?
                 (SchedulePolicyBase)ProviderData[PolicyParams.SchedulePolicy] :
                 null;
-
+            
             // do validations
-            ValidateAzureVMWorkloadType(workloadType);
-            AzureWorkloadProviderHelper.ValidateSimpleSchedulePolicy(schedulePolicy);
+            ValidateAzureVMWorkloadType(workloadType);                       
+
+            // validate V2 schedule ========================================================================================================================    ?
+            AzureWorkloadProviderHelper.ValidateSimpleSchedulePolicy(schedulePolicy, ServiceClientModel.BackupManagementType.AzureIaasVM);
+            
             Logger.Instance.WriteDebug("Validation of Schedule policy is successful");
 
             // validate RetentionPolicy
             AzureWorkloadProviderHelper.ValidateLongTermRetentionPolicy(retentionPolicy);
             Logger.Instance.WriteDebug("Validation of Retention policy is successful");
-
+                        
             // update the retention times from backupSchedule to retentionPolicy after converting to UTC           
             AzureWorkloadProviderHelper.CopyScheduleTimeToRetentionTimes((CmdletModel.LongTermRetentionPolicy)retentionPolicy,
-                                             (CmdletModel.SimpleSchedulePolicy)schedulePolicy);
+                                             schedulePolicy); 
+
             Logger.Instance.WriteDebug("Copy of RetentionTime from with SchedulePolicy to RetentionPolicy is successful");
 
+            Logger.Instance.WriteDebug("############################################################################################################  Loc: 2");
+
             // Now validate both RetentionPolicy and SchedulePolicy together
-            PolicyHelpers.ValidateLongTermRetentionPolicyWithSimpleRetentionPolicy(
+
+            if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicy))
+            {
+                PolicyHelpers.ValidateLongTermRetentionPolicyWithSimpleRetentionPolicy(
                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy,
-                                (CmdletModel.SimpleSchedulePolicy)schedulePolicy);
+                                (CmdletModel.SimpleSchedulePolicy)schedulePolicy); 
+            }
+            else if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2))
+            {
+                PolicyHelpers.ValidateLongTermRetentionPolicyWithSimpleRetentionPolicy(
+                                (CmdletModel.LongTermRetentionPolicy)retentionPolicy,
+                                (CmdletModel.SimpleSchedulePolicyV2)schedulePolicy); // check for V2 ================================= ?
+            }
+                
             Logger.Instance.WriteDebug("Validation of Retention policy with Schedule policy is successful");
 
-            int snapshotRetentionInDays = 2;
-            if (((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
+            Logger.Instance.WriteDebug("############################################################################################################  Loc: 3");
+            int snapshotRetentionInDays = 2; // in case of Hourly ? 
+            if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicy) && ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
             {
                 snapshotRetentionInDays = 5;
             }
+            else if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2) && ((CmdletModel.SimpleSchedulePolicyV2)schedulePolicy).ScheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
+            {
+                snapshotRetentionInDays = 5;
+            }
+
             // construct Service Client policy request            
             ProtectionPolicyResource serviceClientRequest = new ProtectionPolicyResource()
             {
@@ -804,12 +827,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 {
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy),
-                    SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(
-                                                (CmdletModel.SimpleSchedulePolicy)schedulePolicy),
-                    TimeZone = DateTimeKind.Utc.ToString().ToUpper(),
+                    SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(schedulePolicy), // check for V2 ================================= ?
+                    TimeZone = DateTimeKind.Utc.ToString().ToUpper(),  // check for timezone in v2 and hourly v1 ================================= ?
                     InstantRpRetentionRangeInDays = snapshotRetentionInDays
                 }
-
             };
 
             return ServiceClientAdapter.CreateOrUpdateProtectionPolicy(
@@ -848,7 +869,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             // validate RetentionPolicy and SchedulePolicy
             if (schedulePolicy != null)
             {
-                AzureWorkloadProviderHelper.ValidateSimpleSchedulePolicy(schedulePolicy);
+                AzureWorkloadProviderHelper.ValidateSimpleSchedulePolicy(schedulePolicy, ServiceClientModel.BackupManagementType.AzureIaasVM);
                 ((AzureVmPolicy)policy).SchedulePolicy = schedulePolicy;
                 Logger.Instance.WriteDebug("Validation of Schedule policy is successful");
             }
@@ -882,7 +903,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                   (CmdletModel.LongTermRetentionPolicy)((AzureVmPolicy)policy).RetentionPolicy),
                     SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(
-                                  (CmdletModel.SimpleSchedulePolicy)((AzureVmPolicy)policy).SchedulePolicy),
+                                  (CmdletModel.SimpleSchedulePolicy)((AzureVmPolicy)policy).SchedulePolicy), // check for v2 ========== ?
                     TimeZone = DateTimeKind.Utc.ToString().ToUpper(),
                     InstantRpRetentionRangeInDays = ((AzureVmPolicy)policy).SnapshotRetentionInDays,
                     InstantRPDetails = new InstantRPAdditionalDetails(
@@ -1072,18 +1093,86 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
         /// <returns>Default schedule policy object</returns>
         public SchedulePolicyBase GetDefaultSchedulePolicyObject()
         {
-            CmdletModel.SimpleSchedulePolicy defaultSchedule = new CmdletModel.SimpleSchedulePolicy();
-            //Default is daily scedule at 10:30 AM local time
-            defaultSchedule.ScheduleRunFrequency = CmdletModel.ScheduleRunType.Daily;
+            CmdletModel.ScheduleRunType scheduleRunFrequency = (CmdletModel.ScheduleRunType)ProviderData[PolicyParams.ScheduleRunFrequency];
+            CmdletModel.PolicyType policySubType = (CmdletModel.PolicyType)ProviderData[PolicyParams.PolicySubType];
 
-            DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
-            defaultSchedule.ScheduleRunTimes = new List<DateTime>();
-            defaultSchedule.ScheduleRunTimes.Add(scheduleTime);
+            if(policySubType == CmdletModel.PolicyType.Enhanced)
+            {
+                CmdletModel.SimpleSchedulePolicyV2 defaultSchedule = new CmdletModel.SimpleSchedulePolicyV2();
+                
+                //Default is daily scedule at 10:30 AM local time
+                defaultSchedule.ScheduleRunFrequency = scheduleRunFrequency;
+                
+                // ServiceClientModel.SimpleSchedulePolicyV2
+                // ServiceClientModel.SimpleSchedulePolicy
 
-            defaultSchedule.ScheduleRunDays = new List<System.DayOfWeek>();
-            defaultSchedule.ScheduleRunDays.Add(System.DayOfWeek.Sunday);
+                if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Daily)
+                {
+                    DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
 
-            return defaultSchedule;
+                    defaultSchedule.DailySchedule = new CmdletModel.DailySchedule();
+                    defaultSchedule.DailySchedule.ScheduleRunTimes = new List<DateTime>();
+                    defaultSchedule.DailySchedule.ScheduleRunTimes.Add(scheduleTime);
+
+                    defaultSchedule.WeeklySchedule = new CmdletModel.WeeklySchedule();
+                    defaultSchedule.WeeklySchedule.ScheduleRunTimes = new List<DateTime>();
+                    defaultSchedule.WeeklySchedule.ScheduleRunTimes.Add(scheduleTime);
+                    defaultSchedule.WeeklySchedule.ScheduleRunDays = new List<System.DayOfWeek>();
+                    defaultSchedule.WeeklySchedule.ScheduleRunDays.Add(System.DayOfWeek.Sunday);
+                }
+
+                else if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Hourly) // this shouldn't be supported as of now
+                {
+                    int hour = 07, minute = 30;
+                    DateTime scheduleTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+                        DateTime.Now.Day, hour, minute, 00, 00, DateTimeKind.Utc);
+                    
+                    defaultSchedule.HourlySchedule = new CmdletModel.HourlySchedule();
+                    defaultSchedule.HourlySchedule.WindowStartTime = scheduleTime;
+                    defaultSchedule.HourlySchedule.Interval = 4;
+                    defaultSchedule.HourlySchedule.WindowDuration = 24;
+                    
+                    /*defaultSchedule.ScheduleWindowStartTime = scheduleTime;
+                    defaultSchedule.ScheduleInterval = 4;
+                    defaultSchedule.ScheduleWindowDuration = 24;
+                    */                    
+                }
+
+                defaultSchedule.ScheduleRunTimeZone = DateTimeKind.Utc.ToString().ToUpper();
+
+                return defaultSchedule;
+            }
+            else
+            {
+                CmdletModel.SimpleSchedulePolicy defaultSchedule = new CmdletModel.SimpleSchedulePolicy();
+                
+                //Default is daily scedule at 10:30 AM local time
+                defaultSchedule.ScheduleRunFrequency = scheduleRunFrequency;
+
+                if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Daily)
+                {
+                    DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
+                    defaultSchedule.ScheduleRunTimes = new List<DateTime>();
+                    defaultSchedule.ScheduleRunTimes.Add(scheduleTime);
+
+                    defaultSchedule.ScheduleRunDays = new List<System.DayOfWeek>();
+                    defaultSchedule.ScheduleRunDays.Add(System.DayOfWeek.Sunday);
+                }
+
+                else if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Hourly) // this shouldn't be supported as of now
+                {
+                    throw new ArgumentException("Hourly Standard schedule is not supported for WorkloadType AzureVM");
+
+                    /*int hour = 07, minute = 30;
+                    DateTime scheduleTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+                        DateTime.Now.Day, hour, minute, 00, 00, DateTimeKind.Utc);
+                    defaultSchedule.ScheduleWindowStartTime = scheduleTime;
+                    defaultSchedule.ScheduleInterval = 4;
+                    defaultSchedule.ScheduleWindowDuration = 24;
+                    defaultSchedule.ScheduleRunTimeZone = DateTimeKind.Utc.ToString().ToUpper();*/
+                }
+                return defaultSchedule;
+            }
         }
 
         /// <summary>

@@ -61,6 +61,13 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         [ValidateSet("Daily", "Hourly")]
         public ScheduleRunType ScheduleRunFrequency = ScheduleRunType.Daily;
 
+        /// <summary>
+        /// Schedule policy subtype. 
+        /// </summary>
+        [Parameter(Mandatory = false, Position = 3,
+            HelpMessage = ParamHelpMsgs.Policy.SchedulePolicySubType)]
+        public PolicyType PolicySubType = PolicyType.Standard;
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -69,6 +76,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 
                 Dictionary<Enum, object> providerParameters = new Dictionary<Enum, object>();
                 providerParameters.Add(PolicyParams.ScheduleRunFrequency, ScheduleRunFrequency);
+                providerParameters.Add(PolicyParams.PolicySubType, PolicySubType);
 
                 PsBackupProviderManager providerManager = new PsBackupProviderManager(
                     providerParameters, ServiceClientAdapter);

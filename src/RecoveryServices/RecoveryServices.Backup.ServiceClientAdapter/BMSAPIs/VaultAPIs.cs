@@ -42,8 +42,26 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
 
         public BackupResourceVaultConfigResource GetVaultProperty(string vaultName, string resourceGroupName)
         {
+            Dictionary<string, List<string>> customHeaders = new Dictionary<string, List<string>>();
+            customHeaders.Add("abc" , new List<string> { "def"});
+            customHeaders.Add("Accept", new List<string> { "yes1" });
+
+            Logger.Instance.WriteDebug("subscription  :  "+  BmsAdapter.Client.SubscriptionId);
+            Logger.Instance.WriteDebug("ApiVersion  :  " + BmsAdapter.Client.ApiVersion);
+            Logger.Instance.WriteDebug("AcceptLanguage  :  " + BmsAdapter.Client.AcceptLanguage);
+            Logger.Instance.WriteDebug(" \n \n \n ServiceClientCredentials  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.Credentials) + " \n \n \n");
+            Logger.Instance.WriteDebug("LongRunningOperationRetryTimeout  :  " + BmsAdapter.Client.LongRunningOperationRetryTimeout);
+            Logger.Instance.WriteDebug(" \n \n \n SerializationSettings  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.SerializationSettings) + " \n \n \n");
+            Logger.Instance.WriteDebug(" \n \n \n DeserializationSettings  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.DeserializationSettings) + " \n \n \n");
+            Logger.Instance.WriteDebug(" \n \n \n GenerateClientRequestId  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.GenerateClientRequestId) + " \n \n \n");
+            Logger.Instance.WriteDebug(" \n \n \n BaseUri  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.BaseUri) + " \n \n \n");
+            Logger.Instance.WriteDebug(" \n \n \n DisableDispose  :  " + JsonConvert.SerializeObject(BmsAdapter.Client.DisableDispose) + " \n \n \n");
+
+
+            BmsAdapter.Client.BaseUri = new System.Uri("https://centraluseuap.management.azure.com"); 
+            
             return BmsAdapter.Client.BackupResourceVaultConfigs.GetWithHttpMessagesAsync(
-                vaultName, resourceGroupName).Result.Body;
+                vaultName, resourceGroupName, customHeaders).Result.Body;
         }
 
         /// <summary>  
