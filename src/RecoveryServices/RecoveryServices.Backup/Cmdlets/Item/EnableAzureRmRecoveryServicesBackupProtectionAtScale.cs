@@ -20,10 +20,10 @@ using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using Microsoft.Azure.Management.Internal.Resources.Utilities.Models;
 using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Rest.Azure.OData;
-using Azure.Core;
+/*using Azure.Core;
 using Azure.Identity;
 using Azure.ResourceManager.Resources;
-using Azure.ResourceManager.Resources.Models;
+using Azure.ResourceManager.Resources.Models;*/
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -156,7 +156,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
                 // var resourceGroup = new ResourceGroup();
-                var resourceClient = new ResourcesManagementClient(ServiceClientAdapter.BmsAdapter.Client.SubscriptionId, ServiceClientAdapter.BmsAdapter.Client.Credentials);
+                //var resourceClient = new ResourcesManagementClient(ServiceClientAdapter.BmsAdapter.Client.SubscriptionId, ServiceClientAdapter.BmsAdapter.Client.Credentials);
 
                 string shouldProcessName = Name;
                 if (ParameterSetName.Contains("Modify"))
