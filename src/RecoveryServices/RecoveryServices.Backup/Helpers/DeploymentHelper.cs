@@ -34,7 +34,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     /// </summary>
     class DeploymentHelper
     {
-        string subscriptionId = "your-subscription-id";
+        /*string subscriptionId = "your-subscription-id";
         string clientId = "your-service-principal-clientId";
         string clientSecret = "your-service-principal-client-secret";
         string resourceGroupName = "resource-group-name";
@@ -42,12 +42,22 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         string resourceGroupLocation = "resource-group-location"; // must be specified for creating a new resource group
         string pathToTemplateFile = "path-to-template.json-on-disk";
         string pathToParameterFile = "path-to-parameters.json-on-disk";
-        string tenantId = "tenant-id";
+        string tenantId = "tenant-id";*/
 
-        public async void Run()
+        string subscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c";
+        string clientId = "400a6e54-a693-4d97-8a21-80241904e5e1";
+        string clientSecret = "Xs07Q~XIPqtD1_CA7F-gZqy6GHYAlD-cPCQUF";
+        string resourceGroupName = "hiagarg";
+        string deploymentName = "hiagaDeployment";
+        string resourceGroupLocation = "centraluseuap"; // must be specified for creating a new resource group
+        string pathToTemplateFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Template.json";
+        string pathToParameterFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Parameters.json";
+        string tenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47";
+
+        public async void Run() // async
         {
             // Try to obtain the service credentials
-            var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(tenantId, clientId, clientSecret);
+             var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(tenantId, clientId, clientSecret);
 
             // Read the template and parameter file contents
             JObject templateFileContents = GetJsonFileContents(pathToTemplateFile);

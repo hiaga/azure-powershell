@@ -35,115 +35,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
     /// Enable protection of an item with the recovery services vault. 
     /// Returns the corresponding job created in the service to track this operation.
     /// </summary>
-    [Cmdlet("Enable", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesBackupProtection", DefaultParameterSetName = AzureVMComputeParameterSet, SupportsShouldProcess = true), OutputType(typeof(JobBase))]
+    [Cmdlet("Enable", ResourceManager.Common.AzureRMConstants.AzureRMPrefix + "RecoveryServicesBackupProtectionAtScale", SupportsShouldProcess = true), OutputType(typeof(Object))]
     public class EnableAzureRmRecoveryServicesBackupProtectionAtScale : RSBackupVaultCmdletBase
     {
-        internal const string AzureVMClassicComputeParameterSet = "AzureVMClassicComputeEnableProtection";
-        internal const string AzureVMComputeParameterSet = "AzureVMComputeEnableProtection";
-        internal const string AzureFileShareParameterSet = "AzureFileShareEnableProtection";
-        internal const string AzureWorkloadParameterSet = "AzureWorkloadEnableProtection";
-        internal const string ModifyProtectionParameterSet = "ModifyProtection";
-
-        #region parameters
-
-        /// <summary>
-        /// Policy to be associated with this item as part of the protection operation.
-        /// </summary>
-        [Parameter(Position = 1, Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.EnableProtectionPolicy)]
-        [ValidateNotNullOrEmpty]
-        public PolicyBase Policy { get; set; }
-
-        /// <summary>
-        /// Name of the Azure VM whose representative item needs to be protected.
-        /// </summary>
-        [Parameter(Position = 2, Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureVMClassicComputeParameterSet, HelpMessage = ParamHelpMsgs.Item.ItemName)]
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureVMComputeParameterSet, HelpMessage = ParamHelpMsgs.Item.ItemName)]
-        [Parameter(Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureFileShareParameterSet, HelpMessage = ParamHelpMsgs.Item.ItemName)]
-        public string Name { get; set; }
-
-        [Parameter(Position = 2, Mandatory = true, ParameterSetName = AzureWorkloadParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.ProtectedItem, ValueFromPipeline = true)]
-        [ValidateNotNullOrEmpty]
-        public ProtectableItemBase ProtectableItem { get; set; }
-
-        /// <summary>
-        /// Service name of the classic Azure VM whose representative item needs to be protected.
-        /// </summary>
-        [Parameter(Position = 3, Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureVMClassicComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.AzureVMServiceName)]
-        public string ServiceName { get; set; }
-
-        /// <summary>
-        /// Resource group name of the compute Azure VM whose representative item needs to be protected.
-        /// </summary>
-        [Parameter(Position = 3, Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureVMComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.AzureVMResourceGroupName)]
-        [ResourceGroupCompleter]
-        public string ResourceGroupName { get; set; }
-
-        /// <summary>
-        /// Storage account name of the Azure Files whose representative item needs to be protected.
-        /// </summary>
-        [Parameter(Position = 3, Mandatory = true, ValueFromPipelineByPropertyName = true,
-            ParameterSetName = AzureFileShareParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.AzureFileStorageAccountName)]
-        [ResourceGroupCompleter]
-        public string StorageAccountName { get; set; }
-
-        /// <summary>
-        /// Item whose protection needs to be modified.
-        /// </summary>
-        [Parameter(Position = 4, Mandatory = true, ParameterSetName = ModifyProtectionParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.ProtectedItem, ValueFromPipeline = true)]
-        [ValidateNotNullOrEmpty]
-        public ItemBase Item { get; set; }
-
-        /// <summary>
-        /// List of Disk LUNs to include in backup
-        /// </summary>
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMClassicComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.inclusionDiskList)]
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.inclusionDiskList)]
-        [Parameter(Mandatory = false, ParameterSetName = ModifyProtectionParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.inclusionDiskList)]
-        public string[] InclusionDisksList { get; set; }
-
-        /// <summary>
-        /// List of Disk LUNs to exclude in backup
-        /// </summary>
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMClassicComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.exclusionDiskList)]
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.exclusionDiskList)]
-        [Parameter(Mandatory = false, ParameterSetName = ModifyProtectionParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.exclusionDiskList)]
-        public string[] ExclusionDisksList { get; set; }
-
-        /// <summary>
-        /// Reset Disk Exclusion Settings
-        /// </summary>
-        [Parameter(Mandatory = false, ParameterSetName = ModifyProtectionParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.resetExclusionSettings)]
-        public SwitchParameter ResetExclusionSettings { get; set; }
-
-        /// <summary>
-        /// Backup OS disks of VM only
-        /// </summary>
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMClassicComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.excludeAllDataDisks)]
-        [Parameter(Mandatory = false, ParameterSetName = AzureVMComputeParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.excludeAllDataDisks)]
-        [Parameter(Mandatory = false, ParameterSetName = ModifyProtectionParameterSet,
-            HelpMessage = ParamHelpMsgs.Item.excludeAllDataDisks)]
-        public SwitchParameter ExcludeAllDataDisks { get; set; }
-
-        #endregion
 
         public override void ExecuteCmdlet()
         {
@@ -155,122 +49,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string vaultName = resourceIdentifier.ResourceName;
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
-                // var resourceGroup = new ResourceGroup();
-                //var resourceClient = new ResourcesManagementClient(ServiceClientAdapter.BmsAdapter.Client.SubscriptionId, ServiceClientAdapter.BmsAdapter.Client.Credentials);
+                Logger.Instance.WriteDebug("reched here .... 1");
 
-                string shouldProcessName = Name;
-                if (ParameterSetName.Contains("Modify"))
-                {
-                    shouldProcessName = Item.Name;
-                }
+                DeploymentHelper deploymentHelper = new DeploymentHelper();
+                deploymentHelper.Run();
 
-                if (ShouldProcess(shouldProcessName, VerbsLifecycle.Enable))
-                {
-                    if (ParameterSetName == AzureWorkloadParameterSet &&
-                    (string.Compare(((AzureWorkloadProtectableItem)ProtectableItem).ProtectableItemType,
-                    ProtectableItemType.SQLAvailabilityGroup.ToString()) == 0 ||
-                    string.Compare(((AzureWorkloadProtectableItem)ProtectableItem).ProtectableItemType,
-                    ProtectableItemType.SQLInstance.ToString()) == 0))
-                    {
-                        string backupManagementType = ProtectableItem.BackupManagementType.ToString();
-                        string workloadType = ConversionUtils.GetServiceClientWorkloadType(ProtectableItem.WorkloadType.ToString());
-                        string containerName = "VMAppContainer;" + ((AzureWorkloadProtectableItem)ProtectableItem).ContainerName;
-                        ODataQuery<BMSPOQueryObject> queryParam = new ODataQuery<BMSPOQueryObject>(
-                        q => q.BackupManagementType
-                             == backupManagementType &&
-                             q.WorkloadType == workloadType &&
-                             q.ContainerName == containerName);
-
-                        WriteDebug("going to query service to get list of protectable items");
-                        List<WorkloadProtectableItemResource> protectableItems =
-                            ServiceClientAdapter.ListProtectableItem(
-                                queryParam,
-                                vaultName: vaultName,
-                                resourceGroupName: resourceGroupName);
-                        WriteDebug("Successfully got response from service");
-                        List<ProtectableItemBase> itemModels = ConversionHelpers.GetProtectableItemModelList(protectableItems);
-                        for (int protitemindex = 0; protitemindex < itemModels.Count(); protitemindex++)
-                        {
-                            if (string.Compare(((AzureWorkloadProtectableItem)itemModels[protitemindex]).Name,
-                                ProtectableItem.Name) == 0 &&
-                            string.Compare(((AzureWorkloadProtectableItem)itemModels[protitemindex]).ServerName,
-                            ((AzureWorkloadProtectableItem)ProtectableItem).ServerName) == 0 &&
-                            string.Compare(((AzureWorkloadProtectableItem)itemModels[protitemindex]).ProtectableItemType,
-                            ((AzureWorkloadProtectableItem)ProtectableItem).ProtectableItemType) == 0 &&
-                            ((AzureWorkloadProtectableItem)itemModels[protitemindex]).Subinquireditemcount > 0)
-                            {
-                                for (int index = protitemindex + 1;
-                                index <= protitemindex + ((AzureWorkloadProtectableItem)ProtectableItem).Subinquireditemcount;
-                                index++)
-                                {
-                                    PsBackupProviderManager providerManager =
-                                        new PsBackupProviderManager(new Dictionary<Enum, object>()
-                                        {
-                                                                    { VaultParams.VaultName, vaultName },
-                                                                    { VaultParams.ResourceGroupName, resourceGroupName },
-                                                                    { ItemParams.StorageAccountName, StorageAccountName },
-                                                                    { ItemParams.ItemName, Name },
-                                                                    { ItemParams.AzureVMCloudServiceName, ServiceName },
-                                                                    { ItemParams.AzureVMResourceGroupName, ResourceGroupName },
-                                                                    { ItemParams.Policy, Policy },
-                                                                    { ItemParams.Item, Item },
-                                                                    { ItemParams.ProtectableItem, itemModels[index] },
-                                                                    { ItemParams.ParameterSetName, this.ParameterSetName },
-                                        }, ServiceClientAdapter);
-
-                                    IPsBackupProvider psBackupProvider = (Item != null) ?
-                                        providerManager.GetProviderInstance(Item.WorkloadType, Item.BackupManagementType)
-                                        : providerManager.GetProviderInstance(Policy.WorkloadType);
-
-                                    var itemResponse = psBackupProvider.EnableProtection();
-
-                                    // Track Response and display job details
-                                    HandleCreatedJob(
-                                        itemResponse,
-                                        Resources.EnableProtectionOperation,
-                                        vaultName: vaultName,
-                                        resourceGroupName: resourceGroupName);
-                                }
-                                break;
-                            }
-                        }
-                    }
-                    else
-                    {
-                        PsBackupProviderManager providerManager =
-                            new PsBackupProviderManager(new Dictionary<Enum, object>()
-                            {
-                                { VaultParams.VaultName, vaultName },
-                                { VaultParams.ResourceGroupName, resourceGroupName },
-                                { ItemParams.StorageAccountName, StorageAccountName },
-                                { ItemParams.ItemName, Name },
-                                { ItemParams.AzureVMCloudServiceName, ServiceName },
-                                { ItemParams.AzureVMResourceGroupName, ResourceGroupName },
-                                { ItemParams.Policy, Policy },
-                                { ItemParams.Item, Item },
-                                { ItemParams.ProtectableItem, ProtectableItem  },
-                                { ItemParams.ParameterSetName, this.ParameterSetName },
-                                { ItemParams.InclusionDisksList, InclusionDisksList },
-                                { ItemParams.ExclusionDisksList, ExclusionDisksList },
-                                { ItemParams.ResetExclusionSettings, ResetExclusionSettings },
-                                { ItemParams.ExcludeAllDataDisks, ExcludeAllDataDisks.IsPresent }
-                            }, ServiceClientAdapter);
-
-                        IPsBackupProvider psBackupProvider = (Item != null) ?
-                            providerManager.GetProviderInstance(Item.WorkloadType, Item.BackupManagementType)
-                            : providerManager.GetProviderInstance(Policy.WorkloadType);
-
-                        var itemResponse = psBackupProvider.EnableProtection();
-
-                        // Track Response and display job details
-                        HandleCreatedJob(
-                            itemResponse,
-                            Resources.EnableProtectionOperation,
-                            vaultName: vaultName,
-                            resourceGroupName: resourceGroupName);
-                    }
-                }
-            });
+                Logger.Instance.WriteDebug("reched here .... 2");
+                WriteObject("success");
+            });           
         }
     }
 }
