@@ -44,20 +44,20 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         string pathToParameterFile = "path-to-parameters.json-on-disk";
         string tenantId = "tenant-id";*/
 
-        string subscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c";
-        string clientId = "400a6e54-a693-4d97-8a21-80241904e5e1";
-        string clientSecret = "Xs07Q~XIPqtD1_CA7F-gZqy6GHYAlD-cPCQUF";
-        string resourceGroupName = "hiagarg";
-        string deploymentName = "hiagaDeployment";
-        string resourceGroupLocation = "centraluseuap"; // must be specified for creating a new resource group
-        string pathToTemplateFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Template.json";
-        string pathToParameterFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Parameters.json";
-        string tenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47";
+        public string subscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c";
+        public string clientId = "400a6e54-a693-4d97-8a21-80241904e5e1";
+        public string clientSecret = "Xs07Q~XIPqtD1_CA7F-gZqy6GHYAlD-cPCQUF";
+        public string resourceGroupName = "hiagarg";
+        public string deploymentName = "hiagaDeployment";
+        public string resourceGroupLocation = "centraluseuap"; // must be specified for creating a new resource group
+        public string pathToTemplateFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Template.json";
+        public string pathToParameterFile = "C:\\Source\\ps-work\\@scale protection\\TemplateDeployment\\Parameters.json";
+        public string tenantId = "72f988bf-86f1-41af-91ab-2d7cd011db47";
 
         public async void Run() // async
         {
             // Try to obtain the service credentials
-             var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(tenantId, clientId, clientSecret);
+            var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(tenantId, clientId, clientSecret);
 
             // Read the template and parameter file contents
             JObject templateFileContents = GetJsonFileContents(pathToTemplateFile);
@@ -79,7 +79,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// </summary>
         /// <param name="pathToJson">The full path to the JSON file</param>
         /// <returns>The JSON file contents</returns>
-        private JObject GetJsonFileContents(string pathToJson)
+        public JObject GetJsonFileContents(string pathToJson)
         {
             JObject templatefileContent = new JObject();
             using (StreamReader file = File.OpenText(pathToJson))
@@ -98,7 +98,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <param name="resourceManagementClient">The resource manager client.</param>
         /// <param name="resourceGroupName">The name of the resource group.</param>
         /// <param name="resourceGroupLocation">The resource group location. Required when creating a new resource group.</param>
-        private static void EnsureResourceGroupExists(ResourceManagementClient resourceManagementClient, string resourceGroupName, string resourceGroupLocation)
+        public static void EnsureResourceGroupExists(ResourceManagementClient resourceManagementClient, string resourceGroupName, string resourceGroupLocation)
         {
             if (resourceManagementClient.ResourceGroups.CheckExistence(resourceGroupName) != true)
             {
@@ -121,7 +121,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <param name="deploymentName">The name of the deployment.</param>
         /// <param name="templateFileContents">The template file contents.</param>
         /// <param name="parameterFileContents">The parameter file contents.</param>
-        private static void DeployTemplate(ResourceManagementClient resourceManagementClient, string resourceGroupName, string deploymentName, JObject templateFileContents, JObject parameterFileContents)
+        public static void DeployTemplate(ResourceManagementClient resourceManagementClient, string resourceGroupName, string deploymentName, JObject templateFileContents, JObject parameterFileContents)
         {
             Console.WriteLine(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
             var deployment = new Deployment();

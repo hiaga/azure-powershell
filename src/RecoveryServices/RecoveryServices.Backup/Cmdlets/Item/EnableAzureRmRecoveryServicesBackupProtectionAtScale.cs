@@ -25,6 +25,8 @@ using Azure.Identity;
 using Azure.ResourceManager.Resources;
 using Azure.ResourceManager.Resources.Models;*/
 using System;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 using System.Management.Automation;
@@ -50,13 +52,37 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
                 Logger.Instance.WriteDebug("reched here .... 1");
-
-                DeploymentHelper deploymentHelper = new DeploymentHelper();
-                deploymentHelper.Run();
+                
+                EnableProtectionAtScale(resourceGroupName,"EnableProtectionAtScalePowerShell");
 
                 Logger.Instance.WriteDebug("reched here .... 2");
                 WriteObject("success");
             });           
+        }
+
+        public void EnableProtectionAtScale(string resourceGroupName, string deploymentName) 
+        {   
+            // ServiceClientAdapter.DeployTemplate
+            
+            DeploymentHelper deploymentHelper = new DeploymentHelper();
+            //deploymentHelper.Run();
+
+            /*// Try to obtain the service credentials
+            var serviceCreds = await ApplicationTokenProvider.LoginSilentAsync(tenantId, clientId, clientSecret);
+*/
+            // Read the template and parameter file contents
+            JObject templateFileContents = deploymentHelper.GetJsonFileContents(deploymentHelper.pathToTemplateFile);
+            JObject parameterFileContents = deploymentHelper.GetJsonFileContents(deploymentHelper.pathToParameterFile);
+
+            // Create the resource manager client
+            // var resourceManagementClient = new ResourceManagementClient(serviceCreds);
+            // resourceManagementClient.SubscriptionId = subscriptionId;
+
+            // Create or check that resource group exists ---------------------------------------------------------- uncomment this
+            // EnsureResourceGroupExists(resourceManagementClient, resourceGroupName, resourceGroupLocation);  
+
+            // Start a deployment
+            ServiceClientAdapter.DeployTemplate(resourceGroupName, deploymentName, templateFileContents, parameterFileContents);
         }
     }
 }

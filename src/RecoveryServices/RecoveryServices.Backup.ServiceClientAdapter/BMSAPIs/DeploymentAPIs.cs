@@ -21,13 +21,15 @@ using Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.Rest.Azure.OData;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Microsoft.Azure.Management.ResourceManager;
+using ArmModel = Microsoft.Azure.Management.ResourceManager.Models;
 using RestAzureNS = Microsoft.Rest.Azure;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
 {
     public partial class ServiceClientAdapter
     {
-        /*/// <summary>
+        /// <summary>
         /// Starts a template deployment.
         /// </summary>
         /// <param name="resourceManagementClient">The resource manager client.</param>
@@ -35,21 +37,55 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         /// <param name="deploymentName">The name of the deployment.</param>
         /// <param name="templateFileContents">The template file contents.</param>
         /// <param name="parameterFileContents">The parameter file contents.</param>
-        private static void DeployTemplate(ResourceManagementClient resourceManagementClient, string resourceGroupName, string deploymentName, JObject templateFileContents, JObject parameterFileContents)
+        public void DeployTemplate(string resourceGroupName, string deploymentName, JObject templateFileContents, JObject parameterFileContents)
         {
-            Console.WriteLine(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
-            var deployment = new Deployment();
+            Logger.Instance.WriteVerbose(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
+            // Console.WriteLine(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
 
-            deployment.Properties = new DeploymentProperties
+            var deployment = new ArmModel.Deployment();
+
+            deployment.Properties = new ArmModel.DeploymentProperties
             {
-                Mode = DeploymentMode.Incremental,
+                Mode = ArmModel.DeploymentMode.Incremental,
+                Template = templateFileContents,
+                Parameters = parameterFileContents["parameters"].ToObject<JObject>()
+            };
+
+            var deploymentResult = ArmAdapter.Client.Deployments.CreateOrUpdate(resourceGroupName, deploymentName, deployment);
+            
+            Logger.Instance.WriteVerbose(string.Format("Deployment status: {0}", deploymentResult.Properties.ProvisioningState));
+            
+            // Console.WriteLine(string.Format("Deployment status: {0}", deploymentResult.Properties.ProvisioningState));
+        }
+
+        /// <summary>
+        /// Starts a template deployment.
+        /// </summary>
+        /// <param name="resourceManagementClient">The resource manager client.</param>
+        /// <param name="resourceGroupName">The name of the resource group.</param>
+        /// <param name="deploymentName">The name of the deployment.</param>
+        /// <param name="templateFileContents">The template file contents.</param>
+        /// <param name="parameterFileContents">The parameter file contents.</param>
+        public void DeployTemplateOld(ResourceManagementClient resourceManagementClient, string resourceGroupName, string deploymentName, JObject templateFileContents, JObject parameterFileContents)
+        {
+            Logger.Instance.WriteVerbose(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
+            // Console.WriteLine(string.Format("Starting template deployment '{0}' in resource group '{1}'", deploymentName, resourceGroupName));
+
+            var deployment = new ArmModel.Deployment();
+
+            deployment.Properties = new ArmModel.DeploymentProperties
+            {
+                Mode = ArmModel.DeploymentMode.Incremental,
                 Template = templateFileContents,
                 Parameters = parameterFileContents["parameters"].ToObject<JObject>()
             };
 
             var deploymentResult = resourceManagementClient.Deployments.CreateOrUpdate(resourceGroupName, deploymentName, deployment);
-            Console.WriteLine(string.Format("Deployment status: {0}", deploymentResult.Properties.ProvisioningState));
-        }*/
+
+            Logger.Instance.WriteVerbose(string.Format("Deployment status: {0}", deploymentResult.Properties.ProvisioningState));
+
+            // Console.WriteLine(string.Format("Deployment status: {0}", deploymentResult.Properties.ProvisioningState));
+        }
 
         /*public List<string> ListVaults()
         {
