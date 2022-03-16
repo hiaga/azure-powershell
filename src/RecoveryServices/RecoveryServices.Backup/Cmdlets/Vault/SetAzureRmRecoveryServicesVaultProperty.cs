@@ -31,10 +31,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         internal const string AzureRSVaultSoftDelteParameterSet = "AzureRSVaultSoftDelteParameterSet";
         internal const string AzureRSVaultCMKParameterSet = "AzureRSVaultCMKParameterSet";
 
-        [Parameter(Mandatory = true, ValueFromPipeline = false, ParameterSetName = AzureRSVaultSoftDelteParameterSet)]
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultSoftDelteParameterSet)]
         [ValidateNotNullOrEmpty]
         [ValidateSet("Enable", "Disable")]
         public string SoftDeleteFeatureState { get; set; }
+
+        [Parameter(Mandatory = false, ValueFromPipeline = false, ParameterSetName = AzureRSVaultSoftDelteParameterSet)]
+        [ValidateNotNullOrEmpty]
+        [ValidateSet("Enable", "Disable")]
+        public string EnhancedSecurityForHybrid { get; set; }
 
         [Parameter(Mandatory = true, ValueFromPipeline = false, ParameterSetName = AzureRSVaultCMKParameterSet, HelpMessage = ParamHelpMsgs.Encryption.EncryptionKeyID)]
         [ValidateNotNullOrEmpty]
@@ -68,14 +73,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     string vaultName = resourceIdentifier.ResourceName;
                     string resourceGroupName = resourceIdentifier.ResourceGroupName;
 
-                    if (SoftDeleteFeatureState != null)
+                    if (SoftDeleteFeatureState != null || EnhancedSecurityForHybrid != null)
                     {
                         BackupResourceVaultConfigResource currentConfig = ServiceClientAdapter.GetVaultProperty(vaultName, resourceGroupName);
-
                         BackupResourceVaultConfigResource param = new BackupResourceVaultConfigResource();
                         param.Properties = new BackupResourceVaultConfig();
-                        param.Properties.SoftDeleteFeatureState = SoftDeleteFeatureState + "d";
-                        param.Properties.EnhancedSecurityState = currentConfig.Properties.EnhancedSecurityState;
+
+                        param.Properties.SoftDeleteFeatureState = (SoftDeleteFeatureState != null) ? SoftDeleteFeatureState + "d" : currentConfig.Properties.SoftDeleteFeatureState;
+                        param.Properties.EnhancedSecurityState = (EnhancedSecurityForHybrid != null) ? EnhancedSecurityForHybrid + "d" : currentConfig.Properties.EnhancedSecurityState;
+                        
                         BackupResourceVaultConfigResource result = ServiceClientAdapter.SetVaultProperty(vaultName, resourceGroupName, param);
                         WriteObject(result.Properties);
                     }

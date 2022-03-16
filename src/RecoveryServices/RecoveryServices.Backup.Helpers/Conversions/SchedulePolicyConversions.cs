@@ -94,10 +94,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
             }
 
             // safe side validation
-            if (psPolicy.ScheduleRunFrequency != ScheduleRunType.Hourly)
-            {
-                psPolicy.Validate();
-            }            
+            psPolicy.Validate();       
                         
             return psPolicy;
         }
@@ -105,7 +102,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
         // <summary>
         /// Helper function to convert ps simple schedule policy from service response.
         /// </summary>
-        public static SimpleSchedulePolicy GetPSSimpleSchedulePolicyV2(
+        public static SimpleSchedulePolicyV2 GetPSSimpleSchedulePolicyV2(
             ServiceClientModel.SimpleSchedulePolicyV2 serviceClientPolicy, string timeZone)
         {
             if (serviceClientPolicy == null)
@@ -113,78 +110,70 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 return null;
             }
             
-            // now parse the V2 Policy 
-            SimpleSchedulePolicy psPolicy = new SimpleSchedulePolicy();
-
-            psPolicy.ScheduleRunDays = (serviceClientPolicy.WeeklySchedule != null) ? HelperUtils.EnumListConverter<ServiceClientModel.DayOfWeek?, DayOfWeek>(serviceClientPolicy.WeeklySchedule.ScheduleRunDays) : null;
+            SimpleSchedulePolicyV2 psPolicy = new SimpleSchedulePolicyV2();
             
-            psPolicy.ScheduleRunFrequency = (ScheduleRunType)Enum.Parse(typeof(ScheduleRunType), serviceClientPolicy.ScheduleRunFrequency.ToString());            
-
-            psPolicy.ScheduleRunTimes = (serviceClientPolicy.DailySchedule != null) ?  ParseDateTimesToUTC(serviceClientPolicy.DailySchedule.ScheduleRunTimes, timeZone) : null;
+            psPolicy.ScheduleRunFrequency = (ScheduleRunType)Enum.Parse(typeof(ScheduleRunType), serviceClientPolicy.ScheduleRunFrequency.ToString());
 
             if (psPolicy.ScheduleRunFrequency == ScheduleRunType.Weekly)
             {
+                psPolicy.WeeklySchedule = new WeeklySchedule();
+                                
                 int offset = 0;
                 if (serviceClientPolicy.WeeklySchedule != null)
                 {
-                    psPolicy.ScheduleRunTimes = ParseDateTimesToUTC(serviceClientPolicy.WeeklySchedule.ScheduleRunTimes, timeZone);
-                    offset = psPolicy.ScheduleRunTimes[0].DayOfWeek.GetHashCode() -
-                    serviceClientPolicy.WeeklySchedule.ScheduleRunTimes[0].Value.DayOfWeek.GetHashCode();
+                    psPolicy.WeeklySchedule.ScheduleRunDays = HelperUtils.EnumListConverter<ServiceClientModel.DayOfWeek?, DayOfWeek>(serviceClientPolicy.WeeklySchedule.ScheduleRunDays);                    
+                    // is the UTC time conversion necessary here ? 
+                    psPolicy.WeeklySchedule.ScheduleRunTimes = ParseDateTimesToUTC(serviceClientPolicy.WeeklySchedule.ScheduleRunTimes, timeZone);
+
+                    offset = psPolicy.WeeklySchedule.ScheduleRunTimes[0].DayOfWeek.GetHashCode() - serviceClientPolicy.WeeklySchedule.ScheduleRunTimes[0].Value.DayOfWeek.GetHashCode();
                 }
 
-                for (int index = 0; index < psPolicy.ScheduleRunDays.Count(); index++)
+                for (int index = 0; index < psPolicy.WeeklySchedule.ScheduleRunDays.Count(); index++)
                 {
                     if (offset == -1)
                     {
-                        int value = psPolicy.ScheduleRunDays[index].GetHashCode() - 1;
+                        int value = psPolicy.WeeklySchedule.ScheduleRunDays[index].GetHashCode() - 1;
                         if (value == -1)
                         {
                             value = 6;
                         }
-                        psPolicy.ScheduleRunDays[index] = (DayOfWeek)value;
+                        
+                        psPolicy.WeeklySchedule.ScheduleRunDays[index] = (DayOfWeek)value;
                     }
                     else if (offset == 1)
                     {
-                        int value = psPolicy.ScheduleRunDays[index].GetHashCode() + 1;
+                        int value = psPolicy.WeeklySchedule.ScheduleRunDays[index].GetHashCode() + 1;
                         if (value == 7)
                         {
                             value = 0;
                         }
-                        psPolicy.ScheduleRunDays[index] = (DayOfWeek)value;
+                        psPolicy.WeeklySchedule.ScheduleRunDays[index] = (DayOfWeek)value;
                     }
                 }
             }
 
             if (psPolicy.ScheduleRunFrequency == ScheduleRunType.Hourly)
             {
+                psPolicy.HourlySchedule = new HourlySchedule();
+                
                 // multiple backups per day 
-                psPolicy.ScheduleInterval = serviceClientPolicy.HourlySchedule.Interval;
-                psPolicy.ScheduleWindowStartTime = serviceClientPolicy.HourlySchedule.ScheduleWindowStartTime;
-                psPolicy.ScheduleWindowDuration = serviceClientPolicy.HourlySchedule.ScheduleWindowDuration;
-                psPolicy.ScheduleRunTimeZone = timeZone;
-
-                // throw error if these aren't null 
-                psPolicy.ScheduleRunDays = null;
-                psPolicy.ScheduleRunTimes = null;
+                psPolicy.HourlySchedule.Interval = serviceClientPolicy.HourlySchedule.Interval;
+                psPolicy.HourlySchedule.WindowStartTime = serviceClientPolicy.HourlySchedule.ScheduleWindowStartTime;
+                psPolicy.HourlySchedule.WindowDuration = serviceClientPolicy.HourlySchedule.ScheduleWindowDuration;                             
             }
             else
             {
-                psPolicy.ScheduleInterval = null;
-                psPolicy.ScheduleWindowStartTime = null;
-                psPolicy.ScheduleWindowDuration = null;
-                psPolicy.ScheduleRunTimeZone = timeZone;
+                psPolicy.DailySchedule = new DailySchedule();
+                psPolicy.DailySchedule.ScheduleRunTimes = (serviceClientPolicy.DailySchedule != null) ? ParseDateTimesToUTC(serviceClientPolicy.DailySchedule.ScheduleRunTimes, timeZone) : null;
             }
 
+            psPolicy.ScheduleRunTimeZone = timeZone;
+
             // safe side validation
-            if (psPolicy.ScheduleRunFrequency != ScheduleRunType.Hourly)
-            {
-                psPolicy.Validate();
-            }
+            psPolicy.Validate();        
 
             return psPolicy;
         }
-
-
 
         // <summary>
         /// Helper function to convert ps log schedule policy from service response.

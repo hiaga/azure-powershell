@@ -25,7 +25,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     public class HourlySchedule
     {
         /// <summary>
-        /// Represents the difference (in hours) between two successive backups per day. Allowed values are 4, 6, 8, 10 hours.
+        /// Represents the difference (in hours) between two successive backups per day. Allowed values are 4, 6, 8, 12 hours.
         /// </summary>  
         public int? Interval { get; set; }
 
@@ -43,7 +43,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     public class DailySchedule
     {
         /// <summary>
-        /// 
+        ///  Describes the list of times of the days when this schedule should run.
         /// </summary>
         public List<DateTime> ScheduleRunTimes { get; set; }                
     }
@@ -51,19 +51,19 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
     public class WeeklySchedule
     {
         /// <summary>
-        /// 
+        /// Describes the list of the days of the week when this schedule should run.
         /// </summary>
         public List<DayOfWeek> ScheduleRunDays { get; set; }
 
         /// <summary>
-        /// 
+        ///  Describes the list of times of the days when this schedule should run.
         /// </summary>
         public List<DateTime> ScheduleRunTimes { get; set; }
     }
 
     /// <summary>
-        /// Recovery services simple schedule policy.
-        /// </summary>
+    /// Recovery services simple schedule policy.
+    /// </summary>
     public class SimpleSchedulePolicy : SchedulePolicyBase
     {
         /// <summary>
@@ -135,43 +135,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
                 {                    
                     throw new ArgumentException(String.Format(Resources.HourlyScheduleNullValueException));
                 }                
-                
-                // this check should move 
-                /*List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };                
-                if (!(AllowedScheduleIntervals.Contains((int)ScheduleInterval)))
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));                    
-                }*/
-
-                // this check should be splitted
+                                
                 if (ScheduleWindowDuration < ScheduleInterval)
                 {                    
                     // resx
                     throw new ArgumentException(String.Format("ScheduleWindowDuration can't be less than ScheduleInterval for Hourly Policy"));
                 }
 
-                DateTime windowStartTime = (DateTime)ScheduleWindowStartTime;
-                DateTime minimumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 00, 00, 00, 00, DateTimeKind.Utc);
-                DateTime maximumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 19, 30, 00, 00, DateTimeKind.Utc);
+                DateTime windowStartTime = (DateTime)ScheduleWindowStartTime;                
 
-                // final backup time can be 23:30:00
-                /*DateTime finalBackupTime = new DateTime(windowStartTime.Year , windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);                                
-                TimeSpan diff = finalBackupTime - windowStartTime; */
-                // can be generic 
-                //validate window start time 
-                if (ScheduleWindowStartTime > maximumStartTime || ScheduleWindowStartTime < minimumStartTime)
-                {
-                    throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
-                }
-
-                // this check should move 
                 // If ScheduleWindowDuration is greator than (23:30 - ScheduleWindowStartTime) then throw exception  
-                /*if (diff.TotalHours < ScheduleWindowDuration)
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
-                } */               
-
-                // this check can be generic 
                 // if non-UTC times are allowed then this exception needs to change 
                 if (windowStartTime.Minute % 30 != 0 || windowStartTime.Second != 0 || windowStartTime.Millisecond != 0)
                 {
@@ -180,7 +153,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             }            
         }
 
-        public override string ToString()   // how to display in case of hourly ?
+        public override string ToString()
         {
             if (ScheduleRunFrequency == ScheduleRunType.Hourly)
             {
@@ -209,131 +182,30 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// </summary>
         public ScheduleRunType ScheduleRunFrequency { get; set; }
 
-        /*/// <summary>
-        /// Describes the list of the days of the week when this schedule should run.
-        /// </summary>
-        public List<DayOfWeek> ScheduleRunDays { get; set; }
-
-        /// <summary>
-        /// Describes the list of times of the days when this schedule should run.
-        /// </summary>
-        public List<DateTime> ScheduleRunTimes { get; set; }
-        */
-
         /// <summary>
         /// Hourly Schedule for Enhanced policy. 
         /// </summary> 
         public HourlySchedule HourlySchedule { get; set; } // comment this to hide hourly support
 
-        public DailySchedule DailySchedule { get; set; }    
-
-        public WeeklySchedule WeeklySchedule { get; set; }
-
-        /*/// <summary>
-        /// Represents the difference (in hours) between two successive backups per day. Allowed values are 4, 6, 8, 10 hours.
-        /// </summary>        
-        public int? ScheduleInterval { get; set; }
-*/
-        /*/// <summary>
-        /// Represents the window start time at which the first backup triggers in a single day, in case of hourly backups. Values can range from 00:00 to 19:30 in multiples of half hours.
+        /// <summary>
+        /// Daily Schedule for Enhanced policy.
         /// </summary>
-        public DateTime? ScheduleWindowStartTime { get; set; }
+        public DailySchedule DailySchedule { get; set; }
 
         /// <summary>
-        /// Represents the time span (in hours measured from the Schedule Window Start Time) beyond which backup jobs should not be triggered. Values can range from 4 to 23.
+        /// Weekly Schedule for Enhanced policy.
         /// </summary>
-        public int? ScheduleWindowDuration { get; set; }*/
-
+        public WeeklySchedule WeeklySchedule { get; set; }
+                
         /// <summary>
         /// Specifies the timezone in which backups are scheduled (default UTC).  
         /// </summary>
         public string ScheduleRunTimeZone { get; set; }
 
-        /*public override void Validate()
+        public override void Validate() 
         {
-            //Currently only one scheduled run time is allowed
-            //Validate that the schedule runtime is in multiples of 30 Mins
-            if (ScheduleRunFrequency != ScheduleRunType.Hourly)
-            {
-                if (ScheduleRunTimes == null || ScheduleRunTimes.Count != 1 ||
-                ScheduleRunTimes[0].Minute % 30 != 0 ||
-                ScheduleRunTimes[0].Second != 0 ||
-                ScheduleRunTimes[0].Millisecond != 0)
-                {
-                    throw new ArgumentException(Resources.InvalidScheduleTimeInScheduleException);
-                }
-
-                if (ScheduleRunTimes[0].Kind != DateTimeKind.Utc)
-                {
-                    throw new ArgumentException(Resources.ScheduleTimeNotInUTCTimeZoneException);
-                }
-
-                if (ScheduleRunFrequency == ScheduleRunType.Weekly)
-                {
-                    if (ScheduleRunDays == null || ScheduleRunDays.Count == 0 ||
-                        ScheduleRunDays.Count != ScheduleRunDays.Distinct().Count())
-                    {
-                        throw new ArgumentException(Resources.InvalidScheduleRunDaysInScheduleException);
-                    }
-                }
-            }
-            else
-            {
-                if (ScheduleInterval == null || ScheduleWindowStartTime == null || ScheduleWindowDuration == null || ScheduleRunTimeZone == null)
-                {
-                    throw new ArgumentException(String.Format(Resources.HourlyScheduleNullValueException));
-                }
-
-                // this check should move 
-                *//*List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };                
-                if (!(AllowedScheduleIntervals.Contains((int)ScheduleInterval)))
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));                    
-                }*//*
-
-                // this check should be splitted
-                if (ScheduleWindowDuration < ScheduleInterval)
-                {
-                    // resx
-                    throw new ArgumentException(String.Format("ScheduleWindowDuration can't be less than ScheduleInterval for Hourly Policy"));
-                }
-
-                DateTime windowStartTime = (DateTime)ScheduleWindowStartTime;
-                DateTime minimumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 00, 00, 00, 00, DateTimeKind.Utc);
-                DateTime maximumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 19, 30, 00, 00, DateTimeKind.Utc);
-
-                // final backup time can be 23:30:00
-                *//*DateTime finalBackupTime = new DateTime(windowStartTime.Year , windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);                                
-                TimeSpan diff = finalBackupTime - windowStartTime; *//*
-                // can be generic 
-                //validate window start time 
-                if (ScheduleWindowStartTime > maximumStartTime || ScheduleWindowStartTime < minimumStartTime)
-                {
-                    throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
-                }
-
-                // this check should move 
-                // If ScheduleWindowDuration is greator than (23:30 - ScheduleWindowStartTime) then throw exception  
-                *//*if (diff.TotalHours < ScheduleWindowDuration)
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
-                } *//*
-
-                // this check can be generic 
-                // if non-UTC times are allowed then this exception needs to change 
-                if (windowStartTime.Minute % 30 != 0 || windowStartTime.Second != 0 || windowStartTime.Millisecond != 0)
-                {
-                    throw new ArgumentException(Resources.InvalidScheduleTimeInScheduleException);
-                }
-            }
-        }
-*/
-
-        public override void Validate() // v2 
-        {
-            //Currently only one scheduled run time is allowed
-            //Validate that the schedule runtime is in multiples of 30 Mins
-
+            // Currently only one scheduled run time is allowed
+            // Validate that the schedule runtime is in multiples of 30 Mins
             if (ScheduleRunFrequency == ScheduleRunType.Daily || DailySchedule != null)
             {
                 if (DailySchedule.ScheduleRunTimes == null || DailySchedule.ScheduleRunTimes.Count != 1 ||
@@ -377,44 +249,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
                 if (HourlySchedule.Interval == null || HourlySchedule.WindowStartTime == null || HourlySchedule.WindowDuration == null || ScheduleRunTimeZone == null)
                 {
                     throw new ArgumentException(String.Format(Resources.HourlyScheduleNullValueException));
-                }
-
-                // this check should move 
-                /*List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };                
-                if (!(AllowedScheduleIntervals.Contains((int)ScheduleInterval)))
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));                    
-                }*/
-
-                // this check should be splitted
+                }               
+                
                 if (HourlySchedule.WindowDuration < HourlySchedule.Interval)
                 {
                     // resx
                     throw new ArgumentException(String.Format("ScheduleWindowDuration can't be less than ScheduleInterval for Hourly Policy"));
                 }
-
+                                
                 DateTime windowStartTime = (DateTime)HourlySchedule.WindowStartTime;
-                DateTime minimumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 00, 00, 00, 00, DateTimeKind.Utc);
-                DateTime maximumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 19, 30, 00, 00, DateTimeKind.Utc);
-
-                // final backup time can be 23:30:00
-                /*DateTime finalBackupTime = new DateTime(windowStartTime.Year , windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);                                
-                TimeSpan diff = finalBackupTime - windowStartTime; */
-                // can be generic 
-                //validate window start time 
-                if (HourlySchedule.WindowStartTime > maximumStartTime || HourlySchedule.WindowStartTime < minimumStartTime)
-                {
-                    throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
-                }
-
-                // this check should move 
-                // If ScheduleWindowDuration is greator than (23:30 - ScheduleWindowStartTime) then throw exception  
-                /*if (diff.TotalHours < ScheduleWindowDuration)
-                {                    
-                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
-                } */
-
-                // this check can be generic 
+                
                 // if non-UTC times are allowed then this exception needs to change 
                 if (windowStartTime.Minute % 30 != 0 || windowStartTime.Second != 0 || windowStartTime.Millisecond != 0)
                 {

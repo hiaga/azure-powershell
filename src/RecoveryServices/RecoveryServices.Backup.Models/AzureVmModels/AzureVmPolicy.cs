@@ -40,9 +40,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         public string AzureBackupRGNameSuffix { get; set; }
 
         /// <summary>
-        /// Type of the AzureVM policy : V1, V2
+        /// Type of the AzureVM policy : Standard, Enhanced
         /// </summary>
         public PolicyType PolicyType { get; set; }
     }
-
 }

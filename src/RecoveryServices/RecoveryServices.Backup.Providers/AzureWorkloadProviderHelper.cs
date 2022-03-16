@@ -372,7 +372,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
         public void ValidateSimpleSchedulePolicy(CmdletModel.SchedulePolicyBase policy, string backupManagementType = "")
         {            
-            if (policy == null || (policy.GetType() != typeof(CmdletModel.SimpleSchedulePolicy) && policy.GetType() != typeof(CmdletModel.SimpleSchedulePolicyV2)))  // allow V2
+            if (policy == null || (policy.GetType() != typeof(CmdletModel.SimpleSchedulePolicy) && policy.GetType() != typeof(CmdletModel.SimpleSchedulePolicyV2)))
             {
                 throw new ArgumentException(string.Format(Resources.InvalidSchedulePolicyException,
                                             typeof(CmdletModel.SimpleSchedulePolicy).ToString() + ", " + typeof(CmdletModel.SimpleSchedulePolicyV2).ToString()));
@@ -384,17 +384,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 throw new ArgumentException(Resources.AFSWeeklyScheduleNotAllowed);
             }
             
-            // call basic schedule validation 
+            // call base schedule policy validation 
             policy.Validate();
             
             if (backupManagementType == ServiceClientModel.BackupManagementType.AzureIaasVM)
-            {
-                // IaasVM specific validation  - to be added
+            {                
                 ValidateAzureIaasVMSchedulePolicy(policy);
-                // to include - 	Standard hourly is restricted for IaasVM
-                /*Resources.InvalidScheduleInterval
-                Resources.InvalidScheduleWindowDuration
-                Resources.InvalidLastBackupTime*/                
             }
             else if (backupManagementType == ServiceClientModel.BackupManagementType.AzureStorage)
             {
@@ -405,38 +400,80 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
         public void ValidateAFSSchedulePolicy(CmdletModel.SimpleSchedulePolicy policy)
         {
-            // verify if control reaching here 
-            Logger.Instance.WriteDebug("reached here ... 1 ");
-            
-            List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };
-            if (!(AllowedScheduleIntervals.Contains((int)policy.ScheduleInterval)))
+            if(policy.ScheduleRunFrequency == ScheduleRunType.Hourly)
             {
-                throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));
-            }
+                List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };
+                if (!(AllowedScheduleIntervals.Contains((int)policy.ScheduleInterval)))
+                {
+                    throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));
+                }
 
-            if ((policy.ScheduleWindowDuration < policy.ScheduleInterval) || (policy.ScheduleWindowDuration < PolicyConstants.AfsHourlyWindowDurationMin) ||
+                if ((policy.ScheduleWindowDuration < policy.ScheduleInterval) || (policy.ScheduleWindowDuration < PolicyConstants.AfsHourlyWindowDurationMin) ||
                     (policy.ScheduleWindowDuration > PolicyConstants.AfsHourlyWindowDurationMax))
-            {
-                throw new ArgumentException(String.Format(Resources.InvalidScheduleWindowDuration, PolicyConstants.AfsHourlyWindowDurationMin, PolicyConstants.AfsHourlyWindowDurationMax));
-            }
+                {
+                    throw new ArgumentException(String.Format(Resources.InvalidScheduleWindowDuration, PolicyConstants.AfsHourlyWindowDurationMin, PolicyConstants.AfsHourlyWindowDurationMax));
+                }
 
-            // final backup time can be 23:30:00
-            DateTime windowStartTime = (DateTime)policy.ScheduleWindowStartTime;
-            DateTime finalBackupTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);
-            TimeSpan diff = finalBackupTime - windowStartTime;
-                        
-            // If ScheduleWindowDuration is greator than (23:30 - ScheduleWindowStartTime) then throw exception  
-            if (diff.TotalHours < policy.ScheduleWindowDuration)
-            {
-                throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
+                DateTime windowStartTime = (DateTime)policy.ScheduleWindowStartTime;
+                DateTime minimumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 00, 00, 00, 00, DateTimeKind.Utc);
+                DateTime maximumStartTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 19, 30, 00, 00, DateTimeKind.Utc);
+
+                //validate window start time 
+                if (windowStartTime > maximumStartTime || windowStartTime < minimumStartTime)
+                {
+                    throw new ArgumentException(String.Format(Resources.ScheduleWindowStartTimeOutOfRange));
+                }
+
+                // final backup time can be 23:30:00                
+                DateTime finalBackupTime = new DateTime(windowStartTime.Year, windowStartTime.Month, windowStartTime.Day, 23, 30, 00, 00, DateTimeKind.Utc);
+                TimeSpan diff = finalBackupTime - windowStartTime;
+
+                // If ScheduleWindowDuration is greator than (23:30 - ScheduleWindowStartTime) then throw exception  
+                if (diff.TotalHours < policy.ScheduleWindowDuration)
+                {
+                    throw new ArgumentException(String.Format(Resources.InvalidLastBackupTime));
+                }
             }
         }
 
         public void ValidateAzureIaasVMSchedulePolicy(CmdletModel.SchedulePolicyBase policy)
-        {
-            // verify if control reaching here 
-            Logger.Instance.WriteDebug("reached here ... 2 ");
+        {            
+            if(policy.GetType() == typeof(CmdletModel.SimpleSchedulePolicy))
+            {                
+                CmdletModel.SimpleSchedulePolicy simpleSchedulePolicy = (CmdletModel.SimpleSchedulePolicy)policy;
+                
+                // Standard hourly is restricted for IaasVM
+                if (simpleSchedulePolicy.ScheduleRunFrequency == ScheduleRunType.Hourly)
+                {
+                    // resx
+                    throw new ArgumentException("Standard Hourly policy is not supported for WorkloadType AzureIaasVM, please try with Enhanced policy or different schedule frequency: Daily, Weekly");
+                }
+            }  
+            else if (policy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2))
+            {                
+                // hourly not allowed yet - create an exception comment now, uncomment later
+                                
+                CmdletModel.SimpleSchedulePolicyV2 simpleSchedulePolicyV2 = (CmdletModel.SimpleSchedulePolicyV2)policy;
+                if (simpleSchedulePolicyV2.ScheduleRunFrequency == ScheduleRunType.Hourly)
+                {
+                    // uncomment
+                    //throw new ArgumentException("Enhaced Hourly policy is not yet supported for WorkloadType AzureIaasVM. This support will be available soon ...");
+                                        
+                    List<int> AllowedScheduleIntervals = new List<int> { 4, 6, 8, 12 };
+                    if (!(AllowedScheduleIntervals.Contains((int)simpleSchedulePolicyV2.HourlySchedule.Interval)))
+                    {
+                        throw new ArgumentException(String.Format(Resources.InvalidScheduleInterval, string.Join(",", AllowedScheduleIntervals.ToArray())));
+                    }
 
+                    // duration should be multiple of Interval
+                    if (simpleSchedulePolicyV2.HourlySchedule.WindowDuration <= 24 && simpleSchedulePolicyV2.HourlySchedule.WindowDuration % simpleSchedulePolicyV2.HourlySchedule.Interval != 0){
+                        throw new ArgumentException("Hourly policy ScheduleWindowDuration should be multiple of ScheduleInterval and less than or equal to 24 Hrs. for WorkloadType AzureVM");
+                    }
+                }
+            }
+            
+            // remove
+            Logger.Instance.WriteDebug("completed AzureIaaSVM Schedule Policy validation");
         }
 
         public void ValidateSQLSchedulePolicy(CmdletModel.SchedulePolicyBase policy)
@@ -526,28 +563,26 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             {
                 CmdletModel.SimpleSchedulePolicyV2 schPolicyV2 = (CmdletModel.SimpleSchedulePolicyV2)schPolicyBase;
 
-                // need to check the logic again here
-
                 // schedule runTimes is already validated if in UTC/not during validate()
                 // now copy times from schedule to retention policy
                 if (retPolicy.IsDailyScheduleEnabled && retPolicy.DailySchedule != null)
                 {
-                    retPolicy.DailySchedule.RetentionTimes = schPolicyV2.DailySchedule != null ? schPolicyV2.DailySchedule.ScheduleRunTimes : null;
+                    retPolicy.DailySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : null;
                 }
 
                 if (retPolicy.IsWeeklyScheduleEnabled && retPolicy.WeeklySchedule != null)
                 {
-                    retPolicy.WeeklySchedule.RetentionTimes = schPolicyV2.WeeklySchedule != null ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : retPolicy.DailySchedule.RetentionTimes; 
+                    retPolicy.WeeklySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null); 
                 }
 
                 if (retPolicy.IsMonthlyScheduleEnabled && retPolicy.MonthlySchedule != null)
                 {
-                    retPolicy.MonthlySchedule.RetentionTimes = retPolicy.WeeklySchedule.RetentionTimes;
+                    retPolicy.MonthlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null);
                 }
 
                 if (retPolicy.IsYearlyScheduleEnabled && retPolicy.YearlySchedule != null)
                 {
-                    retPolicy.YearlySchedule.RetentionTimes = retPolicy.WeeklySchedule.RetentionTimes;
+                    retPolicy.YearlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null);
                 }
             }
         }

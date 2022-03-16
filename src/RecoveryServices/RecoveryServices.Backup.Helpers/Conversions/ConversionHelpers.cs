@@ -173,8 +173,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                                               ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).RetentionPolicy,
                                               ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).TimeZone,
                                               backupManagementType);
-
-            // if ... else ???
+                        
             if(schedulePolicyType == typeof(ServiceClientModel.SimpleSchedulePolicyV2))
             {
                 iaasPolicyModel.SchedulePolicy = PolicyHelpers.GetPSSimpleSchedulePolicyV2((ServiceClientModel.SimpleSchedulePolicyV2)
@@ -187,10 +186,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                                              ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).SchedulePolicy,
                                              ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).TimeZone);
             }
-            // remove
-            /*iaasPolicyModel.SchedulePolicy = PolicyHelpers.GetPSSimpleSchedulePolicy((ServiceClientModel.SimpleSchedulePolicy)
-                                             ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).SchedulePolicy,
-                                             ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).TimeZone);*/
+            
             iaasPolicyModel.AzureBackupRGName = 
                 ((ServiceClientModel.AzureIaaSVMProtectionPolicy)serviceClientResponse.Properties).InstantRPDetails.AzureBackupRGNamePrefix;
             iaasPolicyModel.AzureBackupRGNameSuffix = 

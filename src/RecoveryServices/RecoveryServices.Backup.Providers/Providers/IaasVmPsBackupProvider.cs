@@ -804,7 +804,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             {
                 PolicyHelpers.ValidateLongTermRetentionPolicyWithSimpleRetentionPolicy(
                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy,
-                                (CmdletModel.SimpleSchedulePolicyV2)schedulePolicy); // check for V2 ================================= ?
+                                (CmdletModel.SimpleSchedulePolicyV2)schedulePolicy);
             }
                 
             Logger.Instance.WriteDebug("Validation of Retention policy with Schedule policy is successful");
@@ -827,7 +827,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 {
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy),
-                    SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(schedulePolicy), // check for V2 ================================= ?
+                    SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(schedulePolicy),
                     TimeZone = DateTimeKind.Utc.ToString().ToUpper(),  // check for timezone in v2 and hourly v1 ================================= ?
                     InstantRpRetentionRangeInDays = snapshotRetentionInDays
                 }
@@ -1102,43 +1102,35 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 
                 //Default is daily scedule at 10:30 AM local time
                 defaultSchedule.ScheduleRunFrequency = scheduleRunFrequency;
-                
-                // ServiceClientModel.SimpleSchedulePolicyV2
-                // ServiceClientModel.SimpleSchedulePolicy
+                DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
 
                 if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Daily)
                 {
-                    DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
-
                     defaultSchedule.DailySchedule = new CmdletModel.DailySchedule();
                     defaultSchedule.DailySchedule.ScheduleRunTimes = new List<DateTime>();
                     defaultSchedule.DailySchedule.ScheduleRunTimes.Add(scheduleTime);
-
+                }
+                else if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
+                {
                     defaultSchedule.WeeklySchedule = new CmdletModel.WeeklySchedule();
                     defaultSchedule.WeeklySchedule.ScheduleRunTimes = new List<DateTime>();
                     defaultSchedule.WeeklySchedule.ScheduleRunTimes.Add(scheduleTime);
                     defaultSchedule.WeeklySchedule.ScheduleRunDays = new List<System.DayOfWeek>();
                     defaultSchedule.WeeklySchedule.ScheduleRunDays.Add(System.DayOfWeek.Sunday);
                 }
-
                 else if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Hourly) // this shouldn't be supported as of now
                 {
                     int hour = 07, minute = 30;
-                    DateTime scheduleTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
+                    scheduleTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
                         DateTime.Now.Day, hour, minute, 00, 00, DateTimeKind.Utc);
                     
                     defaultSchedule.HourlySchedule = new CmdletModel.HourlySchedule();
                     defaultSchedule.HourlySchedule.WindowStartTime = scheduleTime;
                     defaultSchedule.HourlySchedule.Interval = 4;
-                    defaultSchedule.HourlySchedule.WindowDuration = 24;
-                    
-                    /*defaultSchedule.ScheduleWindowStartTime = scheduleTime;
-                    defaultSchedule.ScheduleInterval = 4;
-                    defaultSchedule.ScheduleWindowDuration = 24;
-                    */                    
+                    defaultSchedule.HourlySchedule.WindowDuration = 24;                    
                 }
 
-                defaultSchedule.ScheduleRunTimeZone = DateTimeKind.Utc.ToString().ToUpper();
+                defaultSchedule.ScheduleRunTimeZone = DateTimeKind.Utc.ToString().ToUpper(); // time zone should be changeable
 
                 return defaultSchedule;
             }
@@ -1161,15 +1153,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
                 else if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Hourly) // this shouldn't be supported as of now
                 {
+                    // resx
                     throw new ArgumentException("Hourly Standard schedule is not supported for WorkloadType AzureVM");
-
-                    /*int hour = 07, minute = 30;
-                    DateTime scheduleTime = new DateTime(DateTime.Now.Year, DateTime.Now.Month,
-                        DateTime.Now.Day, hour, minute, 00, 00, DateTimeKind.Utc);
-                    defaultSchedule.ScheduleWindowStartTime = scheduleTime;
-                    defaultSchedule.ScheduleInterval = 4;
-                    defaultSchedule.ScheduleWindowDuration = 24;
-                    defaultSchedule.ScheduleRunTimeZone = DateTimeKind.Utc.ToString().ToUpper();*/
                 }
                 return defaultSchedule;
             }
