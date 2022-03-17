@@ -565,24 +565,27 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
                 // schedule runTimes is already validated if in UTC/not during validate()
                 // now copy times from schedule to retention policy
+                
+                List<DateTime> hourlyWindowStartTime = (schPolicyV2.HourlySchedule != null) ? new List<DateTime>{(DateTime)schPolicyV2.HourlySchedule.WindowStartTime} : null;
+
                 if (retPolicy.IsDailyScheduleEnabled && retPolicy.DailySchedule != null)
                 {
-                    retPolicy.DailySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : null;
+                    retPolicy.DailySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : hourlyWindowStartTime;
                 }
 
                 if (retPolicy.IsWeeklyScheduleEnabled && retPolicy.WeeklySchedule != null)
                 {
-                    retPolicy.WeeklySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null); 
+                    retPolicy.WeeklySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : hourlyWindowStartTime); 
                 }
 
                 if (retPolicy.IsMonthlyScheduleEnabled && retPolicy.MonthlySchedule != null)
                 {
-                    retPolicy.MonthlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null);
+                    retPolicy.MonthlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : hourlyWindowStartTime);
                 }
 
                 if (retPolicy.IsYearlyScheduleEnabled && retPolicy.YearlySchedule != null)
                 {
-                    retPolicy.YearlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : null);
+                    retPolicy.YearlySchedule.RetentionTimes = (schPolicyV2.DailySchedule != null) ? schPolicyV2.DailySchedule.ScheduleRunTimes : ((schPolicyV2.WeeklySchedule != null) ? schPolicyV2.WeeklySchedule.ScheduleRunTimes : hourlyWindowStartTime);
                 }
             }
         }

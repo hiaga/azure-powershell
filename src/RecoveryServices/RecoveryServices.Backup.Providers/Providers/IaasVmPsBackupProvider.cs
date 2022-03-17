@@ -789,9 +789,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                                              schedulePolicy); 
 
             Logger.Instance.WriteDebug("Copy of RetentionTime from with SchedulePolicy to RetentionPolicy is successful");
-
-            Logger.Instance.WriteDebug("############################################################################################################  Loc: 2");
-
+            
             // Now validate both RetentionPolicy and SchedulePolicy together
 
             if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicy))
@@ -828,6 +826,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy),
                     SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(schedulePolicy),
+                    PolicyType = (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2)) ? "V2" : null,
                     TimeZone = DateTimeKind.Utc.ToString().ToUpper(),  // check for timezone in v2 and hourly v1 ================================= ?
                     InstantRpRetentionRangeInDays = snapshotRetentionInDays
                 }
@@ -1167,16 +1166,20 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
         public RetentionPolicyBase GetDefaultRetentionPolicyObject()
         {
             CmdletModel.LongTermRetentionPolicy defaultRetention = new CmdletModel.LongTermRetentionPolicy();
+            CmdletModel.ScheduleRunType scheduleRunFrequency = (CmdletModel.ScheduleRunType)ProviderData[PolicyParams.ScheduleRunFrequency];
 
             //Default time is 10:30 local time
             DateTime retentionTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
 
             //Daily Retention policy
-            defaultRetention.IsDailyScheduleEnabled = true;
-            defaultRetention.DailySchedule = new CmdletModel.DailyRetentionSchedule();
-            defaultRetention.DailySchedule.RetentionTimes = new List<DateTime>();
-            defaultRetention.DailySchedule.RetentionTimes.Add(retentionTime);
-            defaultRetention.DailySchedule.DurationCountInDays = 180; //TBD make it const
+            if(scheduleRunFrequency != CmdletModel.ScheduleRunType.Weekly)
+            {
+                defaultRetention.IsDailyScheduleEnabled = true;
+                defaultRetention.DailySchedule = new CmdletModel.DailyRetentionSchedule();
+                defaultRetention.DailySchedule.RetentionTimes = new List<DateTime>();
+                defaultRetention.DailySchedule.RetentionTimes.Add(retentionTime);
+                defaultRetention.DailySchedule.DurationCountInDays = 180; //TBD make it const
+            }
 
             //Weekly Retention policy
             defaultRetention.IsWeeklyScheduleEnabled = true;

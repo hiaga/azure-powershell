@@ -58,7 +58,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// </summary>
         [Parameter(Mandatory = false, Position = 2,
             HelpMessage = ParamHelpMsgs.Policy.ScheduleFrequencyForRetention)]
-        [ValidateSet("Daily", "Hourly")]
+        [ValidateSet("Daily", "Hourly", "Weekly")]
         public ScheduleRunType ScheduleRunFrequency = ScheduleRunType.Daily;
 
         public override void ExecuteCmdlet()
