@@ -1140,7 +1140,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 //Default is daily scedule at 10:30 AM local time
                 defaultSchedule.ScheduleRunFrequency = scheduleRunFrequency;
 
-                if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Daily)
+                if (scheduleRunFrequency == CmdletModel.ScheduleRunType.Daily || scheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
                 {
                     DateTime scheduleTime = AzureWorkloadProviderHelper.GenerateRandomScheduleTime();
                     defaultSchedule.ScheduleRunTimes = new List<DateTime>();

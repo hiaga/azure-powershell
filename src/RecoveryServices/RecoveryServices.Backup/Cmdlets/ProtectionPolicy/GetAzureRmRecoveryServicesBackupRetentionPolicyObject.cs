@@ -70,6 +70,18 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 Dictionary<Enum, object> providerParameters = new Dictionary<Enum, object>();
                 providerParameters.Add(PolicyParams.ScheduleRunFrequency, ScheduleRunFrequency);
 
+                if (ScheduleRunFrequency != ScheduleRunType.Daily && WorkloadType != WorkloadType.AzureVM && WorkloadType != WorkloadType.AzureFiles)
+                {
+                    //resx
+                    throw new ArgumentException("ScheduleRunFrequency parameter is only expected for WorkloadTypes: AzureVM, AzureFiles ");
+                }
+
+                if (ScheduleRunFrequency == ScheduleRunType.Weekly && WorkloadType == WorkloadType.AzureFiles)
+                {
+                    //resx
+                    throw new ArgumentException("Weekly ScheduleRunFrequency isn't supported for WorkloadType: AzureFiles.");
+                }
+
                 PsBackupProviderManager providerManager =
                     new PsBackupProviderManager(providerParameters, ServiceClientAdapter);
 

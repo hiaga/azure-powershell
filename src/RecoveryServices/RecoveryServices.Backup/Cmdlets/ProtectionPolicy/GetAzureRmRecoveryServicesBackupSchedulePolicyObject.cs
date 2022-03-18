@@ -78,11 +78,24 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 providerParameters.Add(PolicyParams.ScheduleRunFrequency, ScheduleRunFrequency);
                 providerParameters.Add(PolicyParams.PolicySubType, PolicySubType);
 
-                if(PolicySubType == PolicyType.Enhanced && WorkloadType != WorkloadType.AzureVM)
+                if (ScheduleRunFrequency != ScheduleRunType.Daily && WorkloadType != WorkloadType.AzureVM && WorkloadType != WorkloadType.AzureFiles)
                 {
                     //resx
-                    throw new ArgumentException("Enhanced policies are only supported for workloadType AzureVM. Please provide correct PolicySubType and WorkloadType");
+                    throw new ArgumentException("ScheduleRunFrequency parameter is only expected for WorkloadTypes: AzureVM, AzureFiles.");
                 }
+                
+                if(ScheduleRunFrequency == ScheduleRunType.Weekly && WorkloadType == WorkloadType.AzureFiles)
+                {
+                    //resx
+                    throw new ArgumentException("Weekly ScheduleRunFrequency isn't supported for WorkloadType: AzureFiles.");
+                }
+
+                if (PolicySubType == PolicyType.Enhanced && WorkloadType != WorkloadType.AzureVM)
+                {
+                    //resx
+                    throw new ArgumentException("Enhanced policies are only supported for workloadType AzureVM. Please provide correct PolicySubType and WorkloadType.");
+                }
+
 
                 PsBackupProviderManager providerManager = new PsBackupProviderManager(
                     providerParameters, ServiceClientAdapter);
