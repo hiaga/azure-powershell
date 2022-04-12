@@ -18,6 +18,7 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+* Added support for Resource Guard CRUD cmdlets
 
 ## Version 0.3.1
 * Fixed trigger schedule client for `New-AzDataProtectionPolicyTriggerScheduleClientObject`

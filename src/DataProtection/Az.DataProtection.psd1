@@ -96,7 +96,16 @@ FunctionsToExport = 'Backup-AzDataProtectionBackupInstanceAdhoc',
                'Search-AzDataProtectionJobInAzGraph', 
                'Start-AzDataProtectionBackupInstanceRestore', 
                'Update-AzDataProtectionBackupInstanceAssociatedPolicy', 
-               'Update-AzDataProtectionBackupVault'
+               'Update-AzDataProtectionBackupVault',
+               'Get-AzDataProtectionResourceGuard',
+               'New-AzDataProtectionResourceGuard',
+               'Remove-AzDataProtectionResourceGuard',
+               'Resume-AzDataProtectionBackupInstanceBackup',
+               'Resume-AzDataProtectionBackupInstanceProtection',
+               'Stop-AzDataProtectionBackupInstanceProtection',
+               'Suspend-AzDataProtectionBackupInstanceBackup',
+               'Sync-AzDataProtectionBackupInstance',
+               'Update-AzDataProtectionResourceGuard'
 
 # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
 CmdletsToExport = @()
