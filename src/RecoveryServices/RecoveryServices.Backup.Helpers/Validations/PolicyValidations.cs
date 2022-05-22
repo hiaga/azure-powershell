@@ -24,6 +24,83 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
     /// </summary>
     public partial class PolicyHelpers
     {
+        
+        public static void ValidateLongTermRetentionPolicyWithTieringPolicy(LongTermRetentionPolicy ltrPolicy, TieringPolicy tieringPolicy) // check resx messages 
+        {
+            // To enable Archive(either TierRecommended or TierAfter), Monthly or Yearly retention needs to be set
+            if(tieringPolicy != null && tieringPolicy.TieringMode != TieringMode.DoNotTier )
+            {
+                if (!ltrPolicy.IsMonthlyScheduleEnabled && !ltrPolicy.IsYearlyScheduleEnabled)
+                {
+                    // resx
+                    throw new ArgumentException("Monthly or Yearly retention needs to be set to enable Archive smart tiering");
+                }
+
+                // For TierRecommended policy:  At least one of monthly or yearly retention should be >= 9 months.
+                if (tieringPolicy.TieringMode == TieringMode.TierRecommended)
+                {
+                    if ((!ltrPolicy.IsMonthlyScheduleEnabled || ltrPolicy.MonthlySchedule == null || ltrPolicy.MonthlySchedule.DurationCountInMonths < 9) && (!ltrPolicy.IsYearlyScheduleEnabled || ltrPolicy.YearlySchedule == null || (ltrPolicy.YearlySchedule.DurationCountInYears * 12) < 9))                    
+                    {
+                        // resx 
+                        throw new ArgumentException("At least one of monthly or yearly retention should be >= 9 months for enabling TierRecommended mode for smart tiering");
+                    }
+                }
+
+                // For TierAfter policy:   TierAfter duration needs to be >= 3 months,  At least one of monthly or yearly retention should be >= (TierAfter + 6) months.
+                // e.g. if TierAfter is specified as 6 months, at least one of monthly or yearly retention should be at least 12 months.
+                if(tieringPolicy.TieringMode == TieringMode.TierAllEligible)
+                {
+                    // TierAfterDuration for AzureVM should be in Months 
+                    if (tieringPolicy.TierAfterDurationType != "Months")
+                    {
+                        // resx
+                        throw new ArgumentException("TierAfterDurationType should be in Months for workload type AzureVM");
+                    }
+
+                    if(tieringPolicy.TierAfterDuration < 3  || ((ltrPolicy.MonthlySchedule == null || ltrPolicy.MonthlySchedule.DurationCountInMonths < tieringPolicy.TierAfterDuration + 6) && (ltrPolicy.YearlySchedule == null ||    (ltrPolicy.YearlySchedule.DurationCountInYears * 12) < tieringPolicy.TierAfterDuration + 6)))
+                    {
+                        // resx
+                        throw new ArgumentException("TierAfterDuration needs to be >= 3 months, at least one of monthly or yearly retention should be >= (TierAfterDuration + 6) months");
+                    }
+                }
+            }
+        }
+
+        public static void ValidateFullBackupRetentionPolicyWithTieringPolicy(LongTermRetentionPolicy ltrPolicy, TieringPolicy tieringPolicy) // check resx messages 
+        {
+            if (tieringPolicy != null && tieringPolicy.TieringMode != TieringMode.DoNotTier)
+            {
+                // To enable Archive, Full Backup Policy needs to be set.
+                if (ltrPolicy == null)
+                {
+                    // resx
+                    throw new ArgumentException("FullBackupRetentionPolicy can't be null while enabling Archive smart tiering for BackupManagementType AzureWorkload");
+                }
+
+                // For TierAfter policy: TierAfter duration needs to be >= 45 days, at least one retention policy for full backup (daily / weekly / monthly / yearly) should be >= (TierAfter + 180) days.
+                //  e.g. if TierAfter is specified as 100 days, at least one retention policy for Full Backup needs to be greater than or equal to 280 days.
+                if (tieringPolicy.TieringMode == TieringMode.TierAllEligible)
+                {
+                    // TierAfterDuration for AzureWorkload should be in Days 
+                    if (tieringPolicy.TierAfterDurationType != "Days")
+                    {
+                        // resx
+                        throw new ArgumentException("TierAfterDurationType should be in Days for workload type AzureWorkload");
+                    }
+
+                    if (tieringPolicy.TierAfterDuration < 45 || 
+                        ((!ltrPolicy.IsDailyScheduleEnabled || ltrPolicy.DailySchedule == null || ltrPolicy.DailySchedule.DurationCountInDays < tieringPolicy.TierAfterDuration + 180) 
+                        && (!ltrPolicy.IsWeeklyScheduleEnabled || ltrPolicy.WeeklySchedule == null || (ltrPolicy.WeeklySchedule.DurationCountInWeeks * 7) < tieringPolicy.TierAfterDuration + 180) 
+                        && (!ltrPolicy.IsMonthlyScheduleEnabled || ltrPolicy.MonthlySchedule == null || (ltrPolicy.MonthlySchedule.DurationCountInMonths * 30) < tieringPolicy.TierAfterDuration + 180) 
+                        && (!ltrPolicy.IsYearlyScheduleEnabled || ltrPolicy.YearlySchedule == null || (ltrPolicy.YearlySchedule.DurationCountInYears * 365) < tieringPolicy.TierAfterDuration + 180)))
+                    {
+                        // resx
+                        throw new ArgumentException("TierAfterDuration needs to be >= 45 Days, at least one retention policy for full backup (daily / weekly / monthly / yearly) should be >= (TierAfter + 180) days");
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Helper function to validate long term rentention policy and simple schedule policy.
         /// </summary>

@@ -12,6 +12,9 @@
 // limitations under the License.
 // ----------------------------------------------------------------------------------
 
+using System;
+using System.Text;
+
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
 {
     /// <summary>
@@ -43,5 +46,72 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// Type of the AzureVM policy : Standard, Enhanced
         /// </summary>
         public PSPolicyType PolicySubType { get; set; }
+
+        /// <summary>
+        /// Smart tiering settings 
+        /// </summary>
+        public TieringPolicy TieringPolicy { get; set; }
+
+    }
+
+    /// <summary>
+    /// Smart tiering settings
+    /// </summary>
+    public class TieringPolicy // Derive from Objectbase ?
+    {
+        /// <summary>
+        /// Target tier where the recovery point will be automatically moved
+        /// </summary>
+        public RecoveryPointTier TargetTier = RecoveryPointTier.VaultArchive;
+
+        /// <summary>
+        /// Tiering mode to control what RPs will be moved. Allowed values - TierRecommended, TierAllEligible, DoNotTier
+        /// </summary>
+        public TieringMode TieringMode { get; set; }
+
+        /// <summary>
+        /// Duration after which to move to Archive
+        /// </summary>
+        public int? TierAfterDuration { get; set; }
+
+        /// <summary>
+        /// Duration type. Acceptable values: Days, Months
+        /// </summary>
+        public string TierAfterDurationType { get; set; }
+
+        /// <summary>
+        /// Converts the object into string.
+        /// </summary>
+        /// <returns>The string representation.</returns>
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            
+            sb.AppendLine(string.Format("TargetTier: {0}, TieringMode: {1}, TierAfterDuration: {2}, TierAfterDurationType: {3}", this.TargetTier.ToString(),
+                                    this.TieringMode.ToString(), this.TierAfterDuration, this.TierAfterDurationType));
+
+            return sb.ToString();
+        }
+                
+        public void Validate() // override
+        {         
+            if(TieringMode == TieringMode.DoNotTier || TieringMode == TieringMode.TierRecommended)
+            {
+                if(TierAfterDuration != null || TierAfterDurationType != null)
+                {        
+                    // resx
+                    throw new ArgumentException(string.Format("TierAfterDuration, TierAfterDurationType is only acceptable for TieringMode: TierAllEligible"));
+                }                
+            }
+            else if(TieringMode == TieringMode.TierAllEligible)
+            {
+                if (TierAfterDuration == null || TierAfterDurationType == null || (TierAfterDurationType.ToLower() != "days" && TierAfterDurationType.ToLower() != "months"))
+                {
+                    // resx
+                    throw new ArgumentException(string.Format("TierAfterDuration, TierAfterDurationType is required for tiering mode TierAllEligible and the values should either be in Months or Days"));
+                    // need to check with Anjor whether this needs to be SQL/IaasVM specific 
+                }                    
+            }
+        }
     }
 }

@@ -20,8 +20,8 @@ using Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers;
 using Microsoft.Azure.Commands.RecoveryServices.Backup.Properties;
 using Microsoft.Azure.Management.Internal.Resources.Utilities.Models;
-using Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 using Microsoft.Rest.Azure;
+using Newtonsoft.Json;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Backup.Models;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
@@ -70,6 +70,35 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             ParameterSetName = FixInconsistentPolicyParamSet)]
         public SwitchParameter FixForInconsistentItems { get; set; }
 
+        /// <summary>
+        /// Boolean value that specifies whether recovery points should be moved to archive storage by the policy or not. Allowed values are $true, $false. 
+        /// If no value is specified, then there is no change in behaviour for the existing protection policy.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.MoveToArchiveTier, ParameterSetName = ModifyPolicyParamSet)]        
+        public bool? MoveToArchiveTier { get; set; }
+
+        /*Specifies whether all eligible recovery points should be moved to the archive tier or only the recommended recovery points. Use "TierAllEligible" to move all eligible recovery points and use "TierRecommended" to move only recommended recovery points. Default value is "TierRecommended".*/
+
+        /// <summary>
+        /// Tiering mode to specify whether to move recommended or all eligible recovery points.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TieringMode, ParameterSetName = ModifyPolicyParamSet)]
+        [ValidateSet("TierRecommended", "TierAllEligible")]
+        public TieringMode TieringMode { get; set; }
+
+        /// <summary>
+        /// Specifies after how many days/months recovery points should start moving to the archive tier. Applicable only for TieringMode: TierAllEligible
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TierAfterDuration, ParameterSetName = ModifyPolicyParamSet)]
+        public int? TierAfterDuration { get; set; }
+
+        /// <summary>
+        /// Specifies whether the TierAfterDuration is in Days or Months.
+        /// </summary>
+        [Parameter(Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TierAfterDurationType, ParameterSetName = ModifyPolicyParamSet)]
+        [ValidateSet("Days", "Months")]
+        public string TierAfterDurationType { get; set; }
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -96,7 +125,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 PolicyCmdletHelpers.ValidateProtectionPolicyName(Policy.Name);
 
                 // Validate if policy already exists               
-                ProtectionPolicyResource servicePolicy = PolicyCmdletHelpers.GetProtectionPolicyByName(
+                ServiceClientModel.ProtectionPolicyResource servicePolicy = PolicyCmdletHelpers.GetProtectionPolicyByName(
                     Policy.Name,
                     ServiceClientAdapter,
                     vaultName: vaultName,
@@ -106,6 +135,35 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 {
                     throw new ArgumentException(string.Format(Resources.PolicyNotFoundException,
                         Policy.Name));
+                }
+
+
+                // check if smart tiering feature is enabled on this subscription                
+                bool isSmartTieringEnabled = ServiceClientAdapter.IsArchiveFeatureSupported();
+                // if not AzureVM or AzureWorkoad - disable smart tiering 
+
+                TieringPolicy tieringDetails = null;                
+                if (MoveToArchiveTier != null)
+                {
+                    if (Policy != null && Policy.BackupManagementType != BackupManagementType.AzureVM && Policy.BackupManagementType != BackupManagementType.AzureWorkload)
+                    {
+                        // resx
+                        throw new ArgumentException("Smart tiering is only supported for BackupManagementType AzueVM, AzureWorkload. Please try again after removing MoveToArchiveTier parameter.");
+                    }
+                    tieringDetails = new TieringPolicy();
+                    if(MoveToArchiveTier == false)
+                    {
+                        // validate all other params shouldn't be given -- check
+                        tieringDetails.TieringMode = TieringMode.DoNotTier;
+                    }
+                    else
+                    {
+                        // validate all other params should be given 
+                        tieringDetails.TargetTier = RecoveryPointTier.VaultArchive;
+                        tieringDetails.TieringMode = TieringMode;
+                        tieringDetails.TierAfterDuration = TierAfterDuration;
+                        tieringDetails.TierAfterDurationType = TierAfterDurationType;
+                    }
                 }
 
                 PsBackupProviderManager providerManager = new PsBackupProviderManager(
@@ -119,13 +177,15 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         { PolicyParams.FixForInconsistentItems, FixForInconsistentItems.IsPresent },
                         { ResourceGuardParams.Token, Token },
                         { ResourceGuardParams.IsMUAOperation, isMUAOperation },
-                        { PolicyParams.ExistingPolicy, servicePolicy}
+                        { PolicyParams.ExistingPolicy, servicePolicy},
+                        { PolicyParams.TieringPolicy, tieringDetails},
+                        { PolicyParams.IsSmartTieringEnabled, isSmartTieringEnabled}
                     }, ServiceClientAdapter);
 
                 IPsBackupProvider psBackupProvider = providerManager.GetProviderInstance(
                     Policy.WorkloadType, Policy.BackupManagementType);
 
-                AzureOperationResponse<ProtectionPolicyResource> policyResponse = psBackupProvider.ModifyPolicy();
+                AzureOperationResponse<ServiceClientModel.ProtectionPolicyResource> policyResponse = psBackupProvider.ModifyPolicy();
 
                 WriteDebug("ModifyPolicy http response from service: " + policyResponse.Response.StatusCode.ToString());
 
@@ -147,17 +207,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     WriteDebug("Final operation status: " + operationStatus.Status);
 
                     if (operationStatus.Properties != null &&
-                       ((OperationStatusJobsExtendedInfo)operationStatus.Properties)
+                       ((ServiceClientModel.OperationStatusJobsExtendedInfo)operationStatus.Properties)
                             .JobIds != null)
                     {
                         // get list of jobIds and return jobResponses                    
                         WriteObject(GetJobObject(
-                            ((OperationStatusJobsExtendedInfo)operationStatus.Properties).JobIds,
+                            ((ServiceClientModel.OperationStatusJobsExtendedInfo)operationStatus.Properties).JobIds,
                             vaultName: vaultName,
                             resourceGroupName: resourceGroupName));
                     }
 
-                    if (operationStatus.Status == OperationStatusValues.Failed)
+                    if (operationStatus.Status == ServiceClientModel.OperationStatusValues.Failed)
                     {
                         // if operation failed, then trace error and throw exception
                         if (operationStatus.Error != null)

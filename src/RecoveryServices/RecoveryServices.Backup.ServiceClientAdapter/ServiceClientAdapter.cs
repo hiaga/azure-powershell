@@ -19,6 +19,7 @@ using RecoveryServicesBackupNS = Microsoft.Azure.Management.RecoveryServices.Bac
 using RecoveryServicesBackupCRRNS = Microsoft.Azure.Management.RecoveryServices.Backup.CrossRegionRestore;
 using RecoveryServicesNS = Microsoft.Azure.Management.RecoveryServices;
 using ResourcesNS = Microsoft.Azure.Management.Internal.Resources;
+using FeatureNS = Microsoft.Azure.Management.ResourceManager;
 
 namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClientAdapterNS
 {
@@ -36,6 +37,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
         ClientProxy<RecoveryServicesNS.RecoveryServicesClient> RSAdapter;
 
         ClientProxy<ResourcesNS.ResourceManagementClient> RMAdapter;
+        ClientProxy<FeatureNS.FeatureClient> FeatureAdapter;
 
         public string SubscriptionId;
 
@@ -55,6 +57,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ServiceClient
             CrrAdapter = new ClientProxy<RecoveryServicesBackupCRRNS.RecoveryServicesBackupClient>(context);
             RSAdapter = new ClientProxy<RecoveryServicesNS.RecoveryServicesClient>(context);
             RMAdapter = new ClientProxy<ResourcesNS.ResourceManagementClient>(context);
+            FeatureAdapter = new ClientProxy<FeatureNS.FeatureClient>(context);
+
             SubscriptionId = context.Subscription.Id;
         }
     }

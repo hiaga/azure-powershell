@@ -79,6 +79,35 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         [ValidateNotNullOrEmpty]
         public SchedulePolicyBase SchedulePolicy { get; set; }
 
+        /// <summary>
+        /// Boolean value that specifies whether recovery points should be moved to archive storage by the policy or not. Allowed values are $true, $false. 
+        /// If no value is specified, then there is no change in behaviour for the existing protection policy.
+        /// </summary>
+        [Parameter(Position = 6, Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.MoveToArchiveTier)]
+        public bool? MoveToArchiveTier { get; set; }
+
+        /*Specifies whether all eligible recovery points should be moved to the archive tier or only the recommended recovery points.Use "TierAllEligible" to move all eligible recovery points and use "TierRecommended" to move only recommended recovery points.Default value is "TierRecommended".*/
+
+        /// <summary>
+        /// Tiering mode to specify whether to move recommended or all eligible recovery points.
+        /// </summary>
+        [Parameter(Position = 7, Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TieringMode)]
+        [ValidateSet("TierRecommended", "TierAllEligible")]
+        public TieringMode TieringMode { get; set; }
+
+        /// <summary>
+        /// Specifies after how many days/months recovery points should start moving to the archive tier. Applicable only for TieringMode: TierAllEligible
+        /// </summary>
+        [Parameter(Position = 8, Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TierAfterDuration)]
+        public int? TierAfterDuration { get; set; }
+
+        /// <summary>
+        /// Specifies whether the TierAfterDuration is in Days or Months.
+        /// </summary>
+        [Parameter(Position = 9, Mandatory = false, HelpMessage = ParamHelpMsgs.Policy.TierAfterDurationType)]
+        [ValidateSet("Days", "Months")]
+        public string TierAfterDurationType { get; set; }
+
         public override void ExecuteCmdlet()
         {
             ExecutionBlock(() =>
@@ -110,6 +139,35 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     throw new ArgumentException(string.Format(Resources.PolicyAlreadyExistException, Name));
                 }
 
+                // check if smart tiering feature is enabled on this subscription                
+                bool isSmartTieringEnabled = ServiceClientAdapter.IsArchiveFeatureSupported();
+                // if not AzureVM or AzureWorkoad - disable smart tiering 
+
+                TieringPolicy tieringDetails = null;
+                if (MoveToArchiveTier != null)
+                {
+                    if (BackupManagementType != Models.BackupManagementType.AzureVM && BackupManagementType != Models.BackupManagementType.AzureWorkload)
+                    {
+                        // resx
+                        throw new ArgumentException("Smart tiering is only supported for BackupManagementType AzueVM, AzureWorkload. Please try again after removing MoveToArchiveTier parameter.");
+                    }
+
+                    tieringDetails = new TieringPolicy();
+                    if (MoveToArchiveTier == false)
+                    {
+                        // validate all other params shouldn't be given -- check 
+                        tieringDetails.TieringMode = TieringMode.DoNotTier;
+                    }
+                    else
+                    {
+                        // validate all other params should be given -- check can only be provided for AzureVM / AzureWorkload
+                        tieringDetails.TargetTier = RecoveryPointTier.VaultArchive;
+                        tieringDetails.TieringMode = TieringMode;
+                        tieringDetails.TierAfterDuration = TierAfterDuration;
+                        tieringDetails.TierAfterDurationType = TierAfterDurationType;
+                    }
+                }
+
                 Dictionary<Enum, object> providerParameters = new Dictionary<Enum, object>();
                 providerParameters.Add(VaultParams.VaultName, vaultName);
                 providerParameters.Add(VaultParams.ResourceGroupName, resourceGroupName);
@@ -117,7 +175,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 providerParameters.Add(PolicyParams.WorkloadType, WorkloadType);
                 providerParameters.Add(PolicyParams.RetentionPolicy, RetentionPolicy);
                 providerParameters.Add(PolicyParams.SchedulePolicy, SchedulePolicy);
-
+                providerParameters.Add(PolicyParams.TieringPolicy, tieringDetails);
+                providerParameters.Add(PolicyParams.IsSmartTieringEnabled, isSmartTieringEnabled);
+                
                 PsBackupProviderManager providerManager = new PsBackupProviderManager(providerParameters, ServiceClientAdapter);                
 
                 IPsBackupProvider psBackupProvider =

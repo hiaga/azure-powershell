@@ -806,7 +806,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                 ProviderData.ContainsKey(PolicyParams.SchedulePolicy) ?
                 (SchedulePolicyBase)ProviderData[PolicyParams.SchedulePolicy] :
                 null;
-            
+
+            CmdletModel.TieringPolicy tieringDetails = ProviderData.ContainsKey(PolicyParams.TieringPolicy) ? (CmdletModel.TieringPolicy)ProviderData[PolicyParams.TieringPolicy] : null;
+            bool isSmartTieringEnabled = ProviderData.ContainsKey(PolicyParams.IsSmartTieringEnabled) ? (bool)ProviderData[PolicyParams.IsSmartTieringEnabled] : false;
+
             // do validations
             ValidateAzureVMWorkloadType(workloadType);                       
 
@@ -839,7 +842,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             }
                 
             Logger.Instance.WriteDebug("Validation of Retention policy with Schedule policy is successful");
-            
+
+            // check with Anjor
+            PolicyHelpers.ValidateLongTermRetentionPolicyWithTieringPolicy((CmdletModel.LongTermRetentionPolicy)retentionPolicy, tieringDetails);            
+            Logger.Instance.WriteDebug("Validation of Retention policy with Tiering policy is successful");
+
             int snapshotRetentionInDays = 2;
             if (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicy) && ((CmdletModel.SimpleSchedulePolicy)schedulePolicy).ScheduleRunFrequency == CmdletModel.ScheduleRunType.Weekly)
             {
@@ -861,7 +868,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     timeZone = timeZoneInput;
                 }                
             }
-
+            
             // construct Service Client policy request            
             ProtectionPolicyResource serviceClientRequest = new ProtectionPolicyResource()
             {
@@ -870,6 +877,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                                 (CmdletModel.LongTermRetentionPolicy)retentionPolicy),
                     SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(schedulePolicy),
+                    TieringPolicy = PolicyHelpers.GetServiceClientTieringPolicy(tieringDetails, isSmartTieringEnabled),
                     PolicyType = (schedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2)) ? "V2" : null,
                     TimeZone = timeZone,
                     InstantRpRetentionRangeInDays = snapshotRetentionInDays
@@ -899,6 +907,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             RetentionPolicyBase retentionPolicy = ProviderData.ContainsKey(PolicyParams.RetentionPolicy) ? (RetentionPolicyBase)ProviderData[PolicyParams.RetentionPolicy] : null;
             SchedulePolicyBase schedulePolicy = ProviderData.ContainsKey(PolicyParams.SchedulePolicy) ? (SchedulePolicyBase)ProviderData[PolicyParams.SchedulePolicy] : null;
             PolicyBase policy = ProviderData.ContainsKey(PolicyParams.ProtectionPolicy) ? (PolicyBase)ProviderData[PolicyParams.ProtectionPolicy] : null;
+
+            CmdletModel.TieringPolicy tieringDetails = ProviderData.ContainsKey(PolicyParams.TieringPolicy) ? (CmdletModel.TieringPolicy)ProviderData[PolicyParams.TieringPolicy] : null;
+            bool isSmartTieringEnabled = ProviderData.ContainsKey(PolicyParams.IsSmartTieringEnabled) ? (bool)ProviderData[PolicyParams.IsSmartTieringEnabled] : false;
 
             // do validations
             ValidateAzureVMProtectionPolicy(policy);
@@ -940,6 +951,16 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
 
             Logger.Instance.WriteDebug("Validation of Retention policy with Schedule policy is successful");
 
+
+            if (tieringDetails != null)
+            {
+                // AzureWorkloadProviderHelper.ValidateTieringPolicy(tieringDetails); // add code in validation // remove
+                PolicyHelpers.ValidateLongTermRetentionPolicyWithTieringPolicy((CmdletModel.LongTermRetentionPolicy)((AzureVmPolicy)policy).RetentionPolicy, tieringDetails);
+
+                ((AzureVmPolicy)policy).TieringPolicy = tieringDetails;
+                Logger.Instance.WriteDebug("Validation of Retention policy with Tiering policy is successful");
+            }
+
             //Validate instant RP retention days
             ValidateInstantRPRetentionDays(((AzureVmPolicy)policy));
 
@@ -954,7 +975,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     timeZone = timeZoneInput;
                 }
             }
-
+                        
             // construct Service Client policy request            
             ProtectionPolicyResource serviceClientRequest = new ProtectionPolicyResource()
             {
@@ -963,6 +984,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                     RetentionPolicy = PolicyHelpers.GetServiceClientLongTermRetentionPolicy(
                                   (CmdletModel.LongTermRetentionPolicy)((AzureVmPolicy)policy).RetentionPolicy),
                     SchedulePolicy = PolicyHelpers.GetServiceClientSimpleSchedulePolicy(((AzureVmPolicy)policy).SchedulePolicy),
+                    TieringPolicy = PolicyHelpers.GetServiceClientTieringPolicy(((AzureVmPolicy)policy).TieringPolicy, isSmartTieringEnabled),
                     TimeZone = timeZone,
                     PolicyType = (((AzureVmPolicy)policy).SchedulePolicy.GetType() == typeof(CmdletModel.SimpleSchedulePolicyV2)) ? "V2" : null,
                     InstantRpRetentionRangeInDays = ((AzureVmPolicy)policy).SnapshotRetentionInDays,

@@ -64,6 +64,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
         /// </summary>
         public RetentionPolicyBase LogBackupRetentionPolicy { get; set; }
 
+        /// <summary>
+        /// Object defining the tiering policy for full backup.
+        /// </summary>
+        public TieringPolicy FullBackupTieringPolicy { get; set; }
+
         public override void Validate()
         {
             base.Validate();
@@ -87,6 +92,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Models
             {
                 LogBackupRetentionPolicy.Validate();
             }
+
+            FullBackupTieringPolicy.Validate();
         }
     }
 
