@@ -359,7 +359,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
 
             policyModel = new AzureVmWorkloadPolicy();
             AzureVmWorkloadPolicy azureVmWorkloadPolicyModel = policyModel as AzureVmWorkloadPolicy;
-            azureVmWorkloadPolicyModel.WorkloadType = WorkloadType.MSSQL;
+            azureVmWorkloadPolicyModel.WorkloadType = (azureVmWorkloadPolicy.WorkLoadType != "SAPHanaDatabase") ? WorkloadType.MSSQL : WorkloadType.SAPHanaDatabase; 
             azureVmWorkloadPolicyModel.BackupManagementType = BackupManagementType.AzureWorkload;
             azureVmWorkloadPolicyModel.IsCompression =
                 ((ServiceClientModel.AzureVmWorkloadProtectionPolicy)serviceClientResponse.Properties).Settings.IsCompression;

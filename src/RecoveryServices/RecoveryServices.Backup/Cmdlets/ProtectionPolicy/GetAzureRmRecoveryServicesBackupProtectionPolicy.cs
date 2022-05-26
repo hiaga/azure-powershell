@@ -45,7 +45,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// <summary>
         /// List of supported WorkloadTypes for this cmdlet. Used in help text creation.
         /// </summary>
-        private const string validWorkloadTypes = "AzureVM, AzureFiles, MSSQL";
+        private const string validWorkloadTypes = "AzureVM, AzureFiles, MSSQL, SAPHanaDatabase";
 
         /// <summary>
         /// Name of the policy to be fetched.
@@ -148,48 +148,55 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             {
                                 serviceClientProviderType = ServiceClientHelpers.GetServiceClientProviderType(Models.WorkloadType.MSSQL);
                             }
+                            else if (WorkloadType == Models.WorkloadType.SAPHanaDatabase)
+                            {
+                                serviceClientProviderType = ServiceClientHelpers.GetServiceClientProviderType(Models.WorkloadType.SAPHanaDatabase);
+                            }
                             break;
 
                         case WorkloadBackupMangementTypeParamSet:
-                    if( WorkloadType == Models.WorkloadType.AzureVM )
-                        {
-                        if( BackupManagementType != Models.BackupManagementType.AzureVM )
+                            if( WorkloadType == Models.WorkloadType.AzureVM )
                             {
-                            throw new ArgumentException(
-                                Resources.AzureVMUnsupportedBackupManagementTypeException );
+                                if( BackupManagementType != Models.BackupManagementType.AzureVM )
+                                {
+                                    throw new ArgumentException(
+                                        Resources.AzureVMUnsupportedBackupManagementTypeException );
+                                }
+                                serviceClientProviderType = ServiceClientHelpers.
+                                    GetServiceClientProviderType( Models.WorkloadType.AzureVM );
                             }
-                        serviceClientProviderType = ServiceClientHelpers.
-                            GetServiceClientProviderType( Models.WorkloadType.AzureVM );
-                        }
-                    else if( WorkloadType == Models.WorkloadType.AzureFiles )
-                        {
-                        if( BackupManagementType != Models.BackupManagementType.AzureStorage )
+                            else if( WorkloadType == Models.WorkloadType.AzureFiles )
                             {
-                            throw new ArgumentException(
-                                Resources.AzureFileUnsupportedBackupManagementTypeException );
+                                if( BackupManagementType != Models.BackupManagementType.AzureStorage )
+                                {
+                                    throw new ArgumentException(
+                                        Resources.AzureFileUnsupportedBackupManagementTypeException );
+                                }
+                                serviceClientProviderType =
+                                    ServiceClientHelpers.GetServiceClientProviderType(
+                                        Models.WorkloadType.AzureFiles );
                             }
-                        serviceClientProviderType =
-                            ServiceClientHelpers.GetServiceClientProviderType(
-                                Models.WorkloadType.AzureFiles );
-                        }
-                    else if( WorkloadType == Models.WorkloadType.MSSQL )
-                        {
-                        if( BackupManagementType != Models.BackupManagementType.AzureWorkload )
+                            else if( WorkloadType == Models.WorkloadType.MSSQL || WorkloadType == Models.WorkloadType.SAPHanaDatabase)
                             {
-                            throw new ArgumentException(
-                                Resources.AzureFileUnsupportedBackupManagementTypeException );
+                                Models.WorkloadType workloadType = (Models.WorkloadType)WorkloadType;
+
+                                if( BackupManagementType != Models.BackupManagementType.AzureWorkload )
+                                {
+                                    throw new ArgumentException(
+                                        Resources.AzureFileUnsupportedBackupManagementTypeException );
+                                }
+                                serviceClientProviderType =
+                                    ServiceClientHelpers.GetServiceClientProviderType(
+                                        workloadType);
                             }
-                        serviceClientProviderType =
-                            ServiceClientHelpers.GetServiceClientProviderType(
-                                Models.WorkloadType.MSSQL );
-                        }
-                    else
-                        {
-                        throw new ArgumentException( string.Format(
-                            Resources.UnsupportedWorkloadBackupManagementTypeException,
-                            WorkloadType.ToString(),
-                            BackupManagementType.ToString() ) );
-                        }
+                            else
+                            {
+                                throw new ArgumentException( string.Format(
+                                    Resources.UnsupportedWorkloadBackupManagementTypeException,
+                                    WorkloadType.ToString(),
+                                    BackupManagementType.ToString() ) );
+                            }
+                            
                             break;
 
                         default:
@@ -211,6 +218,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     WriteDebug("Successfully got response from service");
 
                     policyList = ConversionHelpers.GetPolicyModelList(respList);
+                    policyList = FilterPolicyForAzureWorkload(policyList, WorkloadType);
                     policyList = FilterPolicyBasedOnPolicyType(policyList, PolicySubType);
                     policyList = FilterPolicyBasedOnSmartTiering(policyList, IsArchiveSmartTieringEnabled);
 
@@ -297,6 +305,25 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     }
 
                     return true;
+                }).ToList();
+            }
+
+            return policyList;
+        }
+
+        /// <summary>
+        /// filter policies based on WorkloadType
+        /// </summary>
+        /// <param name="policyList"></param>
+        /// <param name="workloadType"></param>
+        /// <returns></returns>
+        public static List<PolicyBase> FilterPolicyForAzureWorkload(List<PolicyBase> policyList, WorkloadType? workloadType)
+        {
+            if (workloadType == Models.WorkloadType.SAPHanaDatabase || workloadType == Models.WorkloadType.MSSQL)
+            {
+                policyList = policyList.Where(policy =>
+                {
+                    return policy.WorkloadType == workloadType;                                         
                 }).ToList();
             }
 

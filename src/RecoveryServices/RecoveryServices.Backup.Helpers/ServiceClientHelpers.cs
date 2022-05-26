@@ -79,6 +79,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Helpers
                 case CmdletModel.WorkloadType.MSSQL:
                     providerType = ServiceClientModel.BackupManagementType.AzureWorkload.ToString();
                     break;
+                case CmdletModel.WorkloadType.SAPHanaDatabase:
+                    providerType = ServiceClientModel.BackupManagementType.AzureWorkload.ToString();
+                    break;
                 default:
                     break;
             }

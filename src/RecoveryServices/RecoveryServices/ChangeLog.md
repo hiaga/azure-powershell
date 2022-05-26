@@ -18,6 +18,7 @@
         - Additional information about change #1
 -->
 ## Upcoming Release
+* Added create/modify policy support for SAPHANA workload.
 
 ## Version 7.0.0
 * [Breaking Change] Renamed the property `ResouceType` of `ASRVaultSettings` to `ResourceType`. 
