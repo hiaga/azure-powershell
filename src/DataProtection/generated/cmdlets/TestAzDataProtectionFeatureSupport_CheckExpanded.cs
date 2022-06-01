@@ -12,6 +12,7 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Cmdlets
     /// <remarks>
     /// [OpenAPI] CheckFeatureSupport=>POST:"/subscriptions/{subscriptionId}/providers/Microsoft.DataProtection/locations/{location}/checkFeatureSupport"
     /// </remarks>
+    [global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.InternalExport]
     [global::System.Management.Automation.Cmdlet(global::System.Management.Automation.VerbsDiagnostic.Test, @"AzDataProtectionFeatureSupport_CheckExpanded", SupportsShouldProcess = true)]
     [global::System.Management.Automation.OutputType(typeof(string))]
     [global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Description(@"Validates if a feature is supported")]

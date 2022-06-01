@@ -19,6 +19,7 @@
 -->
 ## Upcoming Release
 * Added support for Resource Guard CRUD cmdlets
+* Added support for updating Azure monitor alert settings from V2 vault
 
 ## Version 0.3.1
 * Fixed trigger schedule client for `New-AzDataProtectionPolicyTriggerScheduleClientObject`

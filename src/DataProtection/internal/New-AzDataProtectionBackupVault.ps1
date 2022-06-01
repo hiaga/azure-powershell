@@ -38,7 +38,7 @@ PARAMETER <IBackupVaultResource>: Backup Vault Resource
   [Location <String>]: Resource location.
   [Tag <IDppTrackedResourceTags>]: Resource tags.
     [(Any) <String>]: This indicates any property can be added to this object.
-  [AzureMonitorAlertSettingAlertsForAllJobFailure <AlertsState?>]: 
+  [AzureMonitorAlertsForAllJobFailure <AlertsState?>]: 
   [ResourceMoveDetailCompletionTimeUtc <String>]: Completion time in UTC of latest ResourceMove operation attempted. ISO 8601 format.
   [ResourceMoveDetailOperationId <String>]: CorrelationId of latest ResourceMove operation attempted
   [ResourceMoveDetailSourceResourcePath <String>]: ARM resource path of source resource
@@ -93,8 +93,9 @@ param(
     [ArgumentCompleter([Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState])]
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Category('Body')]
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState]
-    # .
-    ${AzureMonitorAlertSettingAlertsForAllJobFailure},
+    # Parameter to Enable or Disable built-in azure monitor alerts for job failures.
+    # Security alerts cannot be disabled.
+    ${AzureMonitorAlertsForAllJobFailure},
 
     [Parameter(ParameterSetName='CreateExpanded')]
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Category('Body')]

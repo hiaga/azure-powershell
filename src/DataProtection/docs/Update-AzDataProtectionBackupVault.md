@@ -16,14 +16,14 @@ For example, updating tags for a resource.
 ### UpdateExpanded (Default)
 ```
 Update-AzDataProtectionBackupVault -ResourceGroupName <String> -VaultName <String> [-SubscriptionId <String>]
- [-AzureMonitorAlertSettingAlertsForAllJobFailure <AlertsState>] [-IdentityType <String>] [-Tag <Hashtable>]
+ [-AzureMonitorAlertsForAllJobFailure <AlertsState>] [-IdentityType <String>] [-Tag <Hashtable>]
  [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ### UpdateViaIdentityExpanded
 ```
 Update-AzDataProtectionBackupVault -InputObject <IDataProtectionIdentity>
- [-AzureMonitorAlertSettingAlertsForAllJobFailure <AlertsState>] [-IdentityType <String>] [-Tag <Hashtable>]
+ [-AzureMonitorAlertsForAllJobFailure <AlertsState>] [-IdentityType <String>] [-Tag <Hashtable>]
  [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
@@ -63,8 +63,9 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -AzureMonitorAlertSettingAlertsForAllJobFailure
-.
+### -AzureMonitorAlertsForAllJobFailure
+Parameter to Enable or Disable built-in azure monitor alerts for job failures.
+Security alerts cannot be disabled.
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState

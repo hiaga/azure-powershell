@@ -40,17 +40,19 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Cmdlets
         [global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Category(global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.ParameterCategory.Runtime)]
         public global::System.Management.Automation.SwitchParameter AsJob { get; set; }
 
-        /// <summary>.</summary>
-        [global::System.Management.Automation.Parameter(Mandatory = false, HelpMessage = ".")]
+        /// <summary>
+        /// Parameter to Enable or Disable built-in azure monitor alerts for job failures. Security alerts cannot be disabled.
+        /// </summary>
+        [global::System.Management.Automation.Parameter(Mandatory = false, HelpMessage = "Parameter to Enable or Disable built-in azure monitor alerts for job failures. Security alerts cannot be disabled.")]
         [global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Category(global::Microsoft.Azure.PowerShell.Cmdlets.DataProtection.ParameterCategory.Body)]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Runtime.Info(
         Required = false,
         ReadOnly = false,
-        Description = @".",
+        Description = @"Parameter to Enable or Disable built-in azure monitor alerts for job failures. Security alerts cannot be disabled.",
         SerializedName = @"alertsForAllJobFailures",
         PossibleTypes = new [] { typeof(Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState) })]
         [global::System.Management.Automation.ArgumentCompleter(typeof(Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState))]
-        public Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState AzureMonitorAlertSettingAlertsForAllJobFailure { get => ParametersBody.AzureMonitorAlertSettingAlertsForAllJobFailure ?? ((Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState)""); set => ParametersBody.AzureMonitorAlertSettingAlertsForAllJobFailure = value; }
+        public Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState AzureMonitorAlertsForAllJobFailure { get => ParametersBody.AzureMonitorAlertsForAllJobFailure ?? ((Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState)""); set => ParametersBody.AzureMonitorAlertsForAllJobFailure = value; }
 
         /// <summary>Wait for .NET debugger to attach</summary>
         [global::System.Management.Automation.Parameter(Mandatory = false, DontShow = true, HelpMessage = "Wait for .NET debugger to attach")]

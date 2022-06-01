@@ -42,6 +42,11 @@ directive:
   - from: swagger-document
     where: $.paths["/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/backupVaults/{vaultName}/backupInstances/{backupInstanceName}"].delete
     transform: $["description"] = "Delete a backupInstances"
+  - where:      
+      parameter-name: AzureMonitorAlertSettingAlertsForAllJobFailure
+    set:
+      parameter-name: AzureMonitorAlertsForAllJobFailure
+      parameter-description: Parameter to Enable or Disable built-in azure monitor alerts for job failures. Security alerts cannot be disabled.
   - where:
       verb: Get
       subject: BackupVaultResource.*
@@ -161,6 +166,10 @@ directive:
   - where:
       verb: Test
     hide: true
+  - where:
+      property-name: AzureMonitorAlertSettingAlertsForAllJobFailure
+    set:
+      property-name: AzureMonitorAlertsForAllJobFailure
   - where:
       model-name: BackupVaultResource
     set:

@@ -33,6 +33,11 @@
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20220401.IStorageSetting[]]
         ${StorageSetting},
 
+        [Parameter(Mandatory=$false, HelpMessage='Parameter to Enable or Disable built-in azure monitor alerts for job failures. Security alerts cannot be disabled.')]
+        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Support.AlertsState]
+        [ValidateSet('Enabled','Disabled')]
+        ${AzureMonitorAlertsForAllJobFailure},
+
         [Parameter(HelpMessage='Resource tags.')]
         [System.Collections.Hashtable]
         ${Tag},
@@ -43,7 +48,7 @@
         [System.Management.Automation.PSObject]
         # The credentials, account, tenant, and subscription used for communication with Azure.
         ${DefaultProfile},
-
+            
         [Parameter()]
         [System.Management.Automation.SwitchParameter]
         # Run the command as a job

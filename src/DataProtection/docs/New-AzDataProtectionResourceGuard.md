@@ -23,27 +23,18 @@ Creates a resource guard under a resource group
 
 ## EXAMPLES
 
-### Example 1: {{ Add title here }}
+### Example 1: Create a new resource guard
 ```powershell
-{{ Add code here }}
+PS C:\> New-AzDataProtectionResourceGuard -SubscriptionId "xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx" -ResourceGroupName "mua-rg" -Name "mua-resource-guard" -Location "centraluseuap"
 ```
 
 ```output
-{{ Add output here }}
+ETag Id                                                                                                                                                       IdentityPrincipalId IdentityTenantId IdentityType Location      Name
+---- --                                                                                                                                                       ------------------- ---------------- ------------ --------      ----
+     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx/resourceGroups/mua-rg/providers/Microsoft.DataProtection/resourceGuards/mua-resource-guard                                                   centraluseuap mua-resource-guard
 ```
 
-{{ Add description here }}
-
-### Example 2: {{ Add title here }}
-```powershell
-{{ Add code here }}
-```
-
-```output
-{{ Add output here }}
-```
-
-{{ Add description here }}
+The above command is used to create a resource guard "mua-resource-guard" under resource group "mua-rg" in location "centraluseuap"
 
 ## PARAMETERS
 
