@@ -87,11 +87,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Enables or disables monitor alerts for RS vault.
         /// </summary>
         [Parameter(Mandatory = false)]        
-        public bool? DisableAzureMonitorAlertsForJobFailure { get; set; }       
+        public bool? DisableAzureMonitorAlertsForJobFailure { get; set; }
+
+        /// <summary>
+        /// Enables or disables public network access for RS vault.
+        /// </summary>
+        [Parameter(Mandatory = false)]
+        public bool? DisablePublicNetworkAccess { get; set; }
 
         #endregion
 
-    public override void ExecuteCmdlet()
+        public override void ExecuteCmdlet()
         {
             if (ShouldProcess(Resources.VaultTarget, "set"))
             {
@@ -216,7 +222,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                                 }                                
                             }
                         }
-                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null)
+                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null && DisablePublicNetworkAccess == null)
                         {
                             throw new ArgumentException(Resources.InvalidParameterSet);
                         }
@@ -224,7 +230,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
 
                     PatchVault patchVault = new PatchVault();
 
-                    if(MSI != null && MSI.Type != null && (MSI.Type.ToLower().Contains("none") || MSI.Type.ToLower().Contains("assigned")))
+                    #region patch vault                    
+
+                    if (MSI != null && MSI.Type != null && (MSI.Type.ToLower().Contains("none") || MSI.Type.ToLower().Contains("assigned")))
                     {
                         patchVault.Identity = MSI;
                     }
@@ -246,9 +254,19 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             alerts.ClassicAlertSettings.AlertsForCriticalOperations = (DisableClassicAlerts == true) ? "Disabled" : "Enabled";
                         }
 
-                        patchVault.Properties = new VaultProperties();
+                        if (patchVault.Properties == null) { patchVault.Properties = new VaultProperties(); }
                         patchVault.Properties.MonitoringSettings = alerts;  
                     }
+
+                    // update Public Network Access
+                    if(DisablePublicNetworkAccess != null)
+                    {
+                        if(patchVault.Properties == null) { patchVault.Properties = new VaultProperties();}
+
+                        patchVault.Properties.PublicNetworkAccess = (DisablePublicNetworkAccess == true) ? "Disabled": "Enabled" ; 
+                    }
+
+                    #endregion
 
                     vault = RecoveryServicesClient.UpdateRSVault(this.ResourceGroupName, this.Name, patchVault);                                                         
                     WriteObject(new ARSVault(vault));

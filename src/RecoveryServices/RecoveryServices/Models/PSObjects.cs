@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RecoveryServices.Models;
+using System.Collections.Generic;
 
 namespace Microsoft.Azure.Commands.RecoveryServices
 {
@@ -82,8 +83,49 @@ namespace Microsoft.Azure.Commands.RecoveryServices
             this.Properties.ProvisioningState = vault.Properties.ProvisioningState;
             this.Properties.PrivateEndpointStateForBackup = vault.Properties.PrivateEndpointStateForBackup;
             this.Properties.PrivateEndpointStateForSiteRecovery = vault.Properties.PrivateEndpointStateForSiteRecovery;
+            this.Properties.PublicNetworkAccess = vault.Properties.PublicNetworkAccess;
+                           
+            if (vault.Properties.PrivateEndpointConnections != null)
+            {
+                this.Properties.PrivateEndpointConnections = new List<PrivateEndpointConnection>();
+                // Logger.Instance.WriteDebug("reached .... 1 ");
+                foreach (var serviceClientPEC in vault.Properties.PrivateEndpointConnections)
+                {
+                    PrivateEndpointConnection pec = new PrivateEndpointConnection();
 
-            if(vault.Properties != null && vault.Properties.MonitoringSettings != null)
+                    pec.ID = serviceClientPEC.Id;
+                    pec.Name = serviceClientPEC.Name;
+                    pec.Type = serviceClientPEC.Type;
+
+                    if (serviceClientPEC.Properties != null)
+                    {
+                        pec.ProvisioningState = serviceClientPEC.Properties.ProvisioningState;
+
+                        if(serviceClientPEC.Properties.GroupIds != null)
+                        {
+                            pec.GroupID = new List<string>();
+
+                            foreach(var groupID in serviceClientPEC.Properties.GroupIds)
+                            {
+                                pec.GroupID.Add(groupID);
+                            }                            
+                        }
+
+                        if (serviceClientPEC.Properties.PrivateLinkServiceConnectionState != null)
+                        {
+                            pec.Description = serviceClientPEC.Properties.PrivateLinkServiceConnectionState.Description;
+                            pec.ConnectionState = serviceClientPEC.Properties.PrivateLinkServiceConnectionState.Status;
+                            pec.ActionRequired = serviceClientPEC.Properties.PrivateLinkServiceConnectionState.ActionsRequired;
+                        }
+
+                        if (serviceClientPEC.Properties.PrivateEndpoint != null) pec.PrivateEndpointID = serviceClientPEC.Properties.PrivateEndpoint.Id;                        
+                    }                    
+                        
+                    this.Properties.PrivateEndpointConnections.Add(pec);
+                }                
+            }
+            
+            if(vault.Properties.MonitoringSettings != null)
             {
                 this.Properties.AlertSettings = new AlertSettings();
 
@@ -170,11 +212,75 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         public string PrivateEndpointStateForSiteRecovery { get; set; }
 
         /// <summary>
+        /// Gets or sets PublicNetworkAccess.
+        /// </summary>
+        public string PublicNetworkAccess { get; set; }
+
+        /// <summary>
         /// Gets or sets MonitoringSettings.
         /// </summary>
         public AlertSettings AlertSettings { get; set; }
 
+        public List<PrivateEndpointConnection> PrivateEndpointConnections { get; set; }
+
         #endregion
+    }
+
+    public class PrivateEndpointConnection
+    {
+        #region Properties
+
+        /// <summary>
+        /// Gets or sets the ID.
+        /// </summary>
+        public string ID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Name.
+        /// </summary>
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Type.
+        /// </summary>
+        public string Type { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ProvisioningState.
+        /// </summary>
+        public string ProvisioningState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ConnectionState.
+        /// </summary>
+        public string ConnectionState { get; set; }
+
+        /// <summary>
+        /// Gets or sets the ActionsRequired.
+        /// </summary>
+        public string ActionRequired { get; set; }
+
+        /// <summary>
+        /// Gets or sets the Description.
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
+        /// Gets or sets the GroupID.
+        /// </summary>
+        public List<string> GroupID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the PrivateEndpointID.
+        /// </summary>
+        public string PrivateEndpointID { get; set; }
+
+        #endregion
+
+        public override string ToString()
+        {
+            return string.Format("Name: {0}, ConnectionState: {1}", Name.Split('.')[0], ConnectionState);
+        }
     }
 
     public class AlertSettings

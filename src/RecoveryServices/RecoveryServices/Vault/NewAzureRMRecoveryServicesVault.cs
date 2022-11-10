@@ -72,6 +72,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         [Parameter(Mandatory = false)]
         public bool? DisableAzureMonitorAlertsForJobFailure { get; set; }
 
+        /// <summary>
+        /// Enables or disables public network access for RS vault.
+        /// </summary>
+        [Parameter(Mandatory = false)]
+        public bool? DisablePublicNetworkAccess { get; set; }
+
         #endregion
 
         /// <summary>
@@ -106,18 +112,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                         {
                             MonitoringSettings alerts = new MonitoringSettings();
 
-                            if (DisableAzureMonitorAlertsForJobFailure != null)
-                            {
-                                alerts.AzureMonitorAlertSettings = new AzureMonitorAlertSettings();
-                                alerts.AzureMonitorAlertSettings.AlertsForAllJobFailures = (DisableAzureMonitorAlertsForJobFailure == true) ? "Disabled" : "Enabled";
-                            }
-
-                            if (DisableClassicAlerts != null)
-                            {
-                                alerts.ClassicAlertSettings = new ClassicAlertSettings();
-                                alerts.ClassicAlertSettings.AlertsForCriticalOperations = (DisableClassicAlerts == true) ? "Disabled" : "Enabled";
-                            }
-
+                            alerts.AzureMonitorAlertSettings = new AzureMonitorAlertSettings();
+                            alerts.AzureMonitorAlertSettings.AlertsForAllJobFailures = (DisableAzureMonitorAlertsForJobFailure == true) ? "Disabled" : "Enabled";
+                            
+                            alerts.ClassicAlertSettings = new ClassicAlertSettings();
+                            alerts.ClassicAlertSettings.AlertsForCriticalOperations = (DisableClassicAlerts == true) ? "Disabled" : "Enabled";
+                        
                             vaultCreateArgs.Properties.MonitoringSettings = alerts;
                         }
                         else
@@ -125,8 +125,17 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                             throw new ArgumentException(Resources.MissingParameterForAlerts); 
                         }
                     }
-                    
 
+                    if (DisablePublicNetworkAccess != null)
+                    {
+                        vaultCreateArgs.Properties.PublicNetworkAccess = (DisablePublicNetworkAccess == true) ? "Disabled" : "Enabled";
+                    }
+                    else
+                    {
+                        vaultCreateArgs.Properties.PublicNetworkAccess = "Enabled";
+                        // throw warning - saying PNA enabled by default or vice-versa 
+                    }
+                    
                     Vault response = RecoveryServicesClient.CreateVault(this.ResourceGroupName, this.Name, vaultCreateArgs);
 
                     this.WriteObject(new ARSVault(response));
