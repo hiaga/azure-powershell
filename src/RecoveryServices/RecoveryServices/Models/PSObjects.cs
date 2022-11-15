@@ -13,6 +13,7 @@
 // ----------------------------------------------------------------------------------
 
 using Microsoft.Azure.Management.RecoveryServices.Models;
+using System;
 using System.Collections.Generic;
 
 namespace Microsoft.Azure.Commands.RecoveryServices
@@ -140,6 +141,25 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                 }                
             }
 
+            if(vault.Properties.SecuritySettings != null && vault.Properties.SecuritySettings.ImmutabilitySettings != null)
+            {
+                this.Properties.ImmutabilitySettings = new ImmutabilitySettings();
+
+                if(vault.Properties.SecuritySettings.ImmutabilitySettings.State != null)
+                {
+                    this.Properties.ImmutabilitySettings.Immutability = (vault.Properties.SecuritySettings.ImmutabilitySettings.State == "Disabled") ? Immutability.Disabled : Immutability.Enabled;
+
+                    if (vault.Properties.SecuritySettings.ImmutabilitySettings.State != "Disabled")
+                    {
+                        ImmutabilityState immutabilityState;
+                        Enum.TryParse<ImmutabilityState>(vault.Properties.SecuritySettings.ImmutabilitySettings.State, true, out immutabilityState);
+                        this.Properties.ImmutabilitySettings.ImmutabilityState = immutabilityState;
+                    }
+                    // remove
+                    //this.Properties.ImmutabilitySettings.ImmutabilityState = (vault.Properties.SecuritySettings.ImmutabilitySettings.State != "Disabled") ? vault.Properties.SecuritySettings.ImmutabilitySettings.State. : null;
+                }
+            }
+
             this.Identity = vault.Identity;
         }
 
@@ -216,6 +236,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         /// </summary>
         public string PublicNetworkAccess { get; set; }
 
+        public ImmutabilitySettings ImmutabilitySettings { get; set; }
+
         /// <summary>
         /// Gets or sets MonitoringSettings.
         /// </summary>
@@ -223,6 +245,14 @@ namespace Microsoft.Azure.Commands.RecoveryServices
 
         public List<PrivateEndpointConnection> PrivateEndpointConnections { get; set; }
 
+        #endregion
+    }
+
+    public class ImmutabilitySettings
+    {
+        #region Properties
+            public Immutability Immutability { get; set; }
+            public ImmutabilityState ImmutabilityState { get; set; }
         #endregion
     }
 
@@ -370,6 +400,24 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         GeoRedundant = 1,
         ZoneRedundant,
         LocallyRedundant
+    }
+
+    /// <summary>
+    /// Enum to define the vault Immutability state.
+    /// </summary>
+    public enum ImmutabilityState
+    {
+        Unlocked = 1,
+        Locked
+    }
+
+    /// <summary>
+    /// Enum to define the vault Immutability.
+    /// </summary>
+    public enum Immutability
+    {
+        Enabled = 1,
+        Disabled
     }
 
     /// <summary>

@@ -15,6 +15,7 @@
 using System;
 using System.Management.Automation;
 using Microsoft.Azure.Management.RecoveryServices.Models;
+using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Models;
 using Microsoft.Azure.Commands.RecoveryServices.Properties;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using System.Collections.Generic;
@@ -94,6 +95,19 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// </summary>
         [Parameter(Mandatory = false)]
         public bool? DisablePublicNetworkAccess { get; set; }
+
+
+        /// <summary>
+        /// Enables or disables Immutability setting for RS vault.
+        /// </summary>
+        [Parameter(Mandatory = false)]
+        public bool? EnableImmutability { get; set; }
+
+        /// <summary>
+        /// Locks Immutability setting for RS vault.
+        /// </summary>
+        [Parameter(Mandatory = false)]
+        public SwitchParameter LockImmutability { get; set; }
 
         #endregion
 
@@ -222,7 +236,8 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                                 }                                
                             }
                         }
-                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null && DisablePublicNetworkAccess == null)
+                        // see if control can be reached here ?? 
+                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null && DisablePublicNetworkAccess == null && EnableImmutability == null && !LockImmutability.IsPresent )
                         {
                             throw new ArgumentException(Resources.InvalidParameterSet);
                         }
@@ -264,6 +279,38 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                         if(patchVault.Properties == null) { patchVault.Properties = new VaultProperties();}
 
                         patchVault.Properties.PublicNetworkAccess = (DisablePublicNetworkAccess == true) ? "Disabled": "Enabled" ; 
+                    } 
+
+                    if(EnableImmutability != null && LockImmutability.IsPresent)
+                    {
+                        // resx
+                        throw new ArgumentException("Immutability can't be enabled and locked simultaneously");
+                    }
+                    else if (EnableImmutability != null)
+                    {
+                        if (patchVault.Properties == null) { patchVault.Properties = new VaultProperties(); }
+                        if (patchVault.Properties.SecuritySettings == null) { patchVault.Properties.SecuritySettings = new SecuritySettings(); }
+                        if (patchVault.Properties.SecuritySettings.ImmutabilitySettings == null) { patchVault.Properties.SecuritySettings.ImmutabilitySettings = new ServiceClientModel.ImmutabilitySettings(); }
+                        
+                        if(patchVault.Properties.SecuritySettings.ImmutabilitySettings.State == "Locked")
+                        {
+                            // resx
+                            throw new ArgumentException("Immutability can't be enabled or disabled once locked");
+                        }
+                        
+                        patchVault.Properties.SecuritySettings.ImmutabilitySettings.State = (EnableImmutability == true) ? "Unlocked" : "Disabled";
+                    }
+                    else if (LockImmutability.IsPresent)
+                    {
+                        if(patchVault.Properties == null || patchVault.Properties.SecuritySettings == null || patchVault.Properties.SecuritySettings.ImmutabilitySettings == null || patchVault.Properties.SecuritySettings.ImmutabilitySettings.State == "Disabled")
+                        {
+                            // resx
+                            throw new ArgumentException("Immutability can only be locked after it has been Enabled and in Unlocked state");
+                        }
+                        else if (patchVault.Properties.SecuritySettings.ImmutabilitySettings.State == "Unlocked")
+                        {
+                            patchVault.Properties.SecuritySettings.ImmutabilitySettings.State = "Locked";
+                        }
                     }
 
                     #endregion
