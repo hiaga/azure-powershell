@@ -155,8 +155,6 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                         Enum.TryParse<ImmutabilityState>(vault.Properties.SecuritySettings.ImmutabilitySettings.State, true, out immutabilityState);
                         this.Properties.ImmutabilitySettings.ImmutabilityState = immutabilityState;
                     }
-                    // remove
-                    //this.Properties.ImmutabilitySettings.ImmutabilityState = (vault.Properties.SecuritySettings.ImmutabilitySettings.State != "Disabled") ? vault.Properties.SecuritySettings.ImmutabilitySettings.State. : null;
                 }
             }
 
@@ -407,7 +405,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices
     /// </summary>
     public enum ImmutabilityState
     {
-        Unlocked = 1,
+        Unlocked = 1, // 0 can be made default
         Locked
     }
 
