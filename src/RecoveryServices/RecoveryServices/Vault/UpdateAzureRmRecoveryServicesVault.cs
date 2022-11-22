@@ -16,6 +16,7 @@ using System;
 using System.Management.Automation;
 using Microsoft.Azure.Management.RecoveryServices.Models;
 using ServiceClientModel = Microsoft.Azure.Management.RecoveryServices.Models;
+using cmdletModel = Microsoft.Azure.Commands.RecoveryServices;
 using Microsoft.Azure.Commands.RecoveryServices.Properties;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using System.Collections.Generic;
@@ -94,8 +95,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
         /// Enables or disables public network access for RS vault.
         /// </summary>
         [Parameter(Mandatory = false)]
-        public bool? DisablePublicNetworkAccess { get; set; }
-
+        public PublicNetworkAccess? PublicNetworkAccess { get; set; }
 
         /// <summary>
         /// Enables or disables Immutability setting for RS vault.
@@ -237,7 +237,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                             }
                         }
                         // see if control can be reached here ?? 
-                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null && DisablePublicNetworkAccess == null && EnableImmutability == null && !LockImmutability.IsPresent )
+                        else if (DisableAzureMonitorAlertsForJobFailure == null && DisableClassicAlerts == null && PublicNetworkAccess == null && EnableImmutability == null && !LockImmutability.IsPresent )
                         {
                             throw new ArgumentException(Resources.InvalidParameterSet);
                         }
@@ -274,11 +274,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                     }
 
                     // update Public Network Access
-                    if(DisablePublicNetworkAccess != null)
+                    if(PublicNetworkAccess != null)
                     {
                         if(patchVault.Properties == null) { patchVault.Properties = new VaultProperties();}
 
-                        patchVault.Properties.PublicNetworkAccess = (DisablePublicNetworkAccess == true) ? "Disabled": "Enabled" ; 
+                        patchVault.Properties.PublicNetworkAccess = (PublicNetworkAccess == cmdletModel.PublicNetworkAccess.Disabled) ? "Disabled": "Enabled" ; 
                     }
 
                     if (EnableImmutability != null || LockImmutability.IsPresent)

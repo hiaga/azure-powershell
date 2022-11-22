@@ -418,6 +418,12 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         Disabled
     }
 
+    public enum PublicNetworkAccess
+    {
+        Enabled = 1,
+        Disabled
+    }
+
     /// <summary>
     /// Class to define the vault BackupStorageRedundancy settings.
     /// </summary>

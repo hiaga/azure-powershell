@@ -16,6 +16,7 @@ using System;
 using System.Management.Automation;
 using Microsoft.Azure.Commands.RecoveryServices.Properties;
 using Microsoft.Azure.Management.RecoveryServices.Models;
+using cmdletModel = Microsoft.Azure.Commands.RecoveryServices;
 using Microsoft.Azure.Commands.ResourceManager.Common.ArgumentCompleters;
 using System.Collections.Generic;
 using System.Collections;
@@ -76,7 +77,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         /// Enables or disables public network access for RS vault.
         /// </summary>
         [Parameter(Mandatory = false)]
-        public bool? DisablePublicNetworkAccess { get; set; }
+        public PublicNetworkAccess? PublicNetworkAccess { get; set; }
 
         #endregion
 
@@ -126,9 +127,9 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                         }
                     }
 
-                    if (DisablePublicNetworkAccess != null)
+                    if (PublicNetworkAccess != null)
                     {
-                        vaultCreateArgs.Properties.PublicNetworkAccess = (DisablePublicNetworkAccess == true) ? "Disabled" : "Enabled";
+                        vaultCreateArgs.Properties.PublicNetworkAccess = (PublicNetworkAccess == cmdletModel.PublicNetworkAccess.Disabled) ? "Disabled" : "Enabled";
                     }
                     else
                     {
