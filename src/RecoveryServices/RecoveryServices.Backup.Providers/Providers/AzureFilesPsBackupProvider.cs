@@ -124,6 +124,11 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
                                 item.Id);
         }
 
+        public RestAzureNS.AzureOperationResponse<ProtectedItemResource> SuspendBackup()
+        {
+            throw new NotImplementedException(); // CheckSB : to be implemented
+        }
+
         public RestAzureNS.AzureOperationResponse<ProtectedItemResource> UndeleteProtection()
         {
             throw new Exception(Resources.SoftdeleteNotImplementedException);

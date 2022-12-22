@@ -92,6 +92,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
             public const string AzureVMServiceName = "Cloud Service Name for Azure Classic Compute VM.";
             public const string AzureVMResourceGroupName = "Resource Group Name for Azure Compute VM .";
             public const string ProtectedItem = "Specifies the item to be protected with the given policy.";
+            public const string SuspendItem = "Specifies the item for which the backup needs to be suspended.";
             public const string ProtectableItem = "Specifies the protectable item to be protected using Azure Backup.";
             public const string ProtectionStatus = "Protection status of Item";
             public const string Status = "Status of the data source";
@@ -101,6 +102,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets
                 "also be deleted and restoring will not be possible.";
             public const string ExpiryDate = "Retention period for the recovery points created by this backup operaiton";
             public const string ForceOption = "Force disables backup protection (prevents confirmation dialog). This parameter is optional.";
+            public const string ForceSuspend = "Force suspends backup.";
             public const string ExpiryDateTimeUTC = "Specifies an expiry time for the Recovery point as a DateTime object, " + 
                 "if nothing is given it takes the default value of  30 days. Applicable to VM, SQL (for only Copy-only-full backup type), AFS backup items.";
             public const string ProtectionPolicy = "The id of the backup policy which is used to protect the backup items";

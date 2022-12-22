@@ -263,6 +263,58 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
         /// Triggers the disable protection operation for the given item
         /// </summary>
         /// <returns>The job response returned from the service</returns>
+        public RestAzureNS.AzureOperationResponse<ProtectedItemResource> SuspendBackup()
+        {
+            string vaultName = (string)ProviderData[VaultParams.VaultName];
+            string resourceGroupName = (string)ProviderData[VaultParams.ResourceGroupName];
+
+            // CheckSB : are these both needed ? 
+            ItemBase itemBase = (ItemBase)ProviderData[ItemParams.Item];
+            AzureVmItem item = (AzureVmItem)ProviderData[ItemParams.Item];
+            
+            // do validations
+            ValidateAzureVMDisableProtectionRequest(itemBase);
+
+            Dictionary<UriEnums, string> keyValueDict = HelperUtils.ParseUri(item.Id);
+            string containerUri = HelperUtils.GetContainerUri(keyValueDict, item.Id);
+            string protectedItemUri = HelperUtils.GetProtectedItemUri(keyValueDict, item.Id);
+
+            bool isComputeAzureVM = false;
+            isComputeAzureVM = IsComputeAzureVM(item.VirtualMachineId);
+
+            // construct Service Client protectedItem request
+
+            AzureIaaSVMProtectedItem properties;
+            if (isComputeAzureVM == false)
+            {
+                properties = new AzureIaaSClassicComputeVMProtectedItem();
+            }
+            else
+            {
+                properties = new AzureIaaSComputeVMProtectedItem();
+            }
+
+            // properties.PolicyId = string.Empty;
+            properties.ProtectionState = "BackupSuspended"; // ProtectionState.BackupSuspended;
+            properties.SourceResourceId = item.SourceResourceId;
+
+            ProtectedItemResource serviceClientRequest = new ProtectedItemResource()
+            {
+                Properties = properties,
+            };
+
+            return ServiceClientAdapter.CreateOrUpdateProtectedItem(
+                containerUri,
+                protectedItemUri,
+                serviceClientRequest,
+                vaultName: vaultName,
+                resourceGroupName: resourceGroupName);
+        }
+
+        /// <summary>
+        /// Triggers the disable protection operation for the given item
+        /// </summary>
+        /// <returns>The job response returned from the service</returns>
         public RestAzureNS.AzureOperationResponse<ProtectedItemResource> DisableProtection()
         {
             string vaultName = (string)ProviderData[VaultParams.VaultName];
