@@ -279,23 +279,24 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.ProviderModel
             string containerUri = HelperUtils.GetContainerUri(keyValueDict, item.Id);
             string protectedItemUri = HelperUtils.GetProtectedItemUri(keyValueDict, item.Id);
 
-            bool isComputeAzureVM = false;
-            isComputeAzureVM = IsComputeAzureVM(item.VirtualMachineId);
+            // bool isComputeAzureVM = false;
+            // isComputeAzureVM = IsComputeAzureVM(item.VirtualMachineId);
 
             // construct Service Client protectedItem request
 
-            AzureIaaSVMProtectedItem properties;
-            if (isComputeAzureVM == false)
+            AzureIaaSVMProtectedItem properties = new AzureIaaSVMProtectedItem();
+            /*if (isComputeAzureVM == false)
             {
                 properties = new AzureIaaSClassicComputeVMProtectedItem();
             }
             else
             {
                 properties = new AzureIaaSComputeVMProtectedItem();
-            }
+            }*/
 
             // properties.PolicyId = string.Empty;
-            properties.ProtectionState = "BackupSuspended"; // ProtectionState.BackupSuspended;
+            // properties.ProtectedItemType = null;
+            ((AzureIaaSVMProtectedItem)properties).ProtectionState = "BackupsSuspended"; // ProtectionState.BackupSuspended;
             properties.SourceResourceId = item.SourceResourceId;
 
             ProtectedItemResource serviceClientRequest = new ProtectedItemResource()

@@ -75,6 +75,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Cmdlets.Backup
 
                         var itemResponse = psBackupProvider.SuspendBackup();
                         Logger.Instance.WriteDebug("Suspend backup response " + JsonConvert.SerializeObject(itemResponse));
+
                         // Track Response and display job details
                         HandleCreatedJob(
                                 itemResponse,
