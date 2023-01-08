@@ -1,82 +1,70 @@
 ---
 external help file:
 Module Name: Az.DataProtection
-online version: https://learn.microsoft.com/powershell/module/az.dataprotection/get-azdataprotectionrecoverypoint
+online version: https://learn.microsoft.com/powershell/module/az.dataprotection/get-azdataprotectiondeletedbackupinstance
 schema: 2.0.0
 ---
 
-# Get-AzDataProtectionRecoveryPoint
+# Get-AzDataProtectionDeletedBackupInstance
 
 ## SYNOPSIS
-Gets a Recovery Point using recoveryPointId for a Datasource.
+Gets a deleted backup instance with name in a backup vault
 
 ## SYNTAX
 
 ### List (Default)
 ```
-Get-AzDataProtectionRecoveryPoint [-BackupInstanceName <String>] [-ResourceGroupName <String>]
- [-SubscriptionId <String[]>] [-VaultName <String>] [-DefaultProfile <PSObject>] [-EndTime <DateTime>]
- [-StartTime <DateTime>] [<CommonParameters>]
+Get-AzDataProtectionDeletedBackupInstance -ResourceGroupName <String> -VaultName <String>
+ [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [<CommonParameters>]
 ```
 
 ### Get
 ```
-Get-AzDataProtectionRecoveryPoint -BackupInstanceName <String> -Id <String> -ResourceGroupName <String>
+Get-AzDataProtectionDeletedBackupInstance -BackupInstanceName <String> -ResourceGroupName <String>
  -VaultName <String> [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [<CommonParameters>]
 ```
 
 ### GetViaIdentity
 ```
-Get-AzDataProtectionRecoveryPoint -InputObject <IDataProtectionIdentity> [-DefaultProfile <PSObject>]
+Get-AzDataProtectionDeletedBackupInstance -InputObject <IDataProtectionIdentity> [-DefaultProfile <PSObject>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Gets a Recovery Point using recoveryPointId for a Datasource.
+Gets a deleted backup instance with name in a backup vault
 
 ## EXAMPLES
 
-### Example 1: Get all recovery points of a given backup instance
+### Example 1: {{ Add title here }}
 ```powershell
-$instance = Get-AzDataProtectionBackupInstance -SubscriptionId "xxxx-xxx-xxx" -ResourceGroupName sarath-rg -VaultName sarath-vault
-Get-AzDataProtectionRecoveryPoint -SubscriptionId "xxxx-xxx-xxx" -ResourceGroupName sarath-rg -VaultName sarath-vault -BackupInstanceName $instance[2].Name
+{{ Add code here }}
 ```
 
 ```output
-Name                             Type
-----                             ----
-aded40a562134f97b732f30d0b486fef Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
-f458438d5ebb4098adbf67e9655cb624 Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
-515ba70e49d34b2bbff033dcc08593fe Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
-e61293fdd1064fbdb4f42b7f5927a927 Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
-aecc362b85484f4eb905bb05ef445e3e Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
-dc814d61a9624c36a1f9d635bc0b80f0 Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
+{{ Add output here }}
 ```
 
-This command lists all available recovery points of a given backup instance
+{{ Add description here }}
 
-### Example 2: Get recovery point with given recovery point id.
+### Example 2: {{ Add title here }}
 ```powershell
-$instance = Get-AzDataProtectionBackupInstance -SubscriptionId "xxxx-xxx-xxx" -ResourceGroupName sarath-rg -VaultName sarath-vault
-Get-AzDataProtectionRecoveryPoint -SubscriptionId "xxxx-xxx-xxx" -ResourceGroupName sarath-rg -VaultName sarath-vault -BackupInstanceName $instance[2].Name -Id 892e5c5014dc4a96807d22924f5745c9
+{{ Add code here }}
 ```
 
 ```output
-Name                             Type
-----                             ----
-892e5c5014dc4a96807d22924f5745c9 Microsoft.DataProtection/backupVaults/backupInstances/recoveryPoints
+{{ Add output here }}
 ```
 
-This command returns a recovery point with given id.
+{{ Add description here }}
 
 ## PARAMETERS
 
 ### -BackupInstanceName
-The name of the backup instance.
+The name of the deleted backup instance
 
 ```yaml
 Type: System.String
-Parameter Sets: Get, List
+Parameter Sets: Get
 Aliases:
 
 Required: True
@@ -95,36 +83,6 @@ Parameter Sets: (All)
 Aliases: AzureRMContext, AzureCredential
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -EndTime
-End Time filter for recovery points
-
-```yaml
-Type: System.DateTime
-Parameter Sets: List
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-.
-
-```yaml
-Type: System.String
-Parameter Sets: Get
-Aliases: RecoveryPointId
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -157,21 +115,6 @@ Parameter Sets: Get, List
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -StartTime
-Start Time filter for recovery points
-
-```yaml
-Type: System.DateTime
-Parameter Sets: List
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -218,9 +161,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20221201.IAzureBackupRecoveryPointResource
-
-### System.Management.Automation.PSObject
+### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20221201.IDeletedBackupInstanceResource
 
 ## NOTES
 

@@ -1,42 +1,88 @@
 ---
 external help file:
 Module Name: Az.DataProtection
-online version: https://learn.microsoft.com/powershell/module/az.dataprotection/remove-azdataprotectionresourceguard
+online version: https://learn.microsoft.com/powershell/module/az.dataprotection/restore-azdataprotectiondeletedbackupinstance
 schema: 2.0.0
 ---
 
-# Remove-AzDataProtectionResourceGuard
+# Restore-AzDataProtectionDeletedBackupInstance
 
 ## SYNOPSIS
-Deletes a ResourceGuard resource from the resource group.
+
 
 ## SYNTAX
 
-### Delete (Default)
+### Undelete (Default)
 ```
-Remove-AzDataProtectionResourceGuard -Name <String> -ResourceGroupName <String> [-SubscriptionId <String>]
- [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+Restore-AzDataProtectionDeletedBackupInstance -BackupInstanceName <String> -ResourceGroupName <String>
+ -VaultName <String> [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-PassThru]
+ [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
-### DeleteViaIdentity
+### UndeleteViaIdentity
 ```
-Remove-AzDataProtectionResourceGuard -InputObject <IDataProtectionIdentity> [-DefaultProfile <PSObject>]
- [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+Restore-AzDataProtectionDeletedBackupInstance -InputObject <IDataProtectionIdentity>
+ [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Deletes a ResourceGuard resource from the resource group.
+
 
 ## EXAMPLES
 
-### Example 1: Delete a resource guard
+### Example 1: {{ Add title here }}
 ```powershell
-Remove-AzDataProtectionResourceGuard -Name "ResourceGuardName" -ResourceGroupName "ResourceGroupName" -SubscriptionId "xxxxxxxx-xxxx-xxxx-xxxxxxxxxxxx" 
+{{ Add code here }}
 ```
 
-This command is used to delete the resource guard under a resource group.
+```output
+{{ Add output here }}
+```
+
+{{ Add description here }}
+
+### Example 2: {{ Add title here }}
+```powershell
+{{ Add code here }}
+```
+
+```output
+{{ Add output here }}
+```
+
+{{ Add description here }}
 
 ## PARAMETERS
+
+### -AsJob
+Run the command as a job
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -BackupInstanceName
+The name of the deleted backup instance
+
+```yaml
+Type: System.String
+Parameter Sets: Undelete
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -DefaultProfile
 The credentials, account, tenant, and subscription used for communication with Azure.
@@ -59,7 +105,7 @@ To construct, see NOTES section for INPUTOBJECT properties and create a hash tab
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.IDataProtectionIdentity
-Parameter Sets: DeleteViaIdentity
+Parameter Sets: UndeleteViaIdentity
 Aliases:
 
 Required: True
@@ -69,15 +115,15 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -Name
-The name of ResourceGuard
+### -NoWait
+Run the command asynchronously
 
 ```yaml
-Type: System.String
-Parameter Sets: Delete
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -105,7 +151,7 @@ The name is case insensitive.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Undelete
 Aliases:
 
 Required: True
@@ -121,12 +167,27 @@ The value must be an UUID.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Undelete
 Aliases:
 
 Required: False
 Position: Named
 Default value: (Get-AzContext).Subscription.Id
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -VaultName
+The name of the backup vault.
+
+```yaml
+Type: System.String
+Parameter Sets: Undelete
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```

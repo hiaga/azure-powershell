@@ -35,6 +35,9 @@ Gets a backup policy belonging to a backup vault
 ### [Get-AzDataProtectionBackupVault](Get-AzDataProtectionBackupVault.md)
 Returns resource collection belonging to a subscription.
 
+### [Get-AzDataProtectionDeletedBackupInstance](Get-AzDataProtectionDeletedBackupInstance.md)
+Gets a deleted backup instance with name in a backup vault
+
 ### [Get-AzDataProtectionJob](Get-AzDataProtectionJob.md)
 Gets a job with id in a backup vault
 
@@ -92,6 +95,9 @@ Deletes a BackupVault resource from the resource group.
 ### [Remove-AzDataProtectionResourceGuard](Remove-AzDataProtectionResourceGuard.md)
 Deletes a ResourceGuard resource from the resource group.
 
+### [Restore-AzDataProtectionDeletedBackupInstance](Restore-AzDataProtectionDeletedBackupInstance.md)
+
+
 ### [Resume-AzDataProtectionBackupInstanceProtection](Resume-AzDataProtectionBackupInstanceProtection.md)
 This operation will resume protection for a stopped backup instance
 
@@ -111,7 +117,7 @@ Triggers restore for a BackupInstance
 This operation will stop protection of a backup instance and data will be held forever
 
 ### [Suspend-AzDataProtectionBackupInstanceBackup](Suspend-AzDataProtectionBackupInstanceBackup.md)
-This operation will stop backups for backup instance
+This operation will stop backup for a backup instance and retains the backup data as per the policy (except latest Recovery point, which will be retained forever)
 
 ### [Sync-AzDataProtectionBackupInstance](Sync-AzDataProtectionBackupInstance.md)
 Sync backup instance again in case of failure\r\nThis action will retry last failed operation and will bring backup instance to valid state
