@@ -17,15 +17,21 @@ function New-AzDataProtectionSoftDeleteSettingObject{
 
     process {
         
-        if ($RetentionDurationInDay -eq $null -and $State -eq $null) 
+        if ($RetentionDurationInDay -eq 0 -and $State -eq $null) 
         {
             $errormsg = "Please input either RetentionDurationInDay or State parameter"
     		throw $errormsg
         }
 
         $softDeleteSetting = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20221201.SoftDeleteSettings]::new()
-        if ($RetentionDurationInDay -ne $null) $softDeleteSetting.RetentionDurationInDay = $RetentionDurationInDay
-        if ($State -ne $null) $softDeleteSetting.State = $State        
+        
+        if ($RetentionDurationInDay -ne $null){
+            $softDeleteSetting.RetentionDurationInDay = $RetentionDurationInDay
+        }
+
+        if ($State -ne $null){
+             $softDeleteSetting.State = $State
+        }
         
         $softDeleteSetting
     }
