@@ -45,7 +45,12 @@ function Initialize-AzDataProtectionBackupInstance {
                 
         [Parameter(Mandatory=$false, HelpMessage='Backup configuration for backup. Use this parameter to configure protection for AzureKubernetesService.')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.KubernetesClusterBackupDatasourceParameters]
-        ${BackupConfiguration}
+        ${BackupConfiguration},
+
+        # DppRef: move this param to backup config command
+        [Parameter(Mandatory=$false, HelpMessage='List of containers to be backed up inside the VaultStore. Use this parameter for DatasourceType AzureBlob.')]
+        [System.String[]]
+        ${VaultedBackupContainers}
     )
 
     process {
@@ -145,13 +150,13 @@ function Initialize-AzDataProtectionBackupInstance {
         }
 
         if($manifest.addBackupDatasourceParametersList -eq $true)
-        {            
-            if($BackupConfiguration -eq $null){
-                $errormsg = "Please input parameter BackupConfiguration for AKS cluster backup. Use command New-AzDataProtectionBackupConfigurationClientObject for creating the BackupConfiguration"
+        {   
+            if($BackupConfiguration -eq $null){                
+                $errormsg = "Please input parameter BackupConfiguration for given DatasourceType. Use command New-AzDataProtectionBackupConfigurationClientObject for creating the BackupConfiguration."
     		    throw $errormsg
             }
 
-            $backupInstanceResource.Property.PolicyInfo.PolicyParameter.BackupDatasourceParametersList += @($BackupConfiguration)
+            $backupInstanceResource.Property.PolicyInfo.PolicyParameter.BackupDatasourceParametersList += @($BackupConfiguration)                        
         }
         elseif($ExcludedResourceType -ne $null -or $IncludedResourceType -ne $null -or $ExcludedNamespace -ne $null -or $IncludedNamespace -ne $null -or $LabelSelector -ne $null -or $SnapshotVolume -ne $null -or $IncludeClusterScopeResource -ne $null){
             $errormsg = "ExcludedResourceType, IncludedResourceType, ExcludedNamespace, IncludedNamespace, LabelSelector, SnapshotVolume, IncludeClusterScopeResource parameters are not applicable for given DatasourceType. Please ensure to remove them"

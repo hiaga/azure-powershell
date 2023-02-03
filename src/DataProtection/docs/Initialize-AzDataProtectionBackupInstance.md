@@ -16,7 +16,8 @@ Initializes Backup instance Request object for configuring backup
 Initialize-AzDataProtectionBackupInstance -DatasourceLocation <String> -DatasourceType <DatasourceTypes>
  [-BackupConfiguration <KubernetesClusterBackupDatasourceParameters>] [-DatasourceId <String>]
  [-FriendlyName <String>] [-PolicyId <String>] [-SecretStoreType <SecretStoreTypes>]
- [-SecretStoreURI <String>] [-SnapshotResourceGroupId <String>] [<CommonParameters>]
+ [-SecretStoreURI <String>] [-SnapshotResourceGroupId <String>] [-VaultedBackupContainers <String[]>]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -199,6 +200,22 @@ Sanpshot Resource Group
 
 ```yaml
 Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -VaultedBackupContainers
+List of containers to be backed up inside the VaultStore.
+Use this parameter for DatasourceType AzureBlob.
+
+```yaml
+Type: System.String[]
 Parameter Sets: (All)
 Aliases:
 

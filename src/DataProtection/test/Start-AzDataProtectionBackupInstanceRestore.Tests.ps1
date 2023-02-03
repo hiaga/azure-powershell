@@ -12,6 +12,10 @@ while(-not $mockingPath) {
 . ($mockingPath | Select-Object -First 1).FullName
 
 Describe 'Start-AzDataProtectionBackupInstanceRestore' {
+    It 'CrossSubscriptionRestore' -skip {
+
+    }
+
     It 'OssRestore' {
         # Test trigger Backup for Oss DB
         $recordDate = $env.RecordDate

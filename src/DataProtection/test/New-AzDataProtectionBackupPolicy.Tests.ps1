@@ -47,7 +47,7 @@ Describe 'New-AzDataProtectionBackupPolicy' {
         $trigger =  New-AzDataProtectionPolicyTriggerScheduleClientObject -ScheduleDays $schDates -IntervalType Weekly -IntervalCount 1
 
         Edit-AzDataProtectionPolicyTriggerClientObject -Schedule $trigger -Policy $pol   
-                  
+
         $tagCriteria = New-AzDataProtectionPolicyTagCriteriaClientObject -AbsoluteCriteria FirstOfMonth
 
         Edit-AzDataProtectionPolicyTagClientObject -Policy $pol -Name Monthly -Criteria $tagCriteria

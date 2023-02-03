@@ -23,6 +23,11 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
         [Parameter(ParameterSetName='RemoveRetention',Mandatory, HelpMessage='Specifies whether to remove the retention rule.')]
         [System.Management.Automation.SwitchParameter]
         ${RemoveRule},
+                
+        # DppRef: modify param name as per Aditya
+        [Parameter(ParameterSetName='AddRetention',Mandatory=$false, HelpMessage='Specifies whether to modify an  existing LifeCycle.')]
+        [System.Management.Automation.SwitchParameter]
+        ${DoNotModifyLifeCycle},
 
         [Parameter(ParameterSetName='AddRetention',Mandatory, HelpMessage='Life cycles associated with the retention rule.')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.ISourceLifeCycle[]]
@@ -44,7 +49,7 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
 
         if($parameterSetName -eq "AddRetention"){
             $retentionPolicyIndex = -1
-            Foreach($index in (1..$Policy.PolicyRule.Length)){
+            Foreach($index in (0..$Policy.PolicyRule.Length)){
                 if($Policy.PolicyRule[$index].Name -eq $Name){
                     $retentionPolicyIndex = $index
                 }
@@ -75,10 +80,31 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
             }
 
             if($retentionPolicyIndex -ne -1){
-                $Policy.PolicyRule[$retentionPolicyIndex].LifeCycle = $LifeCycles
+
+                # DppRef : (compare DataStore)
+                
+
+                if($DoNotModifyLifeCycle){
+
+                    # DppRef : can convert to for loop for comparing all lifecycles
+                    if($Policy.PolicyRule[$retentionPolicyIndex].LifeCycle[0].SourceDataStoreType -eq $LifeCycles[0].SourceDataStoreType){
+                        $message = "Lifecycles can't be created with same DataStoreType and Name"
+                        throw $message
+                    }
+
+                    $newRetentionRule = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.AzureRetentionRule]::new()
+                    $newRetentionRule.ObjectType = "AzureRetentionRule"
+                    $newRetentionRule.IsDefault = $IsDefault
+                    $newRetentionRule.Name = $Name
+                    $newRetentionRule.LifeCycle = $LifeCycles
+                    $Policy.PolicyRule += $newRetentionRule
+                }
+                else {
+                    $Policy.PolicyRule[$retentionPolicyIndex].LifeCycle = $LifeCycles
+                }
+                
                 return $Policy
             }
         }
     }
-
 }

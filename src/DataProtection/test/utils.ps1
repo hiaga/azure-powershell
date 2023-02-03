@@ -124,6 +124,22 @@ function setupEnv() {
         FriendlyName = "pstest-aks-cluster"        
     }
 
+    $BlobHardeningVariables = @{
+        SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
+        Location = "eastus"
+        ResourceGroupName = "blob-eus-pstest-rg"
+        VaultName = "blob-eus-pstest-vault"
+        NewPolicyName = "pstest-aks-policy"
+        PolicyName = "operational-vaulted-policy"
+        StorageAccountName = "blobeuspstestsa"
+
+        DataSourceLocation = "eastus"
+        SourceClusterId = "/subscriptions/62b829ee-7936-40c9-a1c9-47a93f9f3965/resourceGroups/aksbackuptestrg-rajat/providers/Microsoft.ContainerService/managedClusters/aks-pstest-cluster"
+        TargetClusterId = "/subscriptions/62b829ee-7936-40c9-a1c9-47a93f9f3965/resourceGroups/aksbackuptestrg-rajat/providers/Microsoft.ContainerService/managedClusters/aks-clitest-cluster"
+        SnapshotResourceGroupId = "/subscriptions/62b829ee-7936-40c9-a1c9-47a93f9f3965/resourceGroups/aksbackuptestrg-rajat"
+        FriendlyName = "pstest-aks-cluster"        
+    }
+
     $env.add("TestBackupInstance", $BackupInstanceTestVariables) | Out-Null
     $env.add("TestBackupPolicy", $BackupPolicyTestVariables) | Out-Null
     $env.add("TestBackupVault", $BackupVaultTestVariables) | Out-Null
@@ -135,6 +151,7 @@ function setupEnv() {
     $env.add("TestResourceGuard", $ResourceGuardVariables) | Out-Null
     $env.add("TestGrantPermission", $GrantPermissionVariables) | Out-Null
     $env.add("TestAksBackupScenario", $AksVariables) | Out-Null
+    $env.add("TestBlobHardeningScenario", $BlobHardeningVariables) | Out-Null
 
     $envFile = 'env.json'
     if ($TestMode -eq 'live') {

@@ -164,14 +164,6 @@ directive:
       variant: Sync$|SyncViaIdentity$|SyncViaIdentityExpanded$
     remove: true
   - where:
-      verb: Get
-      subject: OperationResult
-    remove: true
-  - where:
-      verb: Get
-      subject: OperationStatus
-    remove: true
-  - where:
       verb: Start
       subject: BackupInstanceRehydrate
     remove: true

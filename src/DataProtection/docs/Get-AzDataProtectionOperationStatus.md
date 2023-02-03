@@ -1,70 +1,55 @@
 ---
 external help file:
 Module Name: Az.DataProtection
-online version: https://learn.microsoft.com/powershell/module/az.dataprotection/get-azdataprotectionjob
+online version: https://learn.microsoft.com/powershell/module/az.dataprotection/get-azdataprotectionoperationstatus
 schema: 2.0.0
 ---
 
-# Get-AzDataProtectionJob
+# Get-AzDataProtectionOperationStatus
 
 ## SYNOPSIS
-Gets a job with id in a backup vault
+Gets the operation status for a resource.
 
 ## SYNTAX
 
-### List (Default)
+### Get (Default)
 ```
-Get-AzDataProtectionJob -ResourceGroupName <String> -VaultName <String> [-SubscriptionId <String[]>]
+Get-AzDataProtectionOperationStatus -Location <String> -OperationId <String> [-SubscriptionId <String[]>]
  [-DefaultProfile <PSObject>] [<CommonParameters>]
-```
-
-### Get
-```
-Get-AzDataProtectionJob -Id <String> -ResourceGroupName <String> -VaultName <String>
- [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [<CommonParameters>]
 ```
 
 ### GetViaIdentity
 ```
-Get-AzDataProtectionJob -InputObject <IDataProtectionIdentity> [-DefaultProfile <PSObject>]
+Get-AzDataProtectionOperationStatus -InputObject <IDataProtectionIdentity> [-DefaultProfile <PSObject>]
  [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Gets a job with id in a backup vault
+Gets the operation status for a resource.
 
 ## EXAMPLES
 
-### Example 1: Get All backup Jobs in a backup vault
+### Example 1: Get operation status for a long running operation
 ```powershell
-Get-AzDataProtectionJob -SubscriptionId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ResourceGroupName sarath-rg -VaultName sarath-vault
+$operationResponse = Test-AzDataProtectionBackupInstanceReadiness -ResourceGroupName $resourceGroupName -VaultName $vaultName -SubscriptionId $subId -BackupInstance $backupInstanceClientObject.Property -NoWait
+$operationId = $operationResponse.Target.Split("/")[-1].Split("?")[0]
+Get-AzDataProtectionOperationStatus -OperationId $operationId -Location $vault.Location -SubscriptionId $subId
+While((Get-AzDataProtectionOperationStatus -OperationId $operationId -Location $vault.Location -SubscriptionId $subId).Status -eq "Inprogress"){
+	Start-Sleep -Seconds 10
+}
 ```
 
 ```output
-Name                                 Type
-----                                 ----
-a6a4879d-f914-4174-b129-0e27da8a4fb0 Microsoft.DataProtection/backupVaults/backupJobs
-1a402664-a245-4a9d-8bb5-a6bafbb40d26 Microsoft.DataProtection/backupVaults/backupJobs
-672564f7-1f91-46e2-a0ca-4fb1dc977a1c Microsoft.DataProtection/backupVaults/backupJobs
-1653a7b4-8ce4-457e-8084-dc1c9d9e4106 Microsoft.DataProtection/backupVaults/backupJobs
-9f21c438-ca0d-45c1-88fe-79f08a8342c7 Microsoft.DataProtection/backupVaults/backupJobs
-736bab4d-480f-49f8-92ea-57c5ff203c33 Microsoft.DataProtection/backupVaults/backupJobs
+EndTime              Name                                                                                                 StartTime            Status
+-------              ----                                                                                                 ---------            ------
+5/6/2023 11:44:42 AM N2E2NGU0YzItMzZjNC00MDUwLTlmZGYtMGNlZTFjMmI4MWRhO2U3MjRiMGExLTM3NGItNGYwYS05ZDRlLTQxZWQ5Nzg5MzhkZg== 5/6/2023 11:44:21 AM Succeeded
 ```
 
-This command gets all the backup jobs in a given backup vault.
-
-### Example 2: Get a single Job 
-```powershell
-Get-AzDataProtectionJob -SubscriptionId "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx" -ResourceGroupName sarath-rg -VaultName sarath-vault -Id 4abaea8c-f53a-4bb1-9963-59f96b597165
-```
-
-```output
-Name                                 Type
-----                                 ----
-4abaea8c-f53a-4bb1-9963-59f96b597165 Microsoft.DataProtection/backupVaults/backupJobs
-```
-
-This command returns a single job entity with given Id.
+First command fetches the operation response for a long running operation, using the the parameter -NoWait.
+This is to run the operation in async mode.
+Second command splits the operationResponse to get the operationId.
+Third command fetches the operation status in async way.
+Fourth command fetches the operation status in a loop until it succeeds, while waiting 10 seconds before each iteration.
 
 ## PARAMETERS
 
@@ -78,23 +63,6 @@ Parameter Sets: (All)
 Aliases: AzureRMContext, AzureCredential
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Id
-The Job ID.
-This is a GUID-formatted string (e.g.
-00000000-0000-0000-0000-000000000000).
-
-```yaml
-Type: System.String
-Parameter Sets: Get
-Aliases: JobId
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -117,13 +85,27 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -ResourceGroupName
-The name of the resource group.
-The name is case insensitive.
+### -Location
+Azure region where the operation is triggered.
 
 ```yaml
 Type: System.String
-Parameter Sets: Get, List
+Parameter Sets: Get
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -OperationId
+Operation Id to track the operation status.
+
+```yaml
+Type: System.String
+Parameter Sets: Get
 Aliases:
 
 Required: True
@@ -139,27 +121,12 @@ The value must be an UUID.
 
 ```yaml
 Type: System.String[]
-Parameter Sets: Get, List
+Parameter Sets: Get
 Aliases:
 
 Required: False
 Position: Named
 Default value: (Get-AzContext).Subscription.Id
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -VaultName
-The name of the backup vault.
-
-```yaml
-Type: System.String
-Parameter Sets: Get, List
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
 ```
@@ -173,7 +140,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.IAzureBackupJobResource
+### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.IOperationResource
 
 ## NOTES
 

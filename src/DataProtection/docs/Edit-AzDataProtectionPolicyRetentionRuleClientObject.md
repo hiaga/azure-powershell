@@ -21,7 +21,7 @@ Edit-AzDataProtectionPolicyRetentionRuleClientObject -Name <RetentionRuleName> -
 ### AddRetention
 ```
 Edit-AzDataProtectionPolicyRetentionRuleClientObject -IsDefault <Boolean> -LifeCycles <ISourceLifeCycle[]>
- -Name <RetentionRuleName> -Policy <IBackupPolicy> [<CommonParameters>]
+ -Name <RetentionRuleName> -Policy <IBackupPolicy> [-DoNotModifyLifeCycle] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -60,6 +60,21 @@ DatasourceType            ObjectType
 This command removes weekly retention rule if it exists in given backup policy.
 
 ## PARAMETERS
+
+### -DoNotModifyLifeCycle
+Specifies whether to modify an  existing LifeCycle.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: AddRetention
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -IsDefault
 Specifies if retention rule is default retention rule.
