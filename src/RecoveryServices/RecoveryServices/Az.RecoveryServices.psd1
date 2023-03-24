@@ -67,7 +67,7 @@ RequiredAssemblies = 'Microsoft.Azure.PowerShell.AutoMapper.dll',
                'Microsoft.Azure.PowerShell.RecoveryServices.Backup.Management.Sdk.dll', 
                'Microsoft.Azure.PowerShell.RecoveryServices.Backup.CrossRegionRestore.Management.Sdk.dll', 
                'Microsoft.Azure.PowerShell.RecoveryServices.SiteRecovery.Management.Sdk.dll', 
-               'System.Configuration.ConfigurationManager.dll', 
+               'System.Configuration.ConfigurationManager.dll',
                'TimeZoneConverter.dll'
 
 # Script files (.ps1) that are run in the caller's environment prior to importing this module.

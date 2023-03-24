@@ -32,6 +32,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices
         [Parameter(Mandatory = true, ValueFromPipeline = true)]
         [ValidateNotNullOrEmpty]
         public ARSVault Vault { get; set; }
+
         /// <summary>
         /// Gets or sets BackupStorageRedundancy type.
         /// </summary>
