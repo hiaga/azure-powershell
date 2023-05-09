@@ -26,8 +26,8 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
                 
         # DppRef: modify param name as per Aditya
         [Parameter(ParameterSetName='AddRetention',Mandatory=$false, HelpMessage='Specifies whether to modify an  existing LifeCycle.')]
-        [System.Management.Automation.SwitchParameter]
-        ${DoNotModifyLifeCycle},
+        [Nullable[System.Boolean]]
+        ${OverwriteLifeCycle},
 
         [Parameter(ParameterSetName='AddRetention',Mandatory, HelpMessage='Life cycles associated with the retention rule.')]
         [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api202301.ISourceLifeCycle[]]
@@ -82,9 +82,12 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
             if($retentionPolicyIndex -ne -1){
 
                 # DppRef : (compare DataStore)
-                
+                if($OverwriteLifeCycle -eq $false){
 
-                if($DoNotModifyLifeCycle){
+                    if($Name -ne "Default"){
+                        $message = "Adding $Name Retention rule isn't supported for DataStoreType OperationalStore"
+                        throw $message
+                    }
 
                     # DppRef : can convert to for loop for comparing all lifecycles
                     if($Policy.PolicyRule[$retentionPolicyIndex].LifeCycle[0].SourceDataStoreType -eq $LifeCycles[0].SourceDataStoreType){

@@ -14,7 +14,7 @@
         ${Schedule},
 
         [Parameter(ParameterSetName='RemoveBackupSchedule',Mandatory, HelpMessage='Specifies whether to remove the backup Schedule.')]
-        [System.Management.Automation.SwitchParameter]
+        [Switch]
         ${RemoveSchedule}
     )
 
