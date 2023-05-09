@@ -108,7 +108,7 @@ Accept wildcard characters: False
 ```
 
 ### -OverwriteLifeCycle
-Specifies whether to modify an existing LifeCycle.
+Specifies whether to modify an  existing LifeCycle.
 
 ```yaml
 Type: System.Nullable`1[[System.Boolean, System.Private.CoreLib, Version=7.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]

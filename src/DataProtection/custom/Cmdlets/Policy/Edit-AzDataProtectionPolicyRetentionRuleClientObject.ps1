@@ -25,7 +25,7 @@ function Edit-AzDataProtectionPolicyRetentionRuleClientObject {
         ${RemoveRule},
                 
         # DppRef: modify param name as per Aditya
-        [Parameter(ParameterSetName='AddRetention',Mandatory=$false, HelpMessage='Specifies whether to modify an  existing LifeCycle.')]
+        [Parameter(ParameterSetName='AddRetention',Mandatory=$false, HelpMessage='Specifies whether to modify an existing LifeCycle.')]
         [Nullable[System.Boolean]]
         ${OverwriteLifeCycle},
 
