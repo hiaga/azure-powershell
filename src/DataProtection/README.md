@@ -262,6 +262,16 @@ directive:
     set:
       property-name: SoftDeleteState
   - where:
+      subject: OperationStatus
+      parameter-name: Location
+    set:      
+      parameter-description: Azure region where the operation is triggered.
+  - where:
+      subject: OperationStatus
+      parameter-name: OperationId
+    set:      
+      parameter-description: Operation Id to track the operation status.
+  - where:
       model-name: BackupVaultResource
     set:
       format-table:
