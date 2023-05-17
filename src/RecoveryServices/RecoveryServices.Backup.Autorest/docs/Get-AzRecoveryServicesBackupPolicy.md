@@ -50,6 +50,7 @@ ETag Id                                                                         
      /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/EnhancedPolicy                   EnhancedPolicy      Microsoft.RecoveryServices/vaults/backupPolicies
 ```
 
+
 Gets all the backup policies in the specified vault in the specified resource group.
 
 ### Example 2: Get info for a specific backup policy
@@ -70,8 +71,7 @@ Gets info for a specific backup policy by its name in the specified vault in the
 ## PARAMETERS
 
 ### -DefaultProfile
-The DefaultProfile parameter is not functional.
-Use the SubscriptionId parameter when available if executing the cmdlet against a different subscription.
+The credentials, account, tenant, and subscription used for communication with Azure.
 
 ```yaml
 Type: System.Management.Automation.PSObject

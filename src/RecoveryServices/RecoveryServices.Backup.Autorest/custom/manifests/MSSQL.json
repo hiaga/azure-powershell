@@ -1,5 +1,7 @@
 ﻿{
-  "allowedSubProtectionPolicyTypes": [ "Full", "Differential", "Incremental", "Log" ],
+  "allowedSubProtectionPolicyTypes": [ "Full", "Differential", "Log" ],
+  "allowedBackupFrequencies": [ "Daily", "Weekly" ],
+  "supportsEnhanced" : false,
   "allowedDifferentialParams": [ "DifferentialRetentionPeriodInDays" ],
   "allowedIncrementalParams": [ "IncrementalRetentionPeriodInDays" ],
   "allowedLogParams": [ "LogRetentionPeriodInDays" ],

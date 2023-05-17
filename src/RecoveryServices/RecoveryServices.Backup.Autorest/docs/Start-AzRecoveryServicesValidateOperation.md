@@ -86,8 +86,7 @@ Accept wildcard characters: False
 ```
 
 ### -DefaultProfile
-The DefaultProfile parameter is not functional.
-Use the SubscriptionId parameter when available if executing the cmdlet against a different subscription.
+The credentials, account, tenant, and subscription used for communication with Azure.
 
 ```yaml
 Type: System.Management.Automation.PSObject
@@ -261,7 +260,7 @@ COMPLEX PARAMETER PROPERTIES
 To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
 
 
-`INPUTOBJECT <IRecoveryServicesIdentity>`: Identity Parameter
+INPUTOBJECT <IRecoveryServicesIdentity>: Identity Parameter
   - `[AzureRegion <String>]`: Azure region to hit Api
   - `[BackupEngineName <String>]`: Name of the backup management server.
   - `[ContainerName <String>]`: 
@@ -279,7 +278,7 @@ To create the parameters described below, construct a hash table containing the 
   - `[SubscriptionId <String>]`: The subscription Id.
   - `[VaultName <String>]`: The name of the recovery services vault.
 
-`PARAMETER <IValidateOperationRequest>`: Base class for validate operation request.
+PARAMETER <IValidateOperationRequest>: Base class for validate operation request.
   - `ObjectType <String>`: This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
 
 ## RELATED LINKS

@@ -187,7 +187,7 @@ COMPLEX PARAMETER PROPERTIES
 To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
 
 
-`POLICY <IProtectionPolicy>`: Workload specific Backup policy object.
+POLICY <IProtectionPolicy>: Workload specific Backup policy object.
   - `BackupManagementType <String>`: This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
   - `[ProtectedItemsCount <Int32?>]`: Number of items associated with this policy.
   - `[ResourceGuardOperationRequest <String[]>]`: ResourceGuard Operation Requests

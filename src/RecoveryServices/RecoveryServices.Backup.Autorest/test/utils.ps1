@@ -20,6 +20,15 @@ function setupEnv() {
     $env.Tenant = (Get-AzContext).Tenant.Id
     # For any resources you created for test, you should add it to $env here.
 
+    $TestBackupSchedulePolicyVariables = @{                                                                                                     
+        SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
+        ResourceGroupName = "anssingh-rg"
+        VaultName = "anssingh-vault"
+        NewPolicyName = "anssingh-testPolicy"                                                                              
+    }
+
+    $env.add("TestBackupSchedulePolicy", $TestBackupSchedulePolicyVariables) | Out-Null                                                                
+
     $BackupPolicyTestVariables = @{                                                                                                     
         SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
         ResourceGroupName = "arohijain-rg"
@@ -28,6 +37,7 @@ function setupEnv() {
     }
 
     $env.add("TestBackupPolicy", $BackupPolicyTestVariables) | Out-Null                                                                
+    
     $envFile = 'env.json'
     if ($TestMode -eq 'live') {
         $envFile = 'localEnv.json'

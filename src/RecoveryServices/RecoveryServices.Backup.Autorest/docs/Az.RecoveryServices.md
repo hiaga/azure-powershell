@@ -14,6 +14,9 @@ Microsoft Azure PowerShell: RecoveryServices cmdlets
 ### [Edit-AzrecoveryServicesBackupRetentionPolicyClientObject](Edit-AzrecoveryServicesBackupRetentionPolicyClientObject.md)
 Edits the retention settings for the policy client object
 
+### [Edit-AzRecoveryServicesBackupSchedulePolicyClientObject](Edit-AzRecoveryServicesBackupSchedulePolicyClientObject.md)
+Edits the schedule policy in the specified backup policy object.
+
 ### [Export-AzRecoveryServicesJob](Export-AzRecoveryServicesJob.md)
 Triggers export of jobs specified by filters and returns an OperationID to track.
 

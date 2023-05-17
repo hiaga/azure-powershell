@@ -1,5 +1,7 @@
 ﻿{
-  "allowedSubProtectionPolicyTypes": [],
+  "allowedSubProtectionPolicyTypes": [ "Full" ],
+  "allowedBackupFrequencies": [ "Daily", "Weekly", "Hourly" ],
+  "supportsEnhanced" : true,
   "allowedDifferentialParams": [],
   "allowedIncrementalParams": [],
   "allowedLogParams": [],

@@ -1,0 +1,37 @@
+{
+  "Edit-AzrecoveryServicesBackupRetentionPolicyClientObject+[NoContext]+Test_1+$PUT+https://management.azure.com/subscriptions/38304e13-357e-405e-9e9a-220351dcce8c/resourceGroups/arohijain-rg/providers/Microsoft.RecoveryServices/vaults/arohijain-vault/backupPolicies/arohijain-policy-3?api-version=2023-02-01+1": {
+    "Request": {
+      "Method": "PUT",
+      "RequestUri": "https://management.azure.com/subscriptions/38304e13-357e-405e-9e9a-220351dcce8c/resourceGroups/arohijain-rg/providers/Microsoft.RecoveryServices/vaults/arohijain-vault/backupPolicies/arohijain-policy-3?api-version=2023-02-01",
+      "Content": "{\r\n  \"properties\": {\r\n    \"protectedItemsCount\": 0,\r\n    \"backupManagementType\": \"AzureIaasVM\",\r\n    \"schedulePolicy\": {\r\n      \"schedulePolicyType\": \"SimpleSchedulePolicy\",\r\n      \"scheduleRunFrequency\": \"Daily\",\r\n      \"scheduleRunTimes\": [ \"2020-09-30T19:30:00.0000000Z\" ],\r\n      \"scheduleWeeklyFrequency\": 0\r\n    },\r\n    \"retentionPolicy\": {\r\n      \"retentionPolicyType\": \"LongTermRetentionPolicy\",\r\n      \"dailySchedule\": {\r\n        \"retentionTimes\": [ \"2023-05-22T14:00:00.0000000Z\" ],\r\n        \"retentionDuration\": {\r\n          \"count\": 56,\r\n          \"durationType\": \"Days\"\r\n        }\r\n      },\r\n      \"weeklySchedule\": {\r\n        \"daysOfTheWeek\": [ \"Sunday\" ],\r\n        \"retentionTimes\": [ \"2023-05-22T14:00:00.0000000Z\" ],\r\n        \"retentionDuration\": {\r\n          \"count\": 34,\r\n          \"durationType\": \"Weeks\"\r\n        }\r\n      },\r\n      \"monthlySchedule\": {\r\n        \"retentionScheduleFormatType\": \"Daily\",\r\n        \"retentionScheduleDaily\": {\r\n          \"daysOfTheMonth\": [\r\n            {\r\n              \"date\": 1\r\n            },\r\n            {\r\n              \"date\": 2\r\n            },\r\n            {\r\n              \"date\": 3\r\n            }\r\n          ]\r\n        },\r\n        \"retentionScheduleWeekly\": {\r\n          \"daysOfTheWeek\": [ \"Sunday\" ],\r\n          \"weeksOfTheMonth\": [ \"First\" ]\r\n        },\r\n        \"retentionTimes\": [ \"2023-05-22T14:00:00.0000000Z\" ],\r\n        \"retentionDuration\": {\r\n          \"count\": 54,\r\n          \"durationType\": \"Months\"\r\n        }\r\n      },\r\n      \"yearlySchedule\": {\r\n        \"retentionScheduleFormatType\": \"Daily\",\r\n        \"monthsOfYear\": [ \"March\", \"April\" ],\r\n        \"retentionScheduleDaily\": {\r\n          \"daysOfTheMonth\": [\r\n            {\r\n              \"date\": 2\r\n            },\r\n            {\r\n              \"date\": 4\r\n            },\r\n            {\r\n              \"date\": 5\r\n            }\r\n          ]\r\n        },\r\n        \"retentionScheduleWeekly\": {\r\n          \"daysOfTheWeek\": [ \"Sunday\" ],\r\n          \"weeksOfTheMonth\": [ \"First\" ]\r\n        },\r\n        \"retentionTimes\": [ \"2023-05-22T14:00:00.0000000Z\" ],\r\n        \"retentionDuration\": {\r\n          \"count\": 47,\r\n          \"durationType\": \"Years\"\r\n        }\r\n      }\r\n    },\r\n    \"tieringPolicy\": {\r\n      \"ArchivedRP\": {\r\n        \"tieringMode\": \"DoNotTier\",\r\n        \"duration\": 0,\r\n        \"durationType\": \"Invalid\"\r\n      }\r\n    },\r\n    \"instantRpRetentionRangeInDays\": 2,\r\n    \"timeZone\": \"UTC\",\r\n    \"policyType\": \"V1\"\r\n  }\r\n}",
+      "Headers": {
+      },
+      "ContentHeaders": {
+        "Content-Type": [ "application/json" ],
+        "Content-Length": [ "2448" ]
+      }
+    },
+    "Response": {
+      "StatusCode": 400,
+      "Headers": {
+        "Cache-Control": [ "no-cache" ],
+        "Pragma": [ "no-cache" ],
+        "X-Content-Type-Options": [ "nosniff" ],
+        "x-ms-request-id": [ "c8c23083-eb1c-4598-ba44-92468cd57cfc" ],
+        "x-ms-client-request-id": [ "08672afb-e75a-49e5-b901-a0c1da444bc0", "08672afb-e75a-49e5-b901-a0c1da444bc0" ],
+        "Strict-Transport-Security": [ "max-age=31536000; includeSubDomains" ],
+        "Server": [ "Microsoft-IIS/10.0" ],
+        "X-Powered-By": [ "ASP.NET" ],
+        "x-ms-ratelimit-remaining-subscription-writes": [ "1199" ],
+        "x-ms-correlation-request-id": [ "c8c23083-eb1c-4598-ba44-92468cd57cfc" ],
+        "x-ms-routing-request-id": [ "SOUTHINDIA:20230620T130404Z:c8c23083-eb1c-4598-ba44-92468cd57cfc" ],
+        "Date": [ "Tue, 20 Jun 2023 13:04:04 GMT" ]
+      },
+      "ContentHeaders": {
+        "Content-Length": [ "226" ],
+        "Content-Type": [ "application/json" ]
+      },
+      "Content": "{\"error\":{\"code\":\"BMSUserErrorInvalidPolicyInput\",\"message\":\"Input for create or update policy is not in proper format. Please check format of parameters like schedule time, schedule days, retention time and retention days \"}}"
+    }
+  }
+}
