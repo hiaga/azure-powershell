@@ -182,12 +182,11 @@
         $null = $PSBoundParameters.Remove("TierAfterDurationType")
 
 
-        # RsvRef: public string[] ResourceGuardOperationRequest - this should be a parameter, check in SDK code
+        # TODO: public string[] ResourceGuardOperationRequest - this should be a parameter, check in SDK code
         
         $policyObject = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ProtectionPolicyResource]::new()
         $policyObject.Property = $Policy
 
-        
         $null = $PSBoundParameters.Remove("Policy")
         $null = $PSBoundParameters.Add("Parameter", $policyObject)
                 
