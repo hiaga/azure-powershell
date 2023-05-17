@@ -92,7 +92,7 @@ directive:
       verb: Set
       subject: BackupPolicy
     remove: true
-  - where:      
+  - where:
       verb: Get
       subject: BackupPolicy
     hide: true

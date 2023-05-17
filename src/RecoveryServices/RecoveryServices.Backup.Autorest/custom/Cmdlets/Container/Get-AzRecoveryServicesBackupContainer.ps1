@@ -90,7 +90,7 @@
                 $inquiryContainerType = $manifest.containerInquiryType
             }
         }
-
+        
         $null = $PSBoundParameters.Remove("ContainerType")
         $null = $PSBoundParameters.Remove("FriendlyName")
         $null = $PSBoundParameters.Remove("DatasourceType")

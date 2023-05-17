@@ -72,7 +72,7 @@
     )
 
     process
-    {
+    {           
         $parameterSetName = $PsCmdlet.ParameterSetName
         
         $containerName = ""
@@ -82,7 +82,7 @@
         else{
             $containerName = ($ResourceId -split "/")[-1]
         }
-
+        
         # confirm:$false/ force  
         #$containerType - workload type 
         #$backupManagementType
@@ -111,9 +111,9 @@
         
         # Get protectable containers  (register) / container (re-register)
 
-        $protectableContainers = $null                
+        $protectableContainers = $null
         $protectableContainers = Az.RecoveryServices.Internal\Get-AzRecoveryServicesProtectableContainer @PSBoundParameters | Where-Object { ($_.Name -split ";")[-1] -eq $containerName -or $_.Name -eq $containerName }
-        
+
         $null = $PSBoundParameters.Remove('Filter')
 
         if($protectableContainers -ne $null -or $Container -ne $null){
@@ -133,7 +133,7 @@
             $protectionContainerResource.Property = $property
 
             # register container
-            $registerOperationResponse = $null            
+            $registerOperationResponse = $null
             $PSBoundParameters.Add('ContainerName', $containerFullName)
             $PSBoundParameters.Add('Parameter', $protectionContainerResource)
             $PSBoundParameters.Add('NoWait', $true)
@@ -153,18 +153,18 @@
             }
         }
         else{
-            # throw error
+            # throw error 
             $errormsg= "The specified datasource is already registered with the given recovery services vault"
             throw $errormsg
         }
 
         # List containers
-        $registeredContainer = $null        
+        $registeredContainer = $null
         $PSBoundParameters.Add('ContainerType', 'AzureVMAppContainer')
         $PSBoundParameters.Add('DatasourceType', $DatasourceType)
 
         $registeredContainer = Get-AzRecoveryServicesBackupContainer @PSBoundParameters | Where-Object { $_.Name -eq $containerFullName }
-
+                
         $registeredContainer
     }
 }
