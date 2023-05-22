@@ -27,27 +27,12 @@ Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResu
 
 ## EXAMPLES
 
-### Example 1: {{ Add title here }}
+### Example 1: Remove a policy with its name
 ```powershell
  Remove-AzRecoveryServicesBackupPolicy -PolicyName "MyPolicy" -ResourceGroupName "MyResourceGroup" -VaultName "MyVault"
 ```
 
-```output
-this command deletes the specified existing policy.
-```
-
-{{ Add description here }}
-
-### Example 2: {{ Add title here }}
-```powershell
-{{ Add code here }}
-```
-
-```output
-{{ Add output here }}
-```
-
-{{ Add description here }}
+This command deletes the specified existing policy.
 
 ## PARAMETERS
 
