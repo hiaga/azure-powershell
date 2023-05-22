@@ -90,6 +90,9 @@ Fetches the result of any operation.
 ### [Get-AzRecoveryServicesOperationStatus](Get-AzRecoveryServicesOperationStatus.md)
 Fetches operation status for data move operation on vault
 
+### [Get-AzRecoveryServicesPolicyTemplate](Get-AzRecoveryServicesPolicyTemplate.md)
+Gets default policy template for a selected datasource type.
+
 ### [Get-AzRecoveryServicesPrivateEndpointConnection](Get-AzRecoveryServicesPrivateEndpointConnection.md)
 Get Private Endpoint Connection.
 This call is made by Backup Admin.
@@ -170,9 +173,7 @@ Prepares source vault for Data Move operation
 Move recovery point from one datastore to another store.
 
 ### [New-AzRecoveryServicesBackupPolicy](New-AzRecoveryServicesBackupPolicy.md)
-Creates or modifies a backup policy.
-This is an asynchronous operation.
-Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
+Creates a new backup policy in a given recovery services vault
 
 ### [New-AzRecoveryServicesItemLevelRecoveryConnection](New-AzRecoveryServicesItemLevelRecoveryConnection.md)
 Provisions a script which invokes an iSCSI connection to the backup data.
