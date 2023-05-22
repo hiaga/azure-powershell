@@ -42,6 +42,16 @@ input-file:
 title: RecoveryServices
 directive:
   - where:
+      verb: New
+      subject: ProtectionPolicy
+      variant: ^CreateViaIdentityExpanded$|^CreateExpanded$|^CreateViaIdentity$
+    remove: true
+  - where:
+      verb: New
+      subject: ProtectionPolicy
+      variant: Create
+    hide: true
+  - where:
       verb: Remove
       subject: ProtectionPolicy
       variant: DeleteViaIdentity
@@ -65,6 +75,8 @@ directive:
     - HourlySchedule
     - MonthlyRetentionSchedule
     - Settings
+    - SubProtectionPolicyTieringPolicy
+    - TieringPolicy
     - WeeklyRetentionSchedule
     - YearlyRetentionSchedule
   - from: source-file-csharp

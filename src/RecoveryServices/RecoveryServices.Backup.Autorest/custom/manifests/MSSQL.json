@@ -1,0 +1,133 @@
+﻿{
+  "datasourcePermissions": [ "Reader" ],
+  "snapshotRGPermissions": [],
+  "keyVaultPermissions": [ "Key Vault Secrets User" ],
+  "dataSourceOverSnapshotRGPermissions": [],
+  "isProxyResource": true,
+  "enableDataSourceSetInfo": false,
+  "resourceType": "Microsoft.DBforPostgreSQL/servers/databases",
+  "parentResourceType": "Microsoft.DBforPostgreSQL/servers",
+  "datasourceType": "Microsoft.DBforPostgreSQL/servers/databases",
+  "allowedRestoreModes": [ "RecoveryPointBased" ],
+  "allowedRestoreTargetTypes": [ "AlternateLocation", "RestoreAsFiles" ],
+  "itemLevelRecoveyEnabled": false,
+  "addBackupDatasourceParametersList": false,
+  "backupConfigurationRequired": false,
+  "addDataStoreParametersList": false,
+  "friendlyNameRequired": false,
+  "supportSecretStoreAuthentication": true,
+  "policySettings": {
+    "supportedRetentionTags": [ "Weekly", "Monthly", "Yearly" ],
+    "supportedDatastoreTypes": [ "VaultStore", "ArchiveStore" ],
+    "disableAddRetentionRule": false,
+    "disableCustomRetentionTag": false,
+    "backupScheduleSupported": true,
+    "supportedBackupFrequency": [ "Weekly" ],
+    "defaultPolicy": {
+      "backupManagementType": "AzureWorkload",
+      "workLoadType": "SQLDataBase",
+      "settings": {
+        "timeZone": "UTC",
+        "issqlcompression": false,
+        "isCompression": false
+      },
+      "subProtectionPolicy": [
+        {
+          "policyType": "Full",
+          "schedulePolicy": {
+            "schedulePolicyType": "SimpleSchedulePolicy",
+            "scheduleRunFrequency": "Daily",
+            "scheduleRunTimes": [
+              "2020-09-30T19:30:00Z"
+            ],
+            "scheduleWeeklyFrequency": 0
+          },
+          "retentionPolicy": {
+            "retentionPolicyType": "LongTermRetentionPolicy",
+            "dailySchedule": {
+              "retentionTimes": [
+                "2020-09-30T19:30:00Z"
+              ],
+              "retentionDuration": {
+                "count": 180,
+                "durationType": "Days"
+              }
+            },
+            "weeklySchedule": {
+              "daysOfTheWeek": [
+                "Sunday"
+              ],
+              "retentionTimes": [
+                "2020-09-30T19:30:00Z"
+              ],
+              "retentionDuration": {
+                "count": 104,
+                "durationType": "Weeks"
+              }
+            },
+            "monthlySchedule": {
+              "retentionScheduleFormatType": "Weekly",
+              "retentionScheduleWeekly": {
+                "daysOfTheWeek": [
+                  "Sunday"
+                ],
+                "weeksOfTheMonth": [
+                  "First"
+                ]
+              },
+              "retentionTimes": [
+                "2020-09-30T19:30:00Z"
+              ],
+              "retentionDuration": {
+                "count": 60,
+                "durationType": "Months"
+              }
+            },
+            "yearlySchedule": {
+              "retentionScheduleFormatType": "Weekly",
+              "monthsOfYear": [
+                "January"
+              ],
+              "retentionScheduleWeekly": {
+                "daysOfTheWeek": [
+                  "Sunday"
+                ],
+                "weeksOfTheMonth": [
+                  "First"
+                ]
+              },
+              "retentionTimes": [
+                "2020-09-30T19:30:00Z"
+              ],
+              "retentionDuration": {
+                "count": 10,
+                "durationType": "Years"
+              }
+            }
+          },
+          "tieringPolicy": {
+            "ArchivedRP": {
+              "tieringMode": "DoNotTier",
+              "duration": 0,
+              "durationType": "Invalid"
+            }
+          }
+        },
+        {
+          "policyType": "Log",
+          "schedulePolicy": {
+            "schedulePolicyType": "LogSchedulePolicy",
+            "scheduleFrequencyInMins": 120
+          },
+          "retentionPolicy": {
+            "retentionPolicyType": "SimpleRetentionPolicy",
+            "retentionDuration": {
+              "count": 15,
+              "durationType": "Days"
+            }
+          }
+        }
+      ]
+    }
+  }
+}
