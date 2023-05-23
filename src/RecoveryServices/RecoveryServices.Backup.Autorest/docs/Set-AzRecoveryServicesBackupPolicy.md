@@ -1,11 +1,11 @@
 ---
 external help file:
 Module Name: Az.RecoveryServices
-online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/set-azrecoveryservicesprotectionpolicy
+online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/set-azrecoveryservicesbackuppolicy
 schema: 2.0.0
 ---
 
-# Set-AzRecoveryServicesProtectionPolicy
+# Set-AzRecoveryServicesBackupPolicy
 
 ## SYNOPSIS
 Creates or modifies a backup policy.
@@ -16,7 +16,7 @@ Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
 
 ### UpdateExpanded (Default)
 ```
-Set-AzRecoveryServicesProtectionPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+Set-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
  [-SubscriptionId <String>] [-BackupManagementType <String>] [-ETag <String>] [-Location <String>]
  [-ProtectedItemsCount <Int32>] [-ResourceGuardOperationRequest <String[]>] [-Tag <Hashtable>]
  [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
@@ -24,7 +24,7 @@ Set-AzRecoveryServicesProtectionPolicy -PolicyName <String> -ResourceGroupName <
 
 ### Update
 ```
-Set-AzRecoveryServicesProtectionPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+Set-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
  -Parameter <IProtectionPolicyResource> [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-PassThru]
  [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
