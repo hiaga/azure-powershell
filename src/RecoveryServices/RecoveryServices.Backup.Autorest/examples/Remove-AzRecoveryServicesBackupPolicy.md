@@ -4,7 +4,18 @@
 ```
 
 ```output
+{{ Add output here }}
+```
 
+{{ Add description here }}
+
+### Example 2: {{ Add title here }}
+```powershell
+{{ Add code here }}
+```
+
+```output
+{{ Add output here }}
 ```
 
 This command deletes the specified existing policy.
