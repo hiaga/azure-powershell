@@ -8,11 +8,11 @@ $pol
 ```output
 ETag Id                                                                                                                                                                           Location Name                Type
 ---- --                                                                                                                                                                           -------- ----                ----
-     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/policy1                          wao                 Microsoft.RecoveryServices/vaults/backupPolicies
+     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/policy1                          policy1             Microsoft.RecoveryServices/vaults/backupPolicies
      /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/HourlyLogBackup                  HourlyLogBackup     Microsoft.RecoveryServices/vaults/backupPolicies
      /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/DefaultPolicy                    DefaultPolicy       Microsoft.RecoveryServices/vaults/backupPolicies
-     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/policy2                          delete-test         Microsoft.RecoveryServices/vaults/backupPolicies
-     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/testPolicy                       anssingh-testPolicy Microsoft.RecoveryServices/vaults/backupPolicies
+     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/policy2                          policy2             Microsoft.RecoveryServices/vaults/backupPolicies
+     /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/testPolicy                       testPolicy          Microsoft.RecoveryServices/vaults/backupPolicies
      /subscriptions/xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxx/resourceGroups/myresourcegroup/providers/Microsoft.RecoveryServices/vaults/myvault/backupPolicies/EnhancedPolicy                   EnhancedPolicy      Microsoft.RecoveryServices/vaults/backupPolicies
 ```
 

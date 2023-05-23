@@ -89,7 +89,7 @@ Accept wildcard characters: False
 ```
 
 ### -PolicyName
-Backup policy information to be fetched.
+Name of the backup policy to be fetched
 
 ```yaml
 Type: System.String
