@@ -8,19 +8,28 @@ schema: 2.0.0
 # Get-AzRecoveryServicesBackupPolicy
 
 ## SYNOPSIS
-Lists of backup policies associated with Recovery Services Vault.
-API provides pagination parameters to fetch\r\nscoped results.
+Provides the details of the backup policies associated to Recovery Services Vault.
+This is an asynchronous\r\noperation.
+Status of the operation can be fetched using GetPolicyOperationResult API.
 
 ## SYNTAX
 
+### List (Default)
 ```
 Get-AzRecoveryServicesBackupPolicy -ResourceGroupName <String> -VaultName <String>
  [-SubscriptionId <String[]>] [-Filter <String>] [-DefaultProfile <PSObject>] [<CommonParameters>]
 ```
 
+### Get
+```
+Get-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+ [-SubscriptionId <String[]>] [-DefaultProfile <PSObject>] [<CommonParameters>]
+```
+
 ## DESCRIPTION
-Lists of backup policies associated with Recovery Services Vault.
-API provides pagination parameters to fetch\r\nscoped results.
+Provides the details of the backup policies associated to Recovery Services Vault.
+This is an asynchronous\r\noperation.
+Status of the operation can be fetched using GetPolicyOperationResult API.
 
 ## EXAMPLES
 
@@ -69,10 +78,25 @@ OData filter options.
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: List
 Aliases:
 
 Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PolicyName
+Backup policy information to be fetched.
+
+```yaml
+Type: System.String
+Parameter Sets: Get
+Aliases:
+
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
