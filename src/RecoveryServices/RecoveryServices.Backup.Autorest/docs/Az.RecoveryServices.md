@@ -36,8 +36,9 @@ Some operations\r\ncreate jobs.
 This method returns the list of jobs when the operation is complete.
 
 ### [Get-AzRecoveryServicesBackupPolicy](Get-AzRecoveryServicesBackupPolicy.md)
-Lists of backup policies associated with Recovery Services Vault.
-API provides pagination parameters to fetch\r\nscoped results.
+Provides the details of the backup policies associated to Recovery Services Vault.
+This is an asynchronous\r\noperation.
+Status of the operation can be fetched using GetPolicyOperationResult API.
 
 ### [Get-AzRecoveryServicesBackupProtectableItem](Get-AzRecoveryServicesBackupProtectableItem.md)
 Provides a pageable list of protectable objects within your subscription according to the query filter and the\r\npagination parameters.
@@ -128,11 +129,6 @@ Provides the details of the protection intent up item.
 This is an asynchronous operation.
 To know the status of the operation,\r\ncall the GetItemOperationResult API.
 
-### [Get-AzRecoveryServicesProtectionPolicy](Get-AzRecoveryServicesProtectionPolicy.md)
-Provides the details of the backup policies associated to Recovery Services Vault.
-This is an asynchronous\r\noperation.
-Status of the operation can be fetched using GetPolicyOperationResult API.
-
 ### [Get-AzRecoveryServicesProtectionPolicyOperationResult](Get-AzRecoveryServicesProtectionPolicyOperationResult.md)
 Provides the result of an operation.
 
@@ -173,6 +169,11 @@ Prepares source vault for Data Move operation
 ### [Move-AzRecoveryServicesRecoveryPoint](Move-AzRecoveryServicesRecoveryPoint.md)
 Move recovery point from one datastore to another store.
 
+### [New-AzRecoveryServicesBackupPolicy](New-AzRecoveryServicesBackupPolicy.md)
+Creates or modifies a backup policy.
+This is an asynchronous operation.
+Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
+
 ### [New-AzRecoveryServicesItemLevelRecoveryConnection](New-AzRecoveryServicesItemLevelRecoveryConnection.md)
 Provisions a script which invokes an iSCSI connection to the backup data.
 Executing this script opens a file\r\nexplorer displaying all the recoverable files and folders.
@@ -188,14 +189,14 @@ To know the status of the operation, call the GetItemOperationResult API.
 Create Intent for Enabling backup of an item.
 This is a synchronous operation.
 
-### [New-AzRecoveryServicesProtectionPolicy](New-AzRecoveryServicesProtectionPolicy.md)
-Creates or modifies a backup policy.
-This is an asynchronous operation.
-Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
-
 ### [Register-AzRecoveryServicesProtectionContainer](Register-AzRecoveryServicesProtectionContainer.md)
 Registers the container with Recovery Services vault.\r\nThis is an asynchronous operation.
 To track the operation status, use location header to call get latest status of\r\nthe operation.
+
+### [Remove-AzRecoveryServicesBackupPolicy](Remove-AzRecoveryServicesBackupPolicy.md)
+Deletes specified backup policy from your Recovery Services Vault.
+This is an asynchronous operation.
+Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
 
 ### [Remove-AzRecoveryServicesPrivateEndpointConnection](Remove-AzRecoveryServicesPrivateEndpointConnection.md)
 Delete Private Endpoint requests.
@@ -209,11 +210,6 @@ To know the status of the\r\nrequest, call the GetItemOperationResult API.
 ### [Remove-AzRecoveryServicesProtectionIntent](Remove-AzRecoveryServicesProtectionIntent.md)
 Used to remove intent from an item
 
-### [Remove-AzRecoveryServicesProtectionPolicy](Remove-AzRecoveryServicesProtectionPolicy.md)
-Deletes specified backup policy from your Recovery Services Vault.
-This is an asynchronous operation.
-Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
-
 ### [Remove-AzRecoveryServicesResourceGuardProxy](Remove-AzRecoveryServicesResourceGuardProxy.md)
 Delete ResourceGuardProxy under vault
 
@@ -221,6 +217,11 @@ Delete ResourceGuardProxy under vault
 Revokes an iSCSI connection which can be used to download a script.
 Executing this script opens a file explorer\r\ndisplaying all recoverable files and folders.
 This is an asynchronous operation.
+
+### [Set-AzRecoveryServicesBackupPolicy](Set-AzRecoveryServicesBackupPolicy.md)
+Creates or modifies a backup policy.
+This is an asynchronous operation.
+Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
 
 ### [Set-AzRecoveryServicesBackupResourceEncryptionConfig](Set-AzRecoveryServicesBackupResourceEncryptionConfig.md)
 Updates Vault encryption config.
@@ -243,11 +244,6 @@ To know the status of the operation, call the GetItemOperationResult API.
 ### [Set-AzRecoveryServicesProtectionIntent](Set-AzRecoveryServicesProtectionIntent.md)
 Create Intent for Enabling backup of an item.
 This is a synchronous operation.
-
-### [Set-AzRecoveryServicesProtectionPolicy](Set-AzRecoveryServicesProtectionPolicy.md)
-Creates or modifies a backup policy.
-This is an asynchronous operation.
-Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
 
 ### [Set-AzRecoveryServicesResourceGuardProxy](Set-AzRecoveryServicesResourceGuardProxy.md)
 Add or Update ResourceGuardProxy under vault\r\nSecures vault critical operations
