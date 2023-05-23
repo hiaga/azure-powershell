@@ -1,0 +1,134 @@
+{
+    "datasourcePermissions": [ "Storage Account Backup Contributor" ],
+    "snapshotRGPermissions": [],
+    "keyVaultPermissions": [],
+    "dataSourceOverSnapshotRGPermissions": [],
+    "isProxyResource": false,
+    "enableDataSourceSetInfo": false,
+    "resourceType": "Microsoft.Storage/storageAccounts",
+    "parentResourceType": "Microsoft.Storage/storageAccounts",
+    "datasourceType": "Microsoft.Storage/storageAccounts/blobServices",
+    "allowedRestoreModes": [ "PointInTimeBased", "RecoveryPointBased" ],
+    "allowedRestoreTargetTypes": [ "OriginalLocation", "AlternateLocation" ],
+    "itemLevelRecoveyEnabled": true,
+    "addBackupDatasourceParametersList": true,
+    "backupConfigurationRequired": false,
+    "addDataStoreParametersList": false,
+    "friendlyNameRequired": false,
+    "supportSecretStoreAuthentication": false,
+    "policySettings": {
+        "supportedRetentionTags": [ "Weekly", "Monthly", "Yearly" ],
+        "supportedDatastoreTypes": [ "OperationalStore", "VaultStore" ],
+        "disableAddRetentionRule": false,
+        "disableCustomRetentionTag": false,
+        "backupScheduleSupported": true,
+        "supportedBackupFrequency": [ "Daily", "Weekly" ],
+        "defaultPolicy": {
+            "backupManagementType": "AzureWorkload",
+            "workLoadType": "SAPHanaDatabase",
+            "settings": {
+                "timeZone": "UTC",
+                "issqlcompression": false,
+                "isCompression": false
+            },
+            "subProtectionPolicy": [
+                {
+                    "policyType": "Full",
+                    "schedulePolicy": {
+                        "schedulePolicyType": "SimpleSchedulePolicy",
+                        "scheduleRunFrequency": "Daily",
+                        "scheduleRunTimes": [
+                            "2020-09-30T19:30:00Z"
+                        ],
+                        "scheduleWeeklyFrequency": 0
+                    },
+                    "retentionPolicy": {
+                        "retentionPolicyType": "LongTermRetentionPolicy",
+                        "dailySchedule": {
+                            "retentionTimes": [
+                                "2020-09-30T19:30:00Z"
+                            ],
+                            "retentionDuration": {
+                                "count": 180,
+                                "durationType": "Days"
+                            }
+                        },
+                        "weeklySchedule": {
+                            "daysOfTheWeek": [
+                                "Sunday"
+                            ],
+                            "retentionTimes": [
+                                "2020-09-30T19:30:00Z"
+                            ],
+                            "retentionDuration": {
+                                "count": 104,
+                                "durationType": "Weeks"
+                            }
+                        },
+                        "monthlySchedule": {
+                            "retentionScheduleFormatType": "Weekly",
+                            "retentionScheduleWeekly": {
+                                "daysOfTheWeek": [
+                                    "Sunday"
+                                ],
+                                "weeksOfTheMonth": [
+                                    "First"
+                                ]
+                            },
+                            "retentionTimes": [
+                                "2020-09-30T19:30:00Z"
+                            ],
+                            "retentionDuration": {
+                                "count": 60,
+                                "durationType": "Months"
+                            }
+                        },
+                        "yearlySchedule": {
+                            "retentionScheduleFormatType": "Weekly",
+                            "monthsOfYear": [
+                                "January"
+                            ],
+                            "retentionScheduleWeekly": {
+                                "daysOfTheWeek": [
+                                    "Sunday"
+                                ],
+                                "weeksOfTheMonth": [
+                                    "First"
+                                ]
+                            },
+                            "retentionTimes": [
+                                "2020-09-30T19:30:00Z"
+                            ],
+                            "retentionDuration": {
+                                "count": 10,
+                                "durationType": "Years"
+                            }
+                        }
+                    },
+                    "tieringPolicy": {
+                        "ArchivedRP": {
+                            "tieringMode": "DoNotTier",
+                            "duration": 0,
+                            "durationType": "Invalid"
+                        }
+                    }
+                },
+                {
+                    "policyType": "Log",
+                    "schedulePolicy": {
+                        "schedulePolicyType": "LogSchedulePolicy",
+                        "scheduleFrequencyInMins": 120
+                    },
+                    "retentionPolicy": {
+                        "retentionPolicyType": "SimpleRetentionPolicy",
+                        "retentionDuration": {
+                            "count": 15,
+                            "durationType": "Days"
+                        }
+                    }
+                }
+            ],
+            "protectedItemsCount": 0
+        }
+    }
+}

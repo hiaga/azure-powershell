@@ -26,7 +26,7 @@ AutoRest does not generate authentication code for the module. Authentication is
 For information on how to develop for `Az.RecoveryServices`, see [how-to.md](how-to.md).
 <!-- endregion -->
 
-# My API 
+# My API
 
 This file contains the configuration for generating My API from the OpenAPI specification.
 
@@ -41,7 +41,6 @@ input-file:
   - $(repo)/specification/recoveryservicesbackup/resource-manager/Microsoft.RecoveryServices/stable/2023-02-01/bms.json
 title: RecoveryServices
 directive:
-
   - where:
       verb: Remove
       subject: ProtectionPolicy
@@ -50,6 +49,11 @@ directive:
   - where:
       verb: Get
       subject: ProtectedItem
+      variant: GetViaIdentity
+    remove: true
+  - where:
+      verb: Get
+      subject: ProtectionPolicy
       variant: GetViaIdentity
     remove: true
   - where:
@@ -71,7 +75,7 @@ directive:
     transform: $ = $.replace('internal Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IRetentionPolicy RetentionPolicy', 'public Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IRetentionPolicy RetentionPolicy');
   - from: source-file-csharp
     where: $
-    transform: $ = $.replace('internal Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ISchedulePolicy SchedulePolicy', 'public Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ISchedulePolicy SchedulePolicy');
+    transform: $ = $.replace('internal Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ISchedulePolicy SchedulePolicy', 'public Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ISchedulePolicy SchedulePolicy'); 
 ```
 
 ## Alternate settings
