@@ -41,6 +41,21 @@ input-file:
   - $(repo)/specification/recoveryservicesbackup/resource-manager/Microsoft.RecoveryServices/stable/2023-02-01/bms.json
 title: RecoveryServices
 directive:
+
+  - where:
+      verb: Remove
+      subject: ProtectionPolicy
+      variant: DeleteViaIdentity
+    remove: true
+  - where:
+      verb: Get
+      subject: ProtectedItem
+      variant: GetViaIdentity
+    remove: true
+  - where:
+      subject: ProtectionPolicy
+    set:
+      subject: BackupPolicy
   - no-inline:
     - DailyRetentionSchedule
     - HourlySchedule

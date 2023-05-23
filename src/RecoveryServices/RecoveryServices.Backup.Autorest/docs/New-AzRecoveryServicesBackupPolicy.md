@@ -1,36 +1,53 @@
 ---
 external help file:
 Module Name: Az.RecoveryServices
-online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/remove-azrecoveryservicesprotectionpolicy
+online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/new-azrecoveryservicesbackuppolicy
 schema: 2.0.0
 ---
 
-# Remove-AzRecoveryServicesProtectionPolicy
+# New-AzRecoveryServicesBackupPolicy
 
 ## SYNOPSIS
-Deletes specified backup policy from your Recovery Services Vault.
+Creates or modifies a backup policy.
 This is an asynchronous operation.
-Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
+Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
 
 ## SYNTAX
 
-### Delete (Default)
+### CreateExpanded (Default)
 ```
-Remove-AzRecoveryServicesProtectionPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
- [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-PassThru] [-Confirm] [-WhatIf]
+New-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+ [-SubscriptionId <String>] [-BackupManagementType <String>] [-ETag <String>] [-Location <String>]
+ [-ProtectedItemsCount <Int32>] [-ResourceGuardOperationRequest <String[]>] [-Tag <Hashtable>]
+ [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+```
+
+### Create
+```
+New-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+ -Parameter <IProtectionPolicyResource> [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-PassThru]
+ [-Confirm] [-WhatIf] [<CommonParameters>]
+```
+
+### CreateViaIdentity
+```
+New-AzRecoveryServicesBackupPolicy -InputObject <IRecoveryServicesIdentity>
+ -Parameter <IProtectionPolicyResource> [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf]
  [<CommonParameters>]
 ```
 
-### DeleteViaIdentity
+### CreateViaIdentityExpanded
 ```
-Remove-AzRecoveryServicesProtectionPolicy -InputObject <IRecoveryServicesIdentity>
- [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+New-AzRecoveryServicesBackupPolicy -InputObject <IRecoveryServicesIdentity> [-BackupManagementType <String>]
+ [-ETag <String>] [-Location <String>] [-ProtectedItemsCount <Int32>]
+ [-ResourceGuardOperationRequest <String[]>] [-Tag <Hashtable>] [-DefaultProfile <PSObject>] [-PassThru]
+ [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Deletes specified backup policy from your Recovery Services Vault.
+Creates or modifies a backup policy.
 This is an asynchronous operation.
-Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
+Status of the operation can be fetched\r\nusing GetPolicyOperationResult API.
 
 ## EXAMPLES
 
@@ -58,12 +75,12 @@ Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResu
 
 ## PARAMETERS
 
-### -AsJob
-Run the command as a job
+### -BackupManagementType
+This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: System.String
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
 Aliases:
 
 Required: False
@@ -89,13 +106,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -ETag
+Optional ETag.
+
+```yaml
+Type: System.String
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -InputObject
 Identity Parameter
 To construct, see NOTES section for INPUTOBJECT properties and create a hash table.
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.IRecoveryServicesIdentity
-Parameter Sets: DeleteViaIdentity
+Parameter Sets: CreateViaIdentity, CreateViaIdentityExpanded
 Aliases:
 
 Required: True
@@ -105,18 +137,35 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -NoWait
-Run the command asynchronously
+### -Location
+Resource location.
 
 ```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
+Type: System.String
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
 Aliases:
 
 Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -Parameter
+Base class for backup policy.
+Workload-specific backup policies are derived from this class.
+To construct, see NOTES section for PARAMETER properties and create a hash table.
+
+```yaml
+Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicyResource
+Parameter Sets: Create, CreateViaIdentity
+Aliases:
+
+Required: True
+Position: Named
+Default value: None
+Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
@@ -136,14 +185,29 @@ Accept wildcard characters: False
 ```
 
 ### -PolicyName
-Backup policy to be deleted.
+Backup policy to be created.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Create, CreateExpanded
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProtectedItemsCount
+Number of items associated with this policy.
+
+```yaml
+Type: System.Int32
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -155,10 +219,25 @@ The name of the resource group where the recovery services vault is present.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Create, CreateExpanded
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ResourceGuardOperationRequest
+ResourceGuard Operation Requests
+
+```yaml
+Type: System.String[]
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -170,7 +249,7 @@ The subscription Id.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Create, CreateExpanded
 Aliases:
 
 Required: False
@@ -180,12 +259,27 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Tag
+Resource tags.
+
+```yaml
+Type: System.Collections.Hashtable
+Parameter Sets: CreateExpanded, CreateViaIdentityExpanded
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -VaultName
 The name of the recovery services vault.
 
 ```yaml
 Type: System.String
-Parameter Sets: Delete
+Parameter Sets: Create, CreateExpanded
 Aliases:
 
 Required: True
@@ -231,11 +325,13 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicyResource
+
 ### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.IRecoveryServicesIdentity
 
 ## OUTPUTS
 
-### System.Boolean
+### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicyResource
 
 ## NOTES
 
@@ -263,6 +359,15 @@ To create the parameters described below, construct a hash table containing the 
   - `[ResourceGuardProxyName <String>]`: 
   - `[SubscriptionId <String>]`: The subscription Id.
   - `[VaultName <String>]`: The name of the recovery services vault.
+
+`PARAMETER <IProtectionPolicyResource>`: Base class for backup policy. Workload-specific backup policies are derived from this class.
+  - `[ETag <String>]`: Optional ETag.
+  - `[Location <String>]`: Resource location.
+  - `[Tag <IResourceTags>]`: Resource tags.
+    - `[(Any) <String>]`: This indicates any property can be added to this object.
+  - `[BackupManagementType <String>]`: This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+  - `[ProtectedItemsCount <Int32?>]`: Number of items associated with this policy.
+  - `[ResourceGuardOperationRequest <String[]>]`: ResourceGuard Operation Requests
 
 ## RELATED LINKS
 
