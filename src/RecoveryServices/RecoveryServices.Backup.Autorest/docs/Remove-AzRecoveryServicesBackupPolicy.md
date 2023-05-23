@@ -1,39 +1,39 @@
 ---
 external help file:
 Module Name: Az.RecoveryServices
-online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/get-azrecoveryservicesprotecteditem
+online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/remove-azrecoveryservicesbackuppolicy
 schema: 2.0.0
 ---
 
-# Get-AzRecoveryServicesProtectedItem
+# Remove-AzRecoveryServicesBackupPolicy
 
 ## SYNOPSIS
-Provides the details of the backed up item.
+Deletes specified backup policy from your Recovery Services Vault.
 This is an asynchronous operation.
-To know the status of the operation,\r\ncall the GetItemOperationResult API.
+Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
 
 ## SYNTAX
 
 ```
-Get-AzRecoveryServicesProtectedItem -ContainerName <String> -FabricName <String> -Name <String>
- -ResourceGroupName <String> -VaultName <String> [-SubscriptionId <String[]>] [-Filter <String>]
- [-DefaultProfile <PSObject>] [<CommonParameters>]
+Remove-AzRecoveryServicesBackupPolicy -PolicyName <String> -ResourceGroupName <String> -VaultName <String>
+ [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-PassThru] [-Confirm] [-WhatIf]
+ [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-Provides the details of the backed up item.
+Deletes specified backup policy from your Recovery Services Vault.
 This is an asynchronous operation.
-To know the status of the operation,\r\ncall the GetItemOperationResult API.
+Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
 
 ## EXAMPLES
 
 ### Example 1: {{ Add title here }}
 ```powershell
-{{ Add code here }}
+ Remove-AzRecoveryServicesBackupPolicy -PolicyName "MyPolicy" -ResourceGroupName "MyResourceGroup" -VaultName "MyVault"
 ```
 
 ```output
-{{ Add output here }}
+this command deletes the specified existing policy.
 ```
 
 {{ Add description here }}
@@ -51,15 +51,15 @@ To know the status of the operation,\r\ncall the GetItemOperationResult API.
 
 ## PARAMETERS
 
-### -ContainerName
-Container name associated with the backed up item.
+### -AsJob
+Run the command as a job
 
 ```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
-Required: True
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -82,26 +82,11 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -FabricName
-Fabric name associated with the backed up item.
+### -NoWait
+Run the command asynchronously
 
 ```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Filter
-OData filter options.
-
-```yaml
-Type: System.String
+Type: System.Management.Automation.SwitchParameter
 Parameter Sets: (All)
 Aliases:
 
@@ -112,13 +97,28 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -Name
-Backed up item name whose details are to be fetched.
+### -PassThru
+Returns true when the command succeeds
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -PolicyName
+Backup policy to be deleted.
 
 ```yaml
 Type: System.String
 Parameter Sets: (All)
-Aliases: ProtectedItemName
+Aliases:
 
 Required: True
 Position: Named
@@ -146,7 +146,7 @@ Accept wildcard characters: False
 The subscription Id.
 
 ```yaml
-Type: System.String[]
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -172,6 +172,37 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -Confirm
+Prompts you for confirmation before running the cmdlet.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases: cf
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -WhatIf
+Shows what would happen if the cmdlet runs.
+The cmdlet is not run.
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases: wi
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### CommonParameters
 This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable, -InformationAction, -InformationVariable, -OutVariable, -OutBuffer, -PipelineVariable, -Verbose, -WarningAction, and -WarningVariable. For more information, see [about_CommonParameters](http://go.microsoft.com/fwlink/?LinkID=113216).
 
@@ -179,7 +210,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectedItemResource
+### System.Boolean
 
 ## NOTES
 
