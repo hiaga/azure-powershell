@@ -11,6 +11,9 @@ Locale: en-US
 Microsoft Azure PowerShell: RecoveryServices cmdlets
 
 ## Az.RecoveryServices Cmdlets
+### [Edit-AzRecoveryServicesBackupPolicyClientObject](Edit-AzRecoveryServicesBackupPolicyClientObject.md)
+Edits the created default policy object.
+
 ### [Export-AzRecoveryServicesJob](Export-AzRecoveryServicesJob.md)
 Triggers export of jobs specified by filters and returns an OperationID to track.
 
@@ -193,11 +196,6 @@ This is a synchronous operation.
 ### [Register-AzRecoveryServicesProtectionContainer](Register-AzRecoveryServicesProtectionContainer.md)
 Registers the container with Recovery Services vault.\r\nThis is an asynchronous operation.
 To track the operation status, use location header to call get latest status of\r\nthe operation.
-
-### [Remove-AzRecoveryServicesBackupPolicy](Remove-AzRecoveryServicesBackupPolicy.md)
-Deletes specified backup policy from your Recovery Services Vault.
-This is an asynchronous operation.
-Status of the\r\noperation can be fetched using GetProtectionPolicyOperationResult API.
 
 ### [Remove-AzRecoveryServicesPrivateEndpointConnection](Remove-AzRecoveryServicesPrivateEndpointConnection.md)
 Delete Private Endpoint requests.

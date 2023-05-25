@@ -5,10 +5,11 @@ namespace Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support
     // RsvRef: check all the types in this file are used. if not, remove.
     public enum DatasourceTypes
     {
-        // AzureVM = 0,
-        MSSQL = 1
+        AzureVM = 0,
+        MSSQL,
+        SAPHANA
         /* AzureFiles,
-        SAPHANA,*/
+        */
     }
 
     public enum StorageSettingType
