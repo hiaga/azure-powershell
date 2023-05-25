@@ -19,10 +19,20 @@ function setupEnv() {
     $env.SubscriptionId = (Get-AzContext).Subscription.Id
     $env.Tenant = (Get-AzContext).Tenant.Id
     # For any resources you created for test, you should add it to $env here.
+
+    $BackupPolicyTestVariables = @{                                                                                                     
+        SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
+        ResourceGroupName = "arohijain-rg"
+        VaultName = "arohijain-vault"
+        NewPolicyName = "arohijain-policy-3"                                                                              # confirm what to keep
+    }
+
+    $env.add("TestBackupPolicy", $BackupPolicyTestVariables) | Out-Null                                                                
     $envFile = 'env.json'
     if ($TestMode -eq 'live') {
         $envFile = 'localEnv.json'
     }
+
     set-content -Path (Join-Path $PSScriptRoot $envFile) -Value (ConvertTo-Json $env)
 }
 function cleanupEnv() {
