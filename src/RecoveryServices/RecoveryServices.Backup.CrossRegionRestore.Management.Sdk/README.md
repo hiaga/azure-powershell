@@ -25,7 +25,7 @@ payload-flattening-threshold: 2
 ###
 ``` yaml
 input-file:
-  - https://github.com/hiaga/azure-rest-api-specs/blob/a3a7f21ad62ee1a914cff8005c661121285d46e6/specification/recoveryservicesbackup/resource-manager/Microsoft.RecoveryServices/stable/2021-11-15/bms.json
+  - https://github.com/hiaga/azure-rest-api-specs/blob/e741677cd48cd3b612b7108d7db8b52ca0567ce3/specification/recoveryservicesbackup/resource-manager/Microsoft.RecoveryServices/stable/2021-11-15/bms.json
 
 output-folder: Generated
 
