@@ -24,7 +24,7 @@ function setupEnv() {
         SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
         ResourceGroupName = "arohijain-rg"
         VaultName = "arohijain-vault"
-        NewPolicyName = "arohijain-policy-3"                                                                              # confirm what to keep
+        NewPolicyName = "arohijain-pol5"                                                                              # confirm what to keep
     }
 
     $env.add("TestBackupPolicy", $BackupPolicyTestVariables) | Out-Null                                                                

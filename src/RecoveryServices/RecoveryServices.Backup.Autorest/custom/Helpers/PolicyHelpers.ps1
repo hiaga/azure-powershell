@@ -803,3 +803,79 @@ function ValidateMandatoryFields {
         }
     }
 }
+
+
+
+function ValidateTieringPolicy
+{
+    if($tieringdetails.TieringMode -eq "")
+    {
+        $errormsg="Please specify the tiering mode"
+        throw $errormsg
+    }
+    if(($tieringdetails.TieringMode -eq "DoNotTier") -or ($tieringdetails.TieringMode -eq "TierRecommended"))
+    {
+        if(($tieringdetails.Duration -ne $null -or $tieringdetails.durationType -ne $null) -and ($tieringdetails.Duration -gt 0 -and $tieringdetails.durationType -ne "Invalid"))
+        {
+            $errormsg="Invalid values provided according to TieringMode"
+            throw $errormsg
+        }
+    }
+    elseif($tieringdetails.TieringMode -eq "TierAfter")
+    {
+        if(($tieringdetails.Duration -eq $null) -or ($tieringdetails.Duration -eq 0) -or ($tieringdetails.TieringMode -eq $null) -or ($tieringdetails.TieringMode -eq ""))
+        {
+            $errormsg="Missing parameter values for TierAfter Mode"
+            throw $errormsg
+        }
+    }
+  
+    if($policy.BackupManagementType -eq "AzureIaasVM" -and $tieringdetails.TieringMode -eq "TierAfter")
+    {
+        if(($policy.RetentionPolicy.YearlySchedule.RetentionDuration[0].Count -ne $null) -and ($policy.RetentionPolicy.YearlySchedule.RetentionDuration[0].Count -ne 0))
+        {
+            if(($tieringdetails.Duration -lt 3) -or ($tieringdetails.Duration -gt 114))
+            {
+                $errormsg="TierAfterDuration should be between 3-114"
+                throw $errormsg
+            }
+        }
+        elseif(($policy.RetentionPolicy.MonthlySchedule.RetentionDuration[0].Count -ne $null) -and ($policy.RetentionPolicy.MonthlySchedule.RetentionDuration[0].Count -ne 0))
+        {
+            if(($tieringdetails.Duration -lt 3) -or ($tieringdetails.Duration -gt 54))
+            {
+                $errormsg="TierAfterDuration should be between 3-54"
+                throw $errormsg
+            }
+        }
+    }
+    elseif($policy.BackupManagementType -eq "AzureWorkload" -and $tieringdetails.TieringMode -eq "TierAfter")
+    {
+        $FullBackupPolicy =  $policy.SubProtectionPolicy | where { $_.PolicyType -match "Full" }
+        $Index = $policy.SubProtectionPolicy.IndexOf($FullBackupPolicy)
+        if(($policy.SubProtectionPolicy[$Index].RetentionPolicy.YearlySchedule.RetentionDuration[0].Count -ne $null) -and ($policy.SubProtectionPolicy[$Index].RetentionPolicy.YearlySchedule.RetentionDuration[0].Count -ne 0))
+        {
+            if(($tieringdetails.Duration -lt 45) -or ($tieringdetails.Duration -gt 3470))
+            {
+                $errormsg="TierAfterDuration should be between 45-3470"
+                throw $errormsg
+            }
+        }
+        elseif(($policy.SubProtectionPolicy[$Index].RetentionPolicy.MonthlySchedule.RetentionDuration[0].Count -ne $null) -and ($policy.SubProtectionPolicy[$Index].RetentionPolicy.MonthlySchedule.RetentionDuration[0].Count -ne 0))
+        {
+            if(($tieringdetails.Duration -lt 45) -or ($tieringdetails.Duration -gt 1620))
+            {
+                $errormsg="TierAfterDuration should be between 45-1620"
+                throw $errormsg
+            }
+        }
+        elseif(($policy.SubProtectionPolicy[$Index].RetentionPolicy.WeeklySchedule.RetentionDuration[0].Count -ne $null) -and ($policy.SubProtectionPolicy[$Index].RetentionPolicy.WeeklySchedule.RetentionDuration[0].Count -ne 0))
+        {
+            if(($tieringdetails.Duration -lt 45) -or ($tieringdetails.Duration -gt 548))
+            {
+                $errormsg="TierAfterDuration should be between 45-548"
+                throw $errormsg
+            }
+        }
+    }
+}

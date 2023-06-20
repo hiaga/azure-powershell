@@ -1,4 +1,5 @@
 ﻿{
+  "IsTieringSupported": "True",
   "allowedSubProtectionPolicyTypes": [ "Full", "Differential", "Incremental", "Log" ],
   "allowedDifferentialParams": [ "DifferentialRetentionPeriodInDays" ],
   "allowedIncrementalParams": [ "IncrementalRetentionPeriodInDays" ],

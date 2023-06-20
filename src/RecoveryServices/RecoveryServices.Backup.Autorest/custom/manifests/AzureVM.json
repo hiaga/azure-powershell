@@ -1,4 +1,5 @@
 ﻿{
+  "IsTieringSupported": "True",
   "allowedSubProtectionPolicyTypes": [],
   "allowedDifferentialParams": [],
   "allowedIncrementalParams": [],
