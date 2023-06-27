@@ -186,7 +186,7 @@ function ValidateRetentionParameters {
             $parametersEntered = [System.Collections.ArrayList]::new()
 			if ($DailyRetentionDurationInDays -ne $null) 
             { 
-				$parametersEntered.Add("DailyRetentionDurationInDays")
+				$parametersEntered.Add("DailyRetentionDurationInDays") > $null
 			}
             if ($EnableDailyRetention -ne $true) 
             { 
@@ -201,11 +201,11 @@ function ValidateRetentionParameters {
 			$parametersEntered = [System.Collections.ArrayList]::new()
 			if ($WeeklyRetentionDurationInWeeks) 
             {
-				$parametersEntered.Add("WeeklyRetentionDurationInWeeks")
+				$parametersEntered.Add("WeeklyRetentionDurationInWeeks") > $null
 			}
             if ($WeeklyRetentionDaysOfTheWeek) 
             {
-				$parametersEntered.Add("WeeklyRetentionDaysOfTheWeek")
+				$parametersEntered.Add("WeeklyRetentionDaysOfTheWeek") > $null
 			}
             if ($EnableWeeklyRetention -ne $true) 
             {
@@ -220,11 +220,11 @@ function ValidateRetentionParameters {
             $parametersEntered = [System.Collections.ArrayList]::new()
 			if ($MonthlyRetentionScheduleType) 
             {
-				$parametersEntered.Add("MonthlyRetentionScheduleType")
+				$parametersEntered.Add("MonthlyRetentionScheduleType") > $null
 			}
             if ($MonthlyRetentionDurationInMonths) 
             {
-				$parametersEntered.Add("MonthlyRetentionDurationInMonths")
+				$parametersEntered.Add("MonthlyRetentionDurationInMonths") > $null
 			}
             if ($EnableMonthlyRetention -ne $true) 
             {
@@ -252,13 +252,13 @@ function ValidateRetentionParameters {
                 $parametersEntered = [System.Collections.ArrayList]::new()
                 if ($MonthlyRetentionDaysOfTheMonth) 
                 {
-			    	$parametersEntered.Add("MonthlyRetentionDaysOfTheMonth")
+			    	$parametersEntered.Add("MonthlyRetentionDaysOfTheMonth") > $null
                     $errormsg = $parametersEntered + " can only be used when day based Monthly retention is enabled"
 			    	throw $errormsg
 			    }
                 if ($MonthlyRetentionIsLastDayIncluded)
                 {
-                    $parametersEntered.Add("MonthlyRetentionIsLastDayIncluded")
+                    $parametersEntered.Add("MonthlyRetentionIsLastDayIncluded") > $null
                     $errormsg = $parametersEntered + " can only be used when day based Monthly retention is enabled"
 			    	throw $errormsg
                 }
@@ -273,13 +273,13 @@ function ValidateRetentionParameters {
                 $parametersEntered = [System.Collections.ArrayList]::new()
                 if ($MonthlyRetentionDaysOfTheWeek) 
                 {
-			    	$parametersEntered.Add("MonthlyRetentionDaysOfTheWeek")
+			    	$parametersEntered.Add("MonthlyRetentionDaysOfTheWeek") > $null
                     $errormsg = $parametersEntered + " can only be used when week based Monthly retention is enabled"
 			    	throw $errormsg
 			    }
                 if ($MonthlyRetentionWeeksOfTheMonth)
                 {
-                    $parametersEntered.Add("MonthlyRetentionWeeksOfTheMonth")
+                    $parametersEntered.Add("MonthlyRetentionWeeksOfTheMonth") > $null
                     $errormsg = $parametersEntered + " can only be used when week based Monthly retention is enabled"
 			    	throw $errormsg
                 }
@@ -303,15 +303,15 @@ function ValidateRetentionParameters {
             $parametersEntered = [System.Collections.ArrayList]::new()
 			if ($YearlyRetentionScheduleType) 
             {
-				$parametersEntered.Add("YearlyRetentionScheduleType")
+				$parametersEntered.Add("YearlyRetentionScheduleType") > $null
 			}
             if ($YearlyRetentionDurationInYears) 
             {
-				$parametersEntered.Add("YearlyRetentionDurationInYears")
+				$parametersEntered.Add("YearlyRetentionDurationInYears") > $null
 			}
             if ($YearlyRetentionMonthsOfTheYear) 
             {
-				$parametersEntered.Add("YearlyRetentionMonthsOfTheYear")
+				$parametersEntered.Add("YearlyRetentionMonthsOfTheYear") > $null
 			}
             if ($EnableYearlyRetention -ne $true) 
             {
@@ -341,13 +341,13 @@ function ValidateRetentionParameters {
                 $parametersEntered = [System.Collections.ArrayList]::new()
                 if ($YearlyRetentionDaysOfTheMonth) 
                 {
-			    	$parametersEntered.Add("YearlyRetentionDaysOfTheMonth")
+			    	$parametersEntered.Add("YearlyRetentionDaysOfTheMonth") > $null
                     $errormsg = $parametersEntered + " can only be used when day based Yearly retention is enabled"
 			    	throw $errormsg
 			    }
                 if ($YearlyRetentionIsLastDayIncluded)
                 {
-                    $parametersEntered.Add("YearlyRetentionIsLastDayIncluded")
+                    $parametersEntered.Add("YearlyRetentionIsLastDayIncluded") > $null
                     $errormsg = $parametersEntered + " can only be used when day based Yearly retention is enabled"
 			    	throw $errormsg
                 }
@@ -362,13 +362,13 @@ function ValidateRetentionParameters {
                 $parametersEntered = [System.Collections.ArrayList]::new()
                 if ($YearlyRetentionDaysOfTheWeek) 
                 {
-			    	$parametersEntered.Add("YearlyRetentionDaysOfTheWeek")
+			    	$parametersEntered.Add("YearlyRetentionDaysOfTheWeek") > $null
                     $errormsg = $parametersEntered + " can only be used when week based Yearly retention is enabled"
 			    	throw $errormsg
 			    }
                 if ($YearlyRetentionWeeksOfTheMonth)
                 {
-                    $parametersEntered.Add("YearlyRetentionWeeksOfTheMonth")
+                    $parametersEntered.Add("YearlyRetentionWeeksOfTheMonth") > $null
                     $errormsg = $parametersEntered + " can only be used when week based Yearly retention is enabled"
 			    	throw $errormsg
                 }
@@ -390,7 +390,7 @@ function ValidateRetentionParameters {
 			$parametersEntered = [System.Collections.ArrayList]::new()
 			if ($DifferentialRetentionPeriodInDays) 
             {
-				$parametersEntered.Add("DifferentialRetentionPeriodInDays")
+				$parametersEntered.Add("DifferentialRetentionPeriodInDays") > $null
 			}
             # check whether differential backup is supported for given DatasourceType
             $unsupportedParams = $parametersEntered | Where-Object { $param = $_; $param -notin $manifest.allowedDifferentialParams }
@@ -412,7 +412,7 @@ function ValidateRetentionParameters {
             $parametersEntered = [System.Collections.ArrayList]::new()
 			if ($IncrementalRetentionPeriodInDays) 
             {
-				$parametersEntered.Add("IncrementalRetentionPeriodInDays")
+				$parametersEntered.Add("IncrementalRetentionPeriodInDays") > $null
 			}
             $unsupportedParams = $parametersEntered | Where-Object { $param = $_; $param -notin $manifest.allowedIncrementalParams }
             if ($unsupportedParams.Count -gt 0) {
@@ -433,7 +433,7 @@ function ValidateRetentionParameters {
             
 			if ($LogRetentionPeriodInDays) 
             {
-				$parametersEntered.Add("LogRetentionPeriodInDays")
+				$parametersEntered.Add("LogRetentionPeriodInDays") > $null
 			}
             $unsupportedParams = $parametersEntered | Where-Object { $param = $_; $param -notin $manifest.allowedLogParams }
             if ($unsupportedParams.Count -gt 0) {
@@ -545,9 +545,9 @@ function ValidateMandatoryFields {
 
         # Validate Daily Retention Parameters
 
-        if ($EnableDailyRetention -eq $true) 
+        if ($EnableDailyRetention -eq $true ) 
         {
-             if($manifest.allowedSubProtectionPolicyTypes.Count -gt 2)   #SAPHANA/MSSQL
+             if($manifest.allowedSubProtectionPolicyTypes.Count -gt 2 -and $policy.SubProtectionPolicy[$Index].SchedulePolicy.ScheduleRunFrequency -ne "Weekly")   #SAPHANA/MSSQL
 			 {
                   if(($Policy.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -eq $null) -or ($Policy.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -eq 0) ) 
                   {
@@ -556,7 +556,7 @@ function ValidateMandatoryFields {
                   }
                   #Write-Host "Daily retention duration in days: $($Policy.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count)"
 			 }
-             else    #AzureVM
+             elseif($manifest.allowedSubProtectionPolicyTypes.Count -lt 2 -and $policy.SchedulePolicy.ScheduleRunFrequency -ne "Weekly")    #AzureVM
              {
                  if(($Policy.RetentionPolicy.DailySchedule.RetentionDuration.Count -eq $null) -or ($Policy.RetentionPolicy.DailySchedule.RetentionDuration.Count -eq 0)) 
                  {

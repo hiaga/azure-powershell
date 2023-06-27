@@ -204,7 +204,14 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
               }    
               if(($policyObject.RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0)) 
               {
-                  $policyObject.RetentionPolicy.DailySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime    
+                  if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Hourly")
+                  {
+                      $policyObject.RetentionPolicy.DailySchedule.RetentionTime=$policyObject.SchedulePolicy.HourlySchedule.ScheduleWindowStartTime
+                  }
+                  else
+                  {
+                      $policyObject.RetentionPolicy.DailySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime  
+                  }  
               }
 
 
@@ -260,7 +267,14 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
               }
               if (($policyObject.RetentionPolicy.WeeklySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.RetentionPolicy.WeeklySchedule.RetentionDuration.Count -ne 0)) 
               {
-                  $policyObject.RetentionPolicy.WeeklySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Hourly")
+                  {
+                      $policyObject.RetentionPolicy.WeeklySchedule.RetentionTime=$policyObject.SchedulePolicy.HourlySchedule.ScheduleWindowStartTime
+                  }
+                  else
+                  {
+                      $policyObject.RetentionPolicy.WeeklySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  }
               }
 
 
@@ -383,7 +397,14 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
               }
               if (($policyObject.RetentionPolicy.MonthlySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.RetentionPolicy.MonthlySchedule.RetentionDuration.Count -ne 0)) 
               {
-                  $policyObject.RetentionPolicy.MonthlySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Hourly")
+                  {
+                      $policyObject.RetentionPolicy.MonthlySchedule.RetentionTime=$policyObject.SchedulePolicy.HourlySchedule.ScheduleWindowStartTime
+                  }
+                  else
+                  {
+                      $policyObject.RetentionPolicy.MonthlySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  }
               }
 
 
@@ -527,7 +548,14 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
               }
               if (($policyObject.RetentionPolicy.YearlySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.RetentionPolicy.YearlySchedule.RetentionDuration.Count -ne 0)) 
               {
-                  $policyObject.RetentionPolicy.YearlySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Hourly")
+                  {
+                      $policyObject.RetentionPolicy.YearlySchedule.RetentionTime=$policyObject.SchedulePolicy.HourlySchedule.ScheduleWindowStartTime
+                  }
+                  else
+                  {
+                      $policyObject.RetentionPolicy.YearlySchedule.RetentionTime=$policyObject.SchedulePolicy.ScheduleRunTime
+                  }
               }
 
           }
@@ -639,7 +667,7 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
           {
               $FullBackupPolicy =  $policyObject.SubProtectionPolicy | Where-Object { $_.PolicyType -match "Full" }
               $Index = $policyObject.SubProtectionPolicy.IndexOf($FullBackupPolicy)
-              if($policyObject.SubProtectionPolicy[$Index].SchedulePolicy.ScheduleRunFrequency -eq "Weekly")
+              if($policyObject.SubProtectionPolicy[$Index].SchedulePolicy.ScheduleRunFrequency -eq "Weekly" -and -not($EnableDailyRetention) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0))
               {
                   $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule = $null
                   Write-Host "Daily Retention is disabled when Schedule run frequency is weekly"
@@ -678,7 +706,8 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
                      $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.DailyRetentionSchedule]::new()
                      $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.retentionDuration = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.RetentionDuration]::new()
                      $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count = $DailyRetentionDurationInDays
-                     $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.dailySchedule.retentionDuration.durationType = "Days"                  }
+                     $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.dailySchedule.retentionDuration.durationType = "Days"                  
+                  }
               }
               if (($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0)) 
               {
