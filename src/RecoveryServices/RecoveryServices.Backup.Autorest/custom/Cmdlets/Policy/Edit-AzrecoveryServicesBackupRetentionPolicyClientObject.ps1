@@ -160,10 +160,10 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
           $policyObject = $Policy 
           if(-not($ModifyFullBackup))
           {
-              if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Weekly")
+              if($policyObject.SchedulePolicy.ScheduleRunFrequency -eq "Weekly" -and ($policyObject.RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0))
               {
                   $policyObject.RetentionPolicy.DailySchedule = $null
-                  Write-Host "Daily Retention is disabled when Schedule run frequency is weekly"
+                  Write-Warning "Daily Retention is disabled when Schedule run frequency is weekly"
               }
               elseif ($EnableDailyRetention -eq $false) 
               {
@@ -667,10 +667,10 @@ function Edit-AzrecoveryServicesBackupRetentionPolicyClientObject {
           {
               $FullBackupPolicy =  $policyObject.SubProtectionPolicy | Where-Object { $_.PolicyType -match "Full" }
               $Index = $policyObject.SubProtectionPolicy.IndexOf($FullBackupPolicy)
-              if($policyObject.SubProtectionPolicy[$Index].SchedulePolicy.ScheduleRunFrequency -eq "Weekly" -and -not($EnableDailyRetention) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0))
+              if($policyObject.SubProtectionPolicy[$Index].SchedulePolicy.ScheduleRunFrequency -eq "Weekly" -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne $null) -and ($policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule.RetentionDuration.Count -ne 0))
               {
                   $policyObject.SubProtectionPolicy[$Index].RetentionPolicy.DailySchedule = $null
-                  Write-Host "Daily Retention is disabled when Schedule run frequency is weekly"
+                  Write-Warning "Daily Retention has been disabled since Schedule run frequency is weekly"
               }
               elseif ($EnableDailyRetention -eq $false) 
               {
