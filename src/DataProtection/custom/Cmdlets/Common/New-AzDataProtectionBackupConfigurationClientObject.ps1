@@ -99,7 +99,7 @@ function New-AzDataProtectionBackupConfigurationClientObject{
                 $dataSourceParam.ContainersList = $VaultedBackupContainer
             }
             elseif($IncludeAllContainer){
-                if($StorageAcountName -eq $null -or $StorageAccountResourceGroupName -eq $null){
+                if($StorageAccountName -eq $null -or $StorageAccountResourceGroupName -eq $null){
                     $message = "Please input StorageAcountName and StorageAccountResourceGroupName parameters for fetching all vaulted containers."
                     throw $message
                 }
