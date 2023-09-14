@@ -20,7 +20,7 @@ Edits the retention settings for the policy client object
 ### [Edit-AzRecoveryServicesBackupSchedulePolicyClientObject](Edit-AzRecoveryServicesBackupSchedulePolicyClientObject.md)
 Edits the schedule policy in the specified backup policy object.
 
-### [Enable-AzRecoveryServicesProtection](Enable-AzRecoveryServicesProtection.md)
+### [Enable-AzRecoveryServicesBackupProtection](Enable-AzRecoveryServicesBackupProtection.md)
 Triggers the enable protection operation for the given item
 
 ### [Export-AzRecoveryServicesJob](Export-AzRecoveryServicesJob.md)

@@ -1,8 +1,8 @@
-﻿function New-AzRecoveryServicesBackupPolicy
+﻿function Get-AzRecoveryServicesBackupContainer
 {
-    [OutputType('Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicyResource')]
-    [CmdletBinding(PositionalBinding=$false, SupportsShouldProcess)]
-    [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Description('Creates a new backup policy in a given recovery services vault')]
+    [OutputType('Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionContainerResource')]
+    [CmdletBinding(PositionalBinding=$false)]
+    [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Description('Gets list of backup containers registered with a recovery services vault')]
 
 	param(
         [Parameter(Mandatory=$false, HelpMessage='Subscription Id')]
@@ -17,19 +17,14 @@
         [System.String]
         ${VaultName},
 
-        [Parameter(Mandatory, HelpMessage='Policy Name for the policy to be created')]
+        [Parameter(Mandatory=$false, HelpMessage='Specifies the friendly name of the container to get')]
         [System.String]
-        ${PolicyName},
+        ${FriendlyName},
 
-        [Parameter(Mandatory, HelpMessage='Workload specific Backup policy object.')]
-        [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicy]
-        ${Policy},
-
-        [Parameter(Mandatory=$false)]
-        [ValidateRange(1, 5)]
-        [Nullable[int]]
-        ${SnapshotRetentionDurationInDays},
-
+        [Parameter(Mandatory=$false, HelpMessage='Specifies the DatasourceType')]
+        [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support.DatasourceTypes]
+        ${DatasourceType},
+                
         [Parameter()]
         [Alias('AzureRMContext', 'AzureCredential')]
         [ValidateNotNull()]
@@ -68,26 +63,7 @@
         [Parameter(DontShow)]
         [System.Management.Automation.SwitchParameter]
         # Use the default credentials for the proxy
-        ${ProxyUseDefaultCredentials},
-            
-        [Parameter(Mandatory=$false)]
-        [Nullable[System.Boolean]]
-        ${MoveToArchiveTier},
-        
-        [Parameter(Mandatory=$false)]
-        [ValidateSet('TierRecommended', 'TierAfter')]
-        [string]
-        ${TieringMode},
-        
-        [Parameter(Mandatory=$false)]
-        [Nullable[int]]
-        ${TierAfterDuration},
-
-        [Parameter(Mandatory=$false)]
-        [ValidateSet("Days", "Months", ErrorMessage = "Invalid value for DurationType. Please provide a valid value. Valid values are Days/Months")]
-        [string]
-        ${TierAfterDurationType}
-        
+        ${ProxyUseDefaultCredentials}        
     )
 
     process

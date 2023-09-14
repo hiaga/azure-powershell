@@ -1,4 +1,4 @@
-function Enable-AzRecoveryServicesProtection {
+function Enable-AzRecoveryServicesBackupProtection {
 	[OutputType('PSObject')]
     [CmdletBinding(PositionalBinding=$false)]
     [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Description('Triggers the enable protection operation for the given item')]
@@ -17,6 +17,7 @@ function Enable-AzRecoveryServicesProtection {
         [System.String]
         ${VaultName},
         
+        # TODO: check this message
         [Parameter( HelpMessage='Specifies the item for which this cmdlet enables protection. To obtain a BackupItem , use the Get-AzRecoveryServicesBackupItem cmdlet.')]
         [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectedItemResource]
         ${Item},
@@ -51,18 +52,25 @@ function Enable-AzRecoveryServicesProtection {
     )
     process
     {   
-        if($DatasourceType -eq "AzureVM")
-        {
-            $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureIaaSvmProtectedItem]::new() 
-        }
-        elseif($DatasourceType -eq "SAPHANA")
-        {
-            $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureVMWorkloadSapHanaDatabaseProtectedItem]::new()
-        }
-        elseif($DatasourceType -eq "MSSQL")
-        {
-            $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureVMWorkloadSqlDatabaseProtectedItem]::new()
-        }
+        
+        # Load manifest ProtectedItemType
+        $manifest = LoadManifest -DatasourceType $DatasourceType.ToString()
+        $protectedItemType = "[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201." + $manifest.protectedItemType + "]::new()"
+        $Object =  Invoke-Expression $protectedItemType
+
+        # TODO : remove this part
+        #if($DatasourceType -eq "AzureVM")
+        #{
+        #    $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureIaaSvmProtectedItem]::new() 
+        #}
+        #elseif($DatasourceType -eq "SAPHANA")
+        #{
+        #    $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureVMWorkloadSapHanaDatabaseProtectedItem]::new()
+        #}
+        #elseif($DatasourceType -eq "MSSQL")
+        #{
+        #    $Object=[Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureVMWorkloadSqlDatabaseProtectedItem]::new()
+        #}
 
         $vaultName=$VaultName
         $resourceGroupName=$ResourceGroupName
@@ -71,6 +79,9 @@ function Enable-AzRecoveryServicesProtection {
         {
             if($DatasourceType -eq "AzureVM")
             {
+                # TODO : Filter
+                # TODO : Get-AzRecoveryServicesBackupProtectableItem command
+                # TODO : filter protectable item based on VM resource group
                 $ProtectableItem= Get-AzRecoveryServicesBackupProtectableItem -ResourceGroupName $resourceGroupName -VaultName $vaultName -Filter "backupManagementType eq 'AzureIaasVM' and WorkloadType -eq 'AzureVM'" | Where-Object { $_.friendlyName -match $VMName}
             }
             elseif($DatasourceType -eq "MSSQL")
@@ -82,8 +93,8 @@ function Enable-AzRecoveryServicesProtection {
                 $errormsg= "There is no protectable item by this name in the current vault."
                 throw $errormsg
             }
-            $containerName=Get-containerNameFromArmId -Id $ProtectableItem.Id
-            $itemName=Get-ProtectableItemNameFromArmId -Id $ProtectableItem.Id
+            $containerName = Get-containerNameFromArmId -Id $ProtectableItem.Id
+            $itemName = Get-ProtectableItemNameFromArmId -Id $ProtectableItem.Id
             if($DatasourceType -eq "AzureVM")
             {
                 $Object.SourceResourceId=$ProtectableItem.Property.VirtualMachineId

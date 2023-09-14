@@ -83,7 +83,7 @@
         $null = $PSBoundParameters.Add("NoWait", $true)
         $null = $PSBoundParameters.Add("Parameter", $requestObject)
 
-        # RsvRef : change command name while taking a pull or modify the directive
+        # TODO : change command name while taking a pull or modify the directive
         $restoreOperation = Start-AzRecoveryServicesRestore @PSBoundParameters
             
         Write-Debug -Message "Restore operation : $restoreOperation"
