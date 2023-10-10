@@ -1,38 +1,33 @@
 ---
 external help file:
 Module Name: Az.RecoveryServices
-online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/get-azrecoveryservicesbackupprotectableitem
+online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/register-azrecoveryservicesbackupcontainer
 schema: 2.0.0
 ---
 
-# Get-AzRecoveryServicesBackupProtectableItem
+# Register-AzRecoveryServicesBackupContainer
 
 ## SYNOPSIS
-This command will retrieve all protectable items within a certain container or across all registered containers.
-It will consist of all the elements of the hierarchy of the application.
-Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
+The Register-AzRecoveryServicesBackupContainer cmdlet registers an Azure VM for AzureWorkloads with specific DatasourceType.
 
 ## SYNTAX
 
-### FilterParamSet (Default)
+### Register (Default)
 ```
-Get-AzRecoveryServicesBackupProtectableItem -DatasourceType <DatasourceTypes> -ResourceGroupName <String>
- -VaultName <String> [-Container <IProtectionContainerResource>] [-DefaultProfile <PSObject>]
- [-ItemType <String>] [-Name <String>] [-ServerName <String>] [-SubscriptionId <String[]>]
+Register-AzRecoveryServicesBackupContainer [-ResourceId] <String> [-DatasourceType] <DatasourceTypes>
+ -ResourceGroupName <String> -VaultName <String> [-DefaultProfile <PSObject>] [-SubscriptionId <String>]
  [<CommonParameters>]
 ```
 
-### IdParamSet
+### ReRegister
 ```
-Get-AzRecoveryServicesBackupProtectableItem -ParentID <String> -ResourceGroupName <String> -VaultName <String>
- [-DefaultProfile <PSObject>] [-ItemType <String>] [-Name <String>] [-ServerName <String>]
- [-SubscriptionId <String[]>] [<CommonParameters>]
+Register-AzRecoveryServicesBackupContainer [-Container] <IProtectionContainerResource>
+ [-DatasourceType] <DatasourceTypes> -ResourceGroupName <String> -VaultName <String>
+ [-DefaultProfile <PSObject>] [-SubscriptionId <String>] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
-This command will retrieve all protectable items within a certain container or across all registered containers.
-It will consist of all the elements of the hierarchy of the application.
-Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
+The Register-AzRecoveryServicesBackupContainer cmdlet registers an Azure VM for AzureWorkloads with specific DatasourceType.
 
 ## EXAMPLES
 
@@ -61,19 +56,19 @@ Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
 ## PARAMETERS
 
 ### -Container
-Specifies a container object for which this cmdlet gets protectable items.
+Specifies a container object for which this cmdlet triggers the re-registration.
 To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet
 To construct, see NOTES section for CONTAINER properties and create a hash table.
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionContainerResource
-Parameter Sets: FilterParamSet
+Parameter Sets: ReRegister
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
-Accept pipeline input: False
+Accept pipeline input: True (ByPropertyName)
 Accept wildcard characters: False
 ```
 
@@ -82,11 +77,11 @@ Specifies the DatasourceType
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support.DatasourceTypes
-Parameter Sets: FilterParamSet
+Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
+Position: 1
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -101,52 +96,6 @@ Parameter Sets: (All)
 Aliases: AzureRMContext, AzureCredential
 
 Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ItemType
-Specifies the type of protectable item.
-Acceptable values: SQLDataBase, SQLInstance, SQLAvailabilityGroup
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -Name
-Specifies the name of the Database, Instance or AvailabilityGroup
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ParentID
-Specifies the ARM ID of an Instance or Availability Group
-
-```yaml
-Type: System.String
-Parameter Sets: IdParamSet
-Aliases:
-
-Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -168,16 +117,16 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ServerName
-Specifies the name of the server to which the item belongs
+### -ResourceId
+Specifies the ARM ID of an Instance or Availability Group
 
 ```yaml
 Type: System.String
-Parameter Sets: (All)
+Parameter Sets: Register
 Aliases:
 
-Required: False
-Position: Named
+Required: True
+Position: 0
 Default value: None
 Accept pipeline input: False
 Accept wildcard characters: False
@@ -187,7 +136,7 @@ Accept wildcard characters: False
 Subscription Id
 
 ```yaml
-Type: System.String[]
+Type: System.String
 Parameter Sets: (All)
 Aliases:
 
@@ -218,9 +167,11 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## INPUTS
 
+### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionContainerResource
+
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IWorkloadProtectableItemResource
+### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionContainerResource
 
 ## NOTES
 
@@ -231,7 +182,7 @@ COMPLEX PARAMETER PROPERTIES
 To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
 
 
-`CONTAINER <IProtectionContainerResource>`: Specifies a container object for which this cmdlet gets protectable items. To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet
+`CONTAINER <IProtectionContainerResource>`: Specifies a container object for which this cmdlet triggers the re-registration. To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet
   - `[ETag <String>]`: Optional ETag.
   - `[Location <String>]`: Resource location.
   - `[Tag <IResourceTags>]`: Resource tags.

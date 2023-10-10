@@ -17,14 +17,14 @@ To know the status of the operation, call GetRefreshOperationResult API.
 ### Refresh (Default)
 ```
 Update-AzRecoveryServicesProtectionContainer -FabricName <String> -ResourceGroupName <String>
- -VaultName <String> [-SubscriptionId <String>] [-Filter <String>] [-DefaultProfile <PSObject>] [-PassThru]
- [-Confirm] [-WhatIf] [<CommonParameters>]
+ -VaultName <String> [-SubscriptionId <String>] [-Filter <String>] [-DefaultProfile <PSObject>] [-AsJob]
+ [-NoWait] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ### RefreshViaIdentity
 ```
 Update-AzRecoveryServicesProtectionContainer -InputObject <IRecoveryServicesIdentity> [-Filter <String>]
- [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+ [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm] [-WhatIf] [<CommonParameters>]
 ```
 
 ## DESCRIPTION
@@ -57,6 +57,21 @@ To know the status of the operation, call GetRefreshOperationResult API.
 {{ Add description here }}
 
 ## PARAMETERS
+
+### -AsJob
+Run the command as a job
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -DefaultProfile
 The DefaultProfile parameter is not functional.
@@ -120,8 +135,8 @@ Accept pipeline input: True (ByValue)
 Accept wildcard characters: False
 ```
 
-### -PassThru
-Returns true when the command succeeds
+### -NoWait
+Run the command asynchronously
 
 ```yaml
 Type: System.Management.Automation.SwitchParameter

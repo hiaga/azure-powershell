@@ -24,6 +24,14 @@
         [Parameter(Mandatory=$false, HelpMessage='Specifies the DatasourceType')]
         [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support.DatasourceTypes]
         ${DatasourceType},
+
+        [Parameter(Mandatory=$true, HelpMessage='Specifies the backup container type. The acceptable values for this parameter are: AzureVM, Windows, AzureStorage, AzureVMAppContainer')]
+        [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support.BackupContainerType]
+        ${ContainerType},
+
+        [Parameter(Mandatory=$false, HelpMessage='The ResourceGroup of the resource being managed by the Azure Backup service for example: ResourceGroup name of the VM')]
+        [System.String]
+        ${ContainerResourceGroupName},
                 
         [Parameter()]
         [Alias('AzureRMContext', 'AzureCredential')]
@@ -68,104 +76,29 @@
 
     process
     {   
-        #get datasource type
-        $BackupManagementType = $policy.BackupManagementType
-        $WorkloadType = $policy.WorkLoadType
-        $DataSourceType = Get-DataSourceType -BackupManagementType $BackupManagementType -WorkloadType $WorkloadType
-        $manifest = LoadManifest -DatasourceType $DatasourceType.ToString()
+        $containerResourceGroupName = $ContainerResourceGroupName
 
-        if($SnapshotRetentionDurationInDays -ne $null)
-        {
-            $policy.instantRpRetentionRangeInDay=$SnapshotRetentionDurationInDays
-            if(($policy.SchedulePolicy.ScheduleRunFrequency -eq "Weekly") -and ($policy.instantRpRetentionRangeInDay -ne 5))
-            {
-                $errormsg="SnapshotRetentionDuration value must be 5 for backup policy with frequency of schedule as Weekly"
-                throw $errormsg
-            }
-        }
+        $filter = Get-ContainerFilter -ContainerType $ContainerType -FriendlyName $FriendlyName -DataSourceType $DatasourceType
+        Write-Debug "Container filter - $filter"
 
-        if($MoveToArchiveTier -ne $null)
-        {
-            if($manifest.allowedSubProtectionPolicyTypes.Count -lt 2)
-            {
-                 $tieringdetails = $policy.tieringPolicy.AdditionalProperties.ArchivedRP
-            }
-            elseif($manifest.allowedSubProtectionPolicyTypes.Count -gt 2)
-            {
-                $FullBackupPolicy =  $policy.SubProtectionPolicy | where { $_.PolicyType -match "Full" }
-                $Index = $policy.SubProtectionPolicy.IndexOf($FullBackupPolicy)
-                $tieringdetails =$policy.SubProtectionPolicy[$Index].tieringPolicy.AdditionalProperties.ArchivedRP
-            }
-            if($manifest.IsSmartTieringSupported -ne $true)
-            {
-                $errormsg="Smart tiering not supported for given workload type"
-                throw $errormsg
-            }
-            if($MoveToArchiveTier -eq $false)   #if tiering disabled
-            {
-                if(($TieringMode -ne "") -or ($TierAfterDuration -ne $null) -or ($TierAfterDurationType -ne ""))
-                {
-                    $errormsg= "Invalid parameters for disable tiering"
-                    throw $errormsg
-                }
-                $tieringdetails.tieringMode="DoNotTier"
-                $tieringdetails.duration=$null
-                $tieringdetails.durationType=$null
-            }
-            else #if tiering enabled
-            {
-                if($TieringMode -ne $null){
-                    $tieringdetails.tieringMode=$TieringMode
-                }
-                if($TierAfterDuration -ne $null){
-                    $tieringdetails.duration=$TierAfterDuration
-                }
-                if($TierAfterDurationType -ne $null){
-                    $tieringdetails.durationType=$TierAfterDurationType
-                }
-                if($manifest.allowedSubProtectionPolicyTypes.Count -gt 2){
-                    if($tieringdetails.durationType -ne "Days" -and $tieringdetails.tieringMode -eq "TierAfter")
-                    {
-                        $errormsg="DurationType for AzureWorkload should be days"
-                        throw $errormsg
-                    }
-                }
-                elseif($manifest.allowedSubProtectionPolicyTypes.Count -lt 2){
-                    if($tieringdetails.durationType -ne "Months" -and $tieringdetails.tieringMode -eq "TierAfter")
-                    {
-                        $errormsg="DurationType for AzureVM should be Months"
-                        throw $errormsg
-                    }
-                }
-                if($tieringdetails.tieringMode -eq "TierRecommended")
-                {
-                    $tieringdetails.duration=0
-                    $tieringdetails.durationType="Invalid"
-                }
-                if(($manifest.allowedSubProtectionPolicyTypes.Count -gt 2) -and ($tieringdetails.tieringMode -eq "TierRecommended"))
-                {
-                    $errormsg="TierRecommended not supported for AzureWorkload"
-                    throw $errormsg
-                }
-            }
-                #Validation
-                ValidateTieringPolicy
-        }
-        $null = $PSBoundParameters.Remove("SnapshotRetentionDurationInDays")
-        $null = $PSBoundParameters.Remove("MoveToArchiveTier")
-        $null = $PSBoundParameters.Remove("TieringMode")
-        $null = $PSBoundParameters.Remove("TierAfterDuration")
-        $null = $PSBoundParameters.Remove("TierAfterDurationType")
-
-
-        # TODO: public string[] ResourceGuardOperationRequest - this should be a parameter, check in SDK code
+        $null = $PSBoundParameters.Remove("ContainerType")
         
-        $policyObject = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ProtectionPolicyResource]::new()
-        $policyObject.Property = $Policy
+        # contains check not needed
+        $null = $PSBoundParameters.Remove("FriendlyName")
+        $null = $PSBoundParameters.Remove("DatasourceType")
+        $null = $PSBoundParameters.Remove("ContainerResourceGroupName")
+        
+        if($filter -ne $null){
+            $null = $PSBoundParameters.Add("Filter", $filter)
+        }
 
-        $null = $PSBoundParameters.Remove("Policy")
-        $null = $PSBoundParameters.Add("Parameter", $policyObject)
-                
-        Az.RecoveryServices.Internal\New-AzRecoveryServicesBackupPolicy @PSBoundParameters
+        $containersList = Get-AzRecoveryServicesBackupProtectionContainer @PSBoundParameters
+        
+        # filter by container resource group
+        if($containerResourceGroupName -ne ""){
+            $containersList = $containersList | Where-Object { $_.Id.Split(';')[-2] -eq $containerResourceGroupName }
+        }
+
+        $containersList
     }
 }

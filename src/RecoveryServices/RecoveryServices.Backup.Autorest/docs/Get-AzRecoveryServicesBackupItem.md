@@ -1,38 +1,43 @@
 ---
 external help file:
 Module Name: Az.RecoveryServices
-online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/get-azrecoveryservicesbackupprotectableitem
+online version: https://docs.microsoft.com/powershell/module/az.recoveryservices/get-azrecoveryservicesbackupitem
 schema: 2.0.0
 ---
 
-# Get-AzRecoveryServicesBackupProtectableItem
+# Get-AzRecoveryServicesBackupItem
 
 ## SYNOPSIS
-This command will retrieve all protectable items within a certain container or across all registered containers.
-It will consist of all the elements of the hierarchy of the application.
-Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
+Gets list of backup items protected with a recovery services vault
 
 ## SYNTAX
 
-### FilterParamSet (Default)
+### GetItemsForVault (Default)
 ```
-Get-AzRecoveryServicesBackupProtectableItem -DatasourceType <DatasourceTypes> -ResourceGroupName <String>
- -VaultName <String> [-Container <IProtectionContainerResource>] [-DefaultProfile <PSObject>]
- [-ItemType <String>] [-Name <String>] [-ServerName <String>] [-SubscriptionId <String[]>]
+Get-AzRecoveryServicesBackupItem -DatasourceType <DatasourceTypes> -ResourceGroupName <String>
+ -VaultName <String> [-DefaultProfile <PSObject>] [-DeleteState <String>] [-FriendlyName <String>]
+ [-Name <String>] [-ProtectionState <String>] [-ProtectionStatus <String>] [-SubscriptionId <String[]>]
  [<CommonParameters>]
 ```
 
-### IdParamSet
+### GetItemsForContainer
 ```
-Get-AzRecoveryServicesBackupProtectableItem -ParentID <String> -ResourceGroupName <String> -VaultName <String>
- [-DefaultProfile <PSObject>] [-ItemType <String>] [-Name <String>] [-ServerName <String>]
+Get-AzRecoveryServicesBackupItem -Container <IProtectionContainerResource> -DatasourceType <DatasourceTypes>
+ -ResourceGroupName <String> -VaultName <String> [-DefaultProfile <PSObject>] [-DeleteState <String>]
+ [-FriendlyName <String>] [-Name <String>] [-ProtectionState <String>] [-ProtectionStatus <String>]
  [-SubscriptionId <String[]>] [<CommonParameters>]
 ```
 
+### GetItemsForpolicy
+```
+Get-AzRecoveryServicesBackupItem -Policy <IProtectionPolicyResource> -ResourceGroupName <String>
+ -VaultName <String> [-DefaultProfile <PSObject>] [-DeleteState <String>] [-FriendlyName <String>]
+ [-Name <String>] [-ProtectionState <String>] [-ProtectionStatus <String>] [-SubscriptionId <String[]>]
+ [<CommonParameters>]
+```
+
 ## DESCRIPTION
-This command will retrieve all protectable items within a certain container or across all registered containers.
-It will consist of all the elements of the hierarchy of the application.
-Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
+Gets list of backup items protected with a recovery services vault
 
 ## EXAMPLES
 
@@ -61,16 +66,16 @@ Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
 ## PARAMETERS
 
 ### -Container
-Specifies a container object for which this cmdlet gets protectable items.
-To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet
+Specifies a container object from which this cmdlet gets backup items.
+To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet.
 To construct, see NOTES section for CONTAINER properties and create a hash table.
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionContainerResource
-Parameter Sets: FilterParamSet
+Parameter Sets: GetItemsForContainer
 Aliases:
 
-Required: False
+Required: True
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -82,7 +87,7 @@ Specifies the DatasourceType
 
 ```yaml
 Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Support.DatasourceTypes
-Parameter Sets: FilterParamSet
+Parameter Sets: GetItemsForContainer, GetItemsForVault
 Aliases:
 
 Required: True
@@ -107,9 +112,25 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ItemType
-Specifies the type of protectable item.
-Acceptable values: SQLDataBase, SQLInstance, SQLAvailabilityGroup
+### -DeleteState
+Specifies the delete state of the item The acceptable values for this parameter are: 
+ ToBeDeleted 
+ NotDeleted
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -FriendlyName
+FriendlyName of the backed up item
 
 ```yaml
 Type: System.String
@@ -124,7 +145,8 @@ Accept wildcard characters: False
 ```
 
 ### -Name
-Specifies the name of the Database, Instance or AvailabilityGroup
+Specifies the name of backup item.
+For file share, specify the unique ID of protected file share.
 
 ```yaml
 Type: System.String
@@ -138,15 +160,59 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
-### -ParentID
-Specifies the ARM ID of an Instance or Availability Group
+### -Policy
+Protection policy object
+To construct, see NOTES section for POLICY properties and create a hash table.
 
 ```yaml
-Type: System.String
-Parameter Sets: IdParamSet
+Type: Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectionPolicyResource
+Parameter Sets: GetItemsForpolicy
 Aliases:
 
 Required: True
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProtectionState
+Specifies the state of protection.
+The acceptable values for this parameter are: 
+ IRPending.
+Initial synchronization has not started and there is no recovery point yet.
+
+ Protected.
+Protection is ongoing.
+
+ ProtectionError.
+There is a protection error.
+
+ ProtectionStopped.
+Protection is disabled.
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
+### -ProtectionStatus
+Specifies the overall protection status of an item in the container.
+The acceptable values for this parameter are: Healthy, Unhealthy
+
+```yaml
+Type: System.String
+Parameter Sets: (All)
+Aliases:
+
+Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -154,7 +220,7 @@ Accept wildcard characters: False
 ```
 
 ### -ResourceGroupName
-The name of the resource group where the recovery services vault is present
+The name of the resource group where the recovery services vault is present.
 
 ```yaml
 Type: System.String
@@ -162,21 +228,6 @@ Parameter Sets: (All)
 Aliases:
 
 Required: True
-Position: Named
-Default value: None
-Accept pipeline input: False
-Accept wildcard characters: False
-```
-
-### -ServerName
-Specifies the name of the server to which the item belongs
-
-```yaml
-Type: System.String
-Parameter Sets: (All)
-Aliases:
-
-Required: False
 Position: Named
 Default value: None
 Accept pipeline input: False
@@ -199,7 +250,7 @@ Accept wildcard characters: False
 ```
 
 ### -VaultName
-The name of the recovery services vault
+The name of the recovery services vault.
 
 ```yaml
 Type: System.String
@@ -220,7 +271,7 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IWorkloadProtectableItemResource
+### Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IProtectedItemResource
 
 ## NOTES
 
@@ -231,7 +282,7 @@ COMPLEX PARAMETER PROPERTIES
 To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
 
 
-`CONTAINER <IProtectionContainerResource>`: Specifies a container object for which this cmdlet gets protectable items. To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet
+`CONTAINER <IProtectionContainerResource>`: Specifies a container object from which this cmdlet gets backup items. To obtain an ProtectionContainerResource, use the Get-AzRecoveryServicesBackupContainer cmdlet.
   - `[ETag <String>]`: Optional ETag.
   - `[Location <String>]`: Resource location.
   - `[Tag <IResourceTags>]`: Resource tags.
@@ -242,6 +293,15 @@ To create the parameters described below, construct a hash table containing the 
   - `[HealthStatus <String>]`: Status of health of the container.
   - `[ProtectableObjectType <String>]`: Type of the protectable object associated with this container
   - `[RegistrationStatus <String>]`: Status of registration of the container with the Recovery Services Vault.
+
+`POLICY <IProtectionPolicyResource>`: Protection policy object
+  - `[ETag <String>]`: Optional ETag.
+  - `[Location <String>]`: Resource location.
+  - `[Tag <IResourceTags>]`: Resource tags.
+    - `[(Any) <String>]`: This indicates any property can be added to this object.
+  - `[BackupManagementType <String>]`: This property will be used as the discriminator for deciding the specific types in the polymorphic chain of types.
+  - `[ProtectedItemsCount <Int32?>]`: Number of items associated with this policy.
+  - `[ResourceGuardOperationRequest <String[]>]`: ResourceGuard Operation Requests
 
 ## RELATED LINKS
 

@@ -58,7 +58,7 @@ function Disable-AzRecoveryServicesProtection {
         $resourceGroupName=$ResourceGroupName
         $itemName=$Item.Name
         $fabricName="Azure"
-        $containerName=Get-containerNameFromArmId -Id $Item.Id
+        $containerName=Get-ContainerNameFromArmId -Id $Item.Id
 
         if($RemoveRecoveryPoints)
         {   #disable immutability

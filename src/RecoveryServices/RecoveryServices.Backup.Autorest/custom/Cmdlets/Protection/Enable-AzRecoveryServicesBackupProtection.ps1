@@ -93,7 +93,7 @@ function Enable-AzRecoveryServicesBackupProtection {
                 $errormsg= "There is no protectable item by this name in the current vault."
                 throw $errormsg
             }
-            $containerName = Get-containerNameFromArmId -Id $ProtectableItem.Id
+            $containerName = Get-ContainerNameFromArmId -Id $ProtectableItem.Id
             $itemName = Get-ProtectableItemNameFromArmId -Id $ProtectableItem.Id
             if($DatasourceType -eq "AzureVM")
             {
@@ -101,7 +101,7 @@ function Enable-AzRecoveryServicesBackupProtection {
             }
             if($PolicyId -ne "" -and $PolicyId -ne $null)
             {
-                $Object.PolicyId =$PolicyId
+                $Object.PolicyId = $PolicyId
             }
             elseif($Item.PolicyId -eq $null -or $Item.PolicyId -eq "")
             {
@@ -112,7 +112,7 @@ function Enable-AzRecoveryServicesBackupProtection {
         elseif($Item -ne $null) #modify backup
         {
             $itemName=Get-ProtectedItemNameFromArmId -Id $Item.Id
-            $containerName=Get-containerNameFromArmId -Id $Item.Id
+            $containerName=Get-ContainerNameFromArmId -Id $Item.Id
             if($DatasourceType -eq "AzureVM")
             { 
                if($Item.SourceResourceId -ne "" -and $Item.SourceResourceId -ne $null)

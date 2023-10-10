@@ -26,8 +26,14 @@ Triggers the enable protection operation for the given item
 ### [Export-AzRecoveryServicesJob](Export-AzRecoveryServicesJob.md)
 Triggers export of jobs specified by filters and returns an OperationID to track.
 
+### [Get-AzRecoveryServicesBackupContainer](Get-AzRecoveryServicesBackupContainer.md)
+Gets list of backup containers registered with a recovery services vault
+
 ### [Get-AzRecoveryServicesBackupEngine](Get-AzRecoveryServicesBackupEngine.md)
 Returns backup management server registered to Recovery Services Vault.
+
+### [Get-AzRecoveryServicesBackupItem](Get-AzRecoveryServicesBackupItem.md)
+Gets list of backup items protected with a recovery services vault
 
 ### [Get-AzRecoveryServicesBackupJob](Get-AzRecoveryServicesBackupJob.md)
 Provides a pageable list of jobs.
@@ -53,7 +59,9 @@ This is an asynchronous\r\noperation.
 Status of the operation can be fetched using GetPolicyOperationResult API.
 
 ### [Get-AzRecoveryServicesBackupProtectableItem](Get-AzRecoveryServicesBackupProtectableItem.md)
-Provides a pageable list of protectable objects within your subscription according to the query filter and the\r\npagination parameters.
+This command will retrieve all protectable items within a certain container or across all registered containers.
+It will consist of all the elements of the hierarchy of the application.
+Returns DBs and their upper tier entities like Instance, AvailabilityGroup etc.
 
 ### [Get-AzRecoveryServicesBackupProtectedItem](Get-AzRecoveryServicesBackupProtectedItem.md)
 Provides a pageable list of all items that are backed up within a vault.
@@ -207,6 +215,9 @@ This is a synchronous operation.
 
 ### [New-AzRecoveryServicesRestoreRequest](New-AzRecoveryServicesRestoreRequest.md)
 Triggers restore for the backup item to the specified recovery point.
+
+### [Register-AzRecoveryServicesBackupContainer](Register-AzRecoveryServicesBackupContainer.md)
+The Register-AzRecoveryServicesBackupContainer cmdlet registers an Azure VM for AzureWorkloads with specific DatasourceType.
 
 ### [Register-AzRecoveryServicesProtectionContainer](Register-AzRecoveryServicesProtectionContainer.md)
 Registers the container with Recovery Services vault.\r\nThis is an asynchronous operation.

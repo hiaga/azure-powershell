@@ -19,7 +19,7 @@ Register-AzRecoveryServicesProtectionContainer -ContainerName <String> -FabricNa
  -ResourceGroupName <String> -VaultName <String> [-SubscriptionId <String>]
  [-BackupManagementType <BackupManagementType>] [-ContainerType <ProtectableContainerType>] [-ETag <String>]
  [-FriendlyName <String>] [-HealthStatus <String>] [-Location <String>] [-ProtectableObjectType <String>]
- [-RegistrationStatus <String>] [-Tag <Hashtable>] [-DefaultProfile <PSObject>] [-PassThru] [-Confirm]
+ [-RegistrationStatus <String>] [-Tag <Hashtable>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm]
  [-WhatIf] [<CommonParameters>]
 ```
 
@@ -27,14 +27,15 @@ Register-AzRecoveryServicesProtectionContainer -ContainerName <String> -FabricNa
 ```
 Register-AzRecoveryServicesProtectionContainer -ContainerName <String> -FabricName <String>
  -ResourceGroupName <String> -VaultName <String> -Parameter <IProtectionContainerResource>
- [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf] [<CommonParameters>]
+ [-SubscriptionId <String>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm] [-WhatIf]
+ [<CommonParameters>]
 ```
 
 ### RegisterViaIdentity
 ```
 Register-AzRecoveryServicesProtectionContainer -InputObject <IRecoveryServicesIdentity>
- -Parameter <IProtectionContainerResource> [-DefaultProfile <PSObject>] [-PassThru] [-Confirm] [-WhatIf]
- [<CommonParameters>]
+ -Parameter <IProtectionContainerResource> [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm]
+ [-WhatIf] [<CommonParameters>]
 ```
 
 ### RegisterViaIdentityExpanded
@@ -42,7 +43,7 @@ Register-AzRecoveryServicesProtectionContainer -InputObject <IRecoveryServicesId
 Register-AzRecoveryServicesProtectionContainer -InputObject <IRecoveryServicesIdentity>
  [-BackupManagementType <BackupManagementType>] [-ContainerType <ProtectableContainerType>] [-ETag <String>]
  [-FriendlyName <String>] [-HealthStatus <String>] [-Location <String>] [-ProtectableObjectType <String>]
- [-RegistrationStatus <String>] [-Tag <Hashtable>] [-DefaultProfile <PSObject>] [-PassThru] [-Confirm]
+ [-RegistrationStatus <String>] [-Tag <Hashtable>] [-DefaultProfile <PSObject>] [-AsJob] [-NoWait] [-Confirm]
  [-WhatIf] [<CommonParameters>]
 ```
 
@@ -75,6 +76,21 @@ To track the operation status, use location header to call get latest status of\
 {{ Add description here }}
 
 ## PARAMETERS
+
+### -AsJob
+Run the command as a job
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
 
 ### -BackupManagementType
 Type of backup management for the container.
@@ -236,6 +252,21 @@ Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
+### -NoWait
+Run the command asynchronously
+
+```yaml
+Type: System.Management.Automation.SwitchParameter
+Parameter Sets: (All)
+Aliases:
+
+Required: False
+Position: Named
+Default value: None
+Accept pipeline input: False
+Accept wildcard characters: False
+```
+
 ### -Parameter
 Base class for container with backup items.
 Containers with specific workloads are derived from this class.
@@ -250,21 +281,6 @@ Required: True
 Position: Named
 Default value: None
 Accept pipeline input: True (ByValue)
-Accept wildcard characters: False
-```
-
-### -PassThru
-Returns true when the command succeeds
-
-```yaml
-Type: System.Management.Automation.SwitchParameter
-Parameter Sets: (All)
-Aliases:
-
-Required: False
-Position: Named
-Default value: None
-Accept pipeline input: False
 Accept wildcard characters: False
 ```
 
