@@ -100,7 +100,7 @@
     )
 
     process
-    {           
+    {   
         # get DSType from policy
         $parameterSetName = $PsCmdlet.ParameterSetName
         if($parameterSetName -eq "GetItemsForpolicy"){

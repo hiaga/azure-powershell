@@ -73,11 +73,8 @@
 
     process
     {           
-        $parameterSetName = $PsCmdlet.ParameterSetName       
+        $parameterSetName = $PsCmdlet.ParameterSetName
         
-        Write-Host "Subscription ID: $SubscriptionId"
-        Write-Host "$($SubscriptionId.GetType())"
-
         $containerName = ""
         if($parameterSetName -eq "ReRegister"){
             $containerName = ($Container.Name -split ";")[-1]
@@ -86,10 +83,6 @@
             $containerName = ($ResourceId -split "/")[-1]
         }
         
-        Write-Host "reached .... param set name: $parameterSetName"
-        Write-Host "reached .... $($Container.Name)"
-        Write-Host "reached .... $($Container -ne $null)"
-
         # confirm:$false/ force  
         #$containerType - workload type 
         #$backupManagementType
@@ -98,31 +91,33 @@
         # Refresh containers
         $filter = Get-BackupManagementTypeFilter -DatasourceType $DatasourceType
         
-        Write-Host "reached .... 1"
-        $refreshOperationResponse = Update-AzRecoveryServicesProtectionContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Filter $filter -NoWait
+        $refreshOperationResponse = $null
+        if($SubscriptionId -ne "" -and $SubscriptionId -ne $null){
+            $refreshOperationResponse = Update-AzRecoveryServicesProtectionContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Filter $filter -NoWait
+        }
+        else{
+            $refreshOperationResponse = Update-AzRecoveryServicesProtectionContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -VaultName $VaultName -Filter $filter -NoWait
+        }        
 
-        Write-Host "reached .... 2"
         $operationStatus = GetOperationStatus -Target $refreshOperationResponse.Target
-        
-        Write-Host "reached .... 2a $operationStatus"
-        Write-Host "reached .... 2a $($operationStatus -ne "Succeeded")"
         if($operationStatus -ne "Succeeded"){
             $errormsg= "Refresh container operation failed with operationStatus: $operationStatus"
             throw $errormsg
         }
         
-        Write-Host "reached .... 3"
         # Get protectable containers  (register) / container (re-register)
-        $protectableContainers = Get-AzRecoveryServicesProtectableContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Filter $filter | Where-Object { ($_.Name -split ";")[-1] -eq $containerName -or $_.Name -eq $containerName }
 
-        Write-Host "reached .... 4"
-        Write-Host "reached .... param set name: $parameterSetName"
-        Write-Host "reached .... $($Container.Name)"
-        Write-Host "reached .... $($Container -ne $null)"
+        $protectableContainers = $null
+        if($SubscriptionId -ne "" -and $SubscriptionId -ne $null){
+            $protectableContainers = Get-AzRecoveryServicesProtectableContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Filter $filter | Where-Object { ($_.Name -split ";")[-1] -eq $containerName -or $_.Name -eq $containerName }
+        }
+        else{
+            $protectableContainers = Get-AzRecoveryServicesProtectableContainer -FabricName "Azure" -ResourceGroupName $ResourceGroupName -VaultName $VaultName -Filter $filter | Where-Object { ($_.Name -split ";")[-1] -eq $containerName -or $_.Name -eq $containerName }
+        }               
+
         if($protectableContainers -ne $null -or $Container -ne $null){
             $protectionContainerResource = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.ProtectionContainerResource]::new()
 
-            Write-Host "reached .... 5"
             $containerFullName = ($Container -ne $null) ? $Container.Name : $protectableContainers.Name
 
             $property = [Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.AzureVMAppContainerProtectionContainer]::new()
@@ -136,30 +131,37 @@
 
             $protectionContainerResource.Property = $property
 
-            Write-Host "reached .... 6"
             # register container
-            $registerOperationResponse = Register-AzRecoveryServicesProtectionContainer -ContainerName $containerFullName -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Parameter $protectionContainerResource -NoWait        
+            $registerOperationResponse = $null
+            if($SubscriptionId -ne "" -and $SubscriptionId -ne $null){
+                $registerOperationResponse = Register-AzRecoveryServicesProtectionContainer -ContainerName $containerFullName -FabricName "Azure" -ResourceGroupName $ResourceGroupName -SubscriptionId $SubscriptionId -VaultName $VaultName -Parameter $protectionContainerResource -NoWait
+            }
+            else{
+                $registerOperationResponse = Register-AzRecoveryServicesProtectionContainer -ContainerName $containerFullName -FabricName "Azure" -ResourceGroupName $ResourceGroupName -VaultName $VaultName -Parameter $protectionContainerResource -NoWait
+            }                  
 
-            Write-Host "reached .... 7"
-            $operationStatus = GetOperationStatus -Target $registerOperationResponse.Target            
+            $operationStatus = GetOperationStatus -Target $registerOperationResponse.Target -RefreshAfter 30    
 
             if($operationStatus -ne "Succeeded"){
                 $errormsg= "Register container operation failed with operationStatus: $operationStatus"
                 throw $errormsg
             }
-            Write-Host "reached .... 8"
         }
         else{
             # throw error 
             $errormsg= "The specified datasource is already registered with the given recovery services vault"
-            throw $errormsg            
+            throw $errormsg
         }
-        
-        Write-Host "reached .... 9"
-        # List containers
-        $registeredContainer = Get-AzRecoveryServicesBackupContainer -ResourceGroupName $ResourceGroupName -VaultName $VaultName -SubscriptionId $SubscriptionId -ContainerType AzureVMAppContainer -DatasourceType $DatasourceType | Where-Object { $_.Name -eq $containerFullName }
 
-        Write-Host "reached .... 10"
+        # List containers
+        $registeredContainer = $null
+        if($SubscriptionId -ne "" -and $SubscriptionId -ne $null){
+            $registeredContainer = Get-AzRecoveryServicesBackupContainer -ResourceGroupName $ResourceGroupName -VaultName $VaultName -SubscriptionId $SubscriptionId -ContainerType AzureVMAppContainer -DatasourceType $DatasourceType | Where-Object { $_.Name -eq $containerFullName }
+        }
+        else{
+            $registeredContainer = Get-AzRecoveryServicesBackupContainer -ResourceGroupName $ResourceGroupName -VaultName $VaultName -ContainerType AzureVMAppContainer -DatasourceType $DatasourceType | Where-Object { $_.Name -eq $containerFullName }
+        }
+                
         $registeredContainer
     }
 }

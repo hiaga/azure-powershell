@@ -88,7 +88,7 @@
 
     process
     {   
-        Write-Host "reached .... 1"
+        # Write-Host "reached .... 1"
         
         # get DSType from policy
         $parameterSetName = $PsCmdlet.ParameterSetName
@@ -107,8 +107,8 @@
             }
         }
         
-        Write-Host "reached .... 2"
-        Write-Host $filter
+        # Write-Host "reached .... 2"
+        # Write-Host $filter
 
         $protectableItemsList = $null
         if($SubscriptionId -ne $null){
@@ -119,7 +119,7 @@
             $protectableItemsList = Az.RecoveryServices.Internal\Get-AzRecoveryServicesBackupProtectableItem -ResourceGroupName $ResourceGroupName -VaultName $VaultName -Filter $filter
         }
 
-        Write-Host "reached .... 3"
+        # Write-Host "reached .... 3"
                 
         # Protectable item type filter
         # alternate - $protectableItemsList.Property.GetType().Name -match
@@ -137,26 +137,26 @@
             $protectableItemsList = $protectableItemsList | Where-Object { $_.Property.ServerName -eq $ServerName }
         }
         
-        Write-Host "reached .... 4"
+        # Write-Host "reached .... 4"
 
         # FetchNodesListAndAutoProtectionPolicy
         foreach($proItem in $protectableItemsList){
 
-            Write-Host "reached .... 4 .... 1  $($proItem.Id)"
+            # Write-Host "reached .... 4 .... 1  $($proItem.Id)"
 
             $protectableItemURI = Get-ProtectableItemNameFromArmId -Id $proItem.Id
 
-            Write-Host "reached .... 4 .... 1a  $protectableItemURI"
+            # Write-Host "reached .... 4 .... 1a  $protectableItemURI"
 
             $proItemType = ($protectableItemURI -split ";")[0]
             $itemName = ($protectableItemURI -split ";")[1]
             
-            Write-Host "reached .... 4 .... 2"
+            # Write-Host "reached .... 4 .... 2"
 
             $containerUri = Get-ContainerNameFromArmId -Id $proItem.Id
                  
-            Write-Host "reached .... 4 .... 3"
-            Write-Host "reached .... 5"
+            # Write-Host "reached .... 4 .... 3"
+            # Write-Host "reached .... 5"
 
             if($proItem.ProtectableItemType -ne "SQLDataBase"){
                     
@@ -166,35 +166,35 @@
                 # list protection intent
                 $intentList = Get-AzRecoveryServicesBackupProtectionIntent -ResourceGroupName $ResourceGroupName -VaultName $VaultName -SubscriptionId $SubscriptionId -Filter $filter                    
 
-                Write-Host "reached .... 5 .... 1"
-                Write-Host "IntentList empty $($intentList -eq $null)"
+                # Write-Host "reached .... 5 .... 1"
+                # Write-Host "IntentList empty $($intentList -eq $null)"
 
                 foreach($intent in $intentList){
 
                     # TODO: remove 
-                    Write-Host "Intent .... "
-                    Write-Host $intent.PolicyId
+                    # Write-Host "Intent .... "
+                    # Write-Host $intent.PolicyId
 
                     # type string
                     $proItem.AutoProtectionPolicy = $intent.PolicyId
                 }
             }
 
-            Write-Host "reached .... 6"
+            # Write-Host "reached .... 6"
                 
             if($proItem.ProtectableItemType -eq "SQLAvailabilityGroup"){
                 try{
                     # get container 
                     $container = Get-AzRecoveryServicesProtectionContainer -ResourceGroupName $ResourceGroupName -VaultName $VaultName -SubscriptionId $SubscriptionId -FabricName "Azure" -ContainerName $containerUri
 
-                    Write-Host "reached .... 6 .... 1"
-                    Write-Host "Container empty $($container -eq $null)"
+                    # Write-Host "reached .... 6 .... 1"
+                    # Write-Host "Container empty $($container -eq $null)"
 
                     if($container -ne $null -and $container.Property.ExtendedInfo -ne $null){
                         
                         # TODO: remove
-                        Write-Host "Container NodesList .... "
-                        Write-Host $container.Property.ExtendedInfo.NodesList
+                        # Write-Host "Container NodesList .... "
+                        # Write-Host $container.Property.ExtendedInfo.NodesList
 
 
                         # Microsoft.Azure.PowerShell.Cmdlets.RecoveryServices.Models.Api20230201.IDistributedNodesInfo[]
@@ -207,11 +207,11 @@
                     # Write-Host "An error occurred: $($Error[0].Exception.Message)" -  TODO remove
                 }
 
-                Write-Host "reached .... 7"
+                # Write-Host "reached .... 7"
             }            
         }
 
-        Write-Host "reached .... 8"
+        # Write-Host "reached .... 8"
 
         $protectableItemsList
     }

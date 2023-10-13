@@ -116,7 +116,11 @@ function GetOperationStatus {
     param(
         [Parameter(Mandatory=$true)]
         [System.String]
-        $Target
+        $Target,
+
+        [Parameter(Mandatory=$false)]
+        [System.String]
+        $RefreshAfter = 10
     )
 
     process {
@@ -126,9 +130,12 @@ function GetOperationStatus {
         $vaultName = Get-VaultNameFromArmId -Id $Target
         $subscriptionId = Get-SbscriptionIdFromArmId -Id $Target
 
+
         # operationStatus
         While((Get-AzRecoveryServicesOperationStatus -OperationId $operationId -ResourceGroupName $resourceGroupName -SubscriptionId $subscriptionId -VaultName $vaultName).Status -eq "InProgress"){
-	        Start-Sleep -Seconds 10
+
+            Write-Debug "Polling after $RefreshAfter seconds"
+	        Start-Sleep -Seconds $RefreshAfter
         }
 
         $operationStatus = (Get-AzRecoveryServicesOperationStatus -OperationId $operationId -ResourceGroupName $resourceGroupName -SubscriptionId $subscriptionId -VaultName $vaultName).Status
