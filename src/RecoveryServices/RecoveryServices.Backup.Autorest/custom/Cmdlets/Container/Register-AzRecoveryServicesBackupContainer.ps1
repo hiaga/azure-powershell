@@ -148,7 +148,7 @@
             }
         }
         else{
-            # throw error 
+            # throw error
             $errormsg= "The specified datasource is already registered with the given recovery services vault"
             throw $errormsg
         }

@@ -174,7 +174,7 @@
             # filter : BackupManagementType = MAB 
             # fetch from service 
             # fetch the container name from ITEM ARM Id and match with the given container name       
-                    
+        
         $itemsList
     }
 }

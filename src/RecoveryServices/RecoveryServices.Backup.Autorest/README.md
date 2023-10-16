@@ -83,7 +83,7 @@ directive:
     set:
       subject: BackupPolicy
   - where:      
-      subject: Job|BackupEngine|OperationResult|OperationStatuses|ProtectableItem|Item|ProtectionContainer|ProtectionIntent|EncryptionConfig|StorageConfigsNonCrr|VaultConfig|BackupStatus|BackupUsageSummary|JobDetail|OperationStatus|PrivateEndpointConnection|RecoveryPoint|RecommendedForMove|ResourceGuardProxy|SecurityPiN|ItemLevelRecoveryConnection|Restore|Cancellation|ValidateOperation|ResourceGuardProxyDelete|ProtectableContainer|Prepare|FeatureSupport
+      subject: Job|BackupEngine|OperationResult|OperationStatuses|EncryptionConfig|StorageConfigsNonCrr|VaultConfig|BackupStatus|BackupUsageSummary|JobDetail|PrivateEndpointConnection|RecoveryPoint|RecommendedForMove|ResourceGuardProxy|SecurityPiN|ItemLevelRecoveryConnection|Restore|Cancellation|ValidateOperation|ResourceGuardProxyDelete|Prepare|FeatureSupport|WorkloadItem|DeletedProtectionContainer|InquireProtectionContainer|PrivateEndpointOperationStatus|^ProtectionIntent
     remove: true
   - where:      
       verb: Start
@@ -94,6 +94,17 @@ directive:
     remove: true
   - where:
       subject: BackupProtectableItem
+    hide: true
+  - where:
+      verb: Unregister
+      subject: ProtectionContainer
+    remove: true
+  - where:      
+      verb: New|Remove|Set
+      subject: ProtectedItem
+    remove: true
+  - where:
+      subject: ProtectedItem|ProtectionIntent|OperationStatus|ProtectionContainer|ProtectableContainer
     hide: true
   - no-inline:
     - DailyRetentionSchedule

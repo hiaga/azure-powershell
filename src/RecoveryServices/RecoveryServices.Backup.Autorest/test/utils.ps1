@@ -27,17 +27,14 @@ function setupEnv() {
         NewPolicyName = "anssingh-testPolicy"                                                                              
     }
 
-    $env.add("TestBackupSchedulePolicy", $TestBackupSchedulePolicyVariables) | Out-Null                                                                
-
     $BackupRetentionPolicyTestVariables = @{                                                                                                     
         SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
         ResourceGroupName = "arohijain-rg"
         VaultName = "arohijain-vault"
-        NewPolicyName = "arohijain-p-1"                                                                              # confirm what to keep
+        NewPolicyName = "arohijain-p-1"                                                                              
+        # confirm what to keep
     }
 
-    $env.add("TestBackupPolicy", $BackupRetentionPolicyTestVariables) | Out-Null     
-    
     $BackupTestVariables = @{
         SubscriptionId = "38304e13-357e-405e-9e9a-220351dcce8c"
         ResourceGroupName = "arohijain-rg"
@@ -45,7 +42,10 @@ function setupEnv() {
         VirtualMachineName = "arohijain-vm"
     }
 
+    $env.add("TestBackupSchedulePolicy", $TestBackupSchedulePolicyVariables) | Out-Null                                                                
+    $env.add("TestBackupPolicy", $BackupRetentionPolicyTestVariables) | Out-Null     
     $env.add("TestBackup", $BackupTestVariables) | Out-Null  
+
 
     $envFile = 'env.json'
     if ($TestMode -eq 'live') {
