@@ -1,0 +1,391 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<test-results xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="nunit_schema_2.5.xsd" name="Pester" total="2" errors="0" failures="0" not-run="0" inconclusive="0" ignored="0" skipped="0" invalid="0" date="2023-08-29" time="13:46:04">
+  <environment os-version="10.0.22621" machine-name="MININT-AHI6FE4" platform="Microsoft Windows 11 Enterprise|C:\WINDOWS|\Device\Harddisk0\Partition4" cwd="C:\Source\v2PowerShell\azure-powershell\src\DataProtection" user-domain="FAREAST" clr-version="Unknown" nunit-version="2.5.8.0" user="hiaga" />
+  <culture-info current-culture="en-US" current-uiculture="en-US" />
+  <test-suite type="TestFixture" name="Pester" executed="True" result="Success" success="True" time="44.687" asserts="0" description="Pester">
+    <results>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AddFilterToQuery.Tests.ps1" executed="True" result="Success" success="True" time="0.9525" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AddFilterToQuery.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AssignMissingRoles.Tests.ps1" executed="True" result="Success" success="True" time="0.0175" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AssignMissingRoles.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AssignMissingRolesHelper.Tests.ps1" executed="True" result="Success" success="True" time="0.6767" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\AssignMissingRolesHelper.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Backup-AzDataProtectionBackupInstanceAdhoc.Tests.ps1" executed="True" result="Success" success="True" time="0.6067" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Backup-AzDataProtectionBackupInstanceAdhoc.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\BlobHardeningScenario.Tests.ps1" executed="True" result="Success" success="True" time="0.5553" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\BlobHardeningScenario.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\DiskBackupScenario.Tests.ps1" executed="True" result="Success" success="True" time="0.5605" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\DiskBackupScenario.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyRetentionRuleClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.6617" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyRetentionRuleClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyTagClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.6346" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyTagClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyTriggerClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.6051" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Edit-AzDataProtectionPolicyTriggerClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Find-AzDataProtectionRestorableTimeRange.Tests.ps1" executed="True" result="Success" success="True" time="0.5734" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Find-AzDataProtectionRestorableTimeRange.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="3.7521" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstance.Tests.ps1">
+        <results>
+          <test-suite type="TestFixture" name="Get-AzDataProtectionBackupInstance" executed="True" result="Success" success="True" time="2.8229" asserts="0" description="Get-AzDataProtectionBackupInstance">
+            <results>
+              <test-case description="GetAll" name="Get-AzDataProtectionBackupInstance.GetAll" time="1.8002" asserts="0" success="True" result="Success" executed="True" />
+              <test-case description="Get" name="Get-AzDataProtectionBackupInstance.Get" time="0.5645" asserts="0" success="True" result="Success" executed="True" />
+            </results>
+          </test-suite>
+        </results>
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstanceFromARG.Tests.ps1" executed="True" result="Success" success="True" time="0.5442" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstanceFromARG.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstanceOperationResult.Tests.ps1" executed="True" result="Success" success="True" time="0.0099" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupInstanceOperationResult.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupPolicy.Tests.ps1" executed="True" result="Success" success="True" time="0.5144" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupPolicy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVault.Tests.ps1" executed="True" result="Success" success="True" time="0.5457" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVault.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVaultResource.Tests.ps1" executed="True" result="Success" success="True" time="0.5265" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVaultResource.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVaultStorageSetting.Tests.ps1" executed="True" result="Success" success="True" time="0.5196" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionBackupVaultStorageSetting.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDeletedBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.0083" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDeletedBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDppResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0085" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDppResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDppResourceGuardProxy.Tests.ps1" executed="True" result="Success" success="True" time="0.0085" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionDppResourceGuardProxy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionExportJobsOperationResult.Tests.ps1" executed="True" result="Success" success="True" time="0.4925" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionExportJobsOperationResult.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionJob.Tests.ps1" executed="True" result="Success" success="True" time="0.4843" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionJob.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionJobFromARG.Tests.ps1" executed="True" result="Success" success="True" time="0.4953" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionJobFromARG.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperation.Tests.ps1" executed="True" result="Success" success="True" time="0.0096" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperation.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationResult.Tests.ps1" executed="True" result="Success" success="True" time="0.508" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationResult.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationResultPatch.Tests.ps1" executed="True" result="Success" success="True" time="0.5038" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationResultPatch.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatus.Tests.ps1" executed="True" result="Success" success="True" time="0.6107" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatus.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatusBackupVaultContext.Tests.ps1" executed="True" result="Success" success="True" time="0.0115" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatusBackupVaultContext.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatusResourceGroupContext.Tests.ps1" executed="True" result="Success" success="True" time="0.0124" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionOperationStatusResourceGroupContext.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionPolicyTemplate.Tests.ps1" executed="True" result="Success" success="True" time="0.5879" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionPolicyTemplate.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionRecoveryPoint.Tests.ps1" executed="True" result="Success" success="True" time="0.5862" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionRecoveryPoint.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionRecoveryPointList.Tests.ps1" executed="True" result="Success" success="True" time="0.556" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionRecoveryPointList.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuard.Tests.ps1" executed="True" result="Success" success="True" time="0.0117" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuard.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardBackupSecurityPinRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.011" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardBackupSecurityPinRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultBackupSecurityPinRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0107" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultBackupSecurityPinRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDeleteProtectedItemRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0106" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDeleteProtectedItemRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDeleteResourceGuardProxyRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0106" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDeleteResourceGuardProxyRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDisableSoftDeleteRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.011" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultDisableSoftDeleteRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultUpdateProtectedItemRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0108" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultUpdateProtectedItemRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultUpdateProtectionPolicyRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0117" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDefaultUpdateProtectionPolicyRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDeleteProtectedItemRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0108" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDeleteProtectedItemRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDeleteResourceGuardProxyRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0104" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDeleteResourceGuardProxyRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDisableSoftDeleteRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0103" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardDisableSoftDeleteRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0085" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardResource.Tests.ps1" executed="True" result="Success" success="True" time="0.0114" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardResource.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardUpdateProtectedItemRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0107" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardUpdateProtectedItemRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardUpdateProtectionPolicyRequestObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0102" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceGuardUpdateProtectionPolicyRequestObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationGatekeeper.Tests.ps1" executed="True" result="Success" success="True" time="0.5306" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationGatekeeper.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationGatekeeperResource.Tests.ps1" executed="True" result="Success" success="True" time="0.5759" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationGatekeeperResource.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationResultPatch.Tests.ps1" executed="True" result="Success" success="True" time="0.5055" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionResourceOperationResultPatch.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionSoftDeletedBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.0077" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Get-AzDataProtectionSoftDeletedBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetBackupFrequenceFromTimeInterval.Tests.ps1" executed="True" result="Success" success="True" time="0.4789" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetBackupFrequenceFromTimeInterval.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetBackupFrequencyString.Tests.ps1" executed="True" result="Success" success="True" time="0.4766" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetBackupFrequencyString.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetClientDatasourceType.Tests.ps1" executed="True" result="Success" success="True" time="0.498" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetClientDatasourceType.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceInfo.Tests.ps1" executed="True" result="Success" success="True" time="0.4791" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceInfo.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceSetInfo.Tests.ps1" executed="True" result="Success" success="True" time="0.4851" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceSetInfo.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceTypes.Tests.ps1" executed="True" result="Success" success="True" time="0.4812" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetDatasourceTypes.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetRestoreType.Tests.ps1" executed="True" result="Success" success="True" time="0.4937" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetRestoreType.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetTaggingPriority.Tests.ps1" executed="True" result="Success" success="True" time="0.489" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\GetTaggingPriority.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.4823" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionRestoreRequest.Tests.ps1" executed="True" result="Success" success="True" time="0.5101" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionRestoreRequest.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionTargetRestoreInfo.Tests.ps1" executed="True" result="Success" success="True" time="0.4877" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Initialize-AzDataProtectionTargetRestoreInfo.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\LoadManifest.Tests.ps1" executed="True" result="Success" success="True" time="0.477" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\LoadManifest.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupConfigurationClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0075" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupConfigurationClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.5088" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupPolicy.Tests.ps1" executed="True" result="Success" success="True" time="0.4835" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupPolicy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupVault.Tests.ps1" executed="True" result="Success" success="True" time="0.5049" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupVault.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupVaultStorageSettingObject.Tests.ps1" executed="True" result="Success" success="True" time="0.5736" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionBackupVaultStorageSettingObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionDppResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0084" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionDppResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionDppResourceGuardProxy.Tests.ps1" executed="True" result="Success" success="True" time="0.0093" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionDppResourceGuardProxy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTagCriteria.Tests.ps1" executed="True" result="Success" success="True" time="0.5529" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTagCriteria.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTagCriteriaClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.5026" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTagCriteriaClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTriggerSchedule.Tests.ps1" executed="True" result="Success" success="True" time="0.4916" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTriggerSchedule.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTriggerScheduleClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.4584" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionPolicyTriggerScheduleClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionResourceGuard.Tests.ps1" executed="True" result="Success" success="True" time="0.0112" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionResourceGuard.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0085" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRestoreConfigurationClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0094" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRestoreConfigurationClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRetentionLifeCycle.Tests.ps1" executed="True" result="Success" success="True" time="0.4956" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRetentionLifeCycle.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRetentionLifeCycleClientObject.Tests.ps1" executed="True" result="Success" success="True" time="0.4792" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionRetentionLifeCycleClientObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionSoftDeleteSettingObject.Tests.ps1" executed="True" result="Success" success="True" time="0.0101" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\New-AzDataProtectionSoftDeleteSettingObject.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Prepare-AzDataProtectionDatasourceInfo.Tests.ps1" executed="True" result="Success" success="True" time="0.4861" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Prepare-AzDataProtectionDatasourceInfo.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.4799" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupPolicy.Tests.ps1" executed="True" result="Success" success="True" time="0.4814" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupPolicy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupVault.Tests.ps1" executed="True" result="Success" success="True" time="0.4752" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionBackupVault.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionDppResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0074" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionDppResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionDppResourceGuardProxy.Tests.ps1" executed="True" result="Success" success="True" time="0.0074" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionDppResourceGuardProxy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceGuard.Tests.ps1" executed="True" result="Success" success="True" time="0.0098" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceGuard.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0076" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceOperationGatekeeper.Tests.ps1" executed="True" result="Success" success="True" time="0.4852" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Remove-AzDataProtectionResourceOperationGatekeeper.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Restore-AzDataProtectionDeletedBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.0079" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Restore-AzDataProtectionDeletedBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Resume-AzDataProtectionBackupInstanceBackup.Tests.ps1" executed="True" result="Success" success="True" time="0.0097" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Resume-AzDataProtectionBackupInstanceBackup.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Resume-AzDataProtectionBackupInstanceProtection.Tests.ps1" executed="True" result="Success" success="True" time="0.0093" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Resume-AzDataProtectionBackupInstanceProtection.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Search-AzDataProtectionBackupInstanceInAzGraph.Tests.ps1" executed="True" result="Success" success="True" time="0.4761" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Search-AzDataProtectionBackupInstanceInAzGraph.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Search-AzDataProtectionJobInAzGraph.Tests.ps1" executed="True" result="Success" success="True" time="0.477" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Search-AzDataProtectionJobInAzGraph.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Set-AzDataProtectionMSIPermission.Tests.ps1" executed="True" result="Success" success="True" time="0.0299" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Set-AzDataProtectionMSIPermission.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Set-AzDataProtectionResourceGuardMapping.Tests.ps1" executed="True" result="Success" success="True" time="0.0083" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Set-AzDataProtectionResourceGuardMapping.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionBackupInstanceRehydrate.Tests.ps1" executed="True" result="Success" success="True" time="0.5107" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionBackupInstanceRehydrate.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionBackupInstanceRestore.Tests.ps1" executed="True" result="Success" success="True" time="0.6233" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionBackupInstanceRestore.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionExportJob.Tests.ps1" executed="True" result="Success" success="True" time="0.5649" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Start-AzDataProtectionExportJob.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Stop-AzDataProtectionBackupInstanceProtection.Tests.ps1" executed="True" result="Success" success="True" time="0.0098" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Stop-AzDataProtectionBackupInstanceProtection.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Suspend-AzDataProtectionBackupInstanceBackup.Tests.ps1" executed="True" result="Success" success="True" time="0.0103" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Suspend-AzDataProtectionBackupInstanceBackup.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Sync-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.0099" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Sync-AzDataProtectionBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstance.Tests.ps1" executed="True" result="Success" success="True" time="0.5092" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstance.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstanceReadiness.Tests.ps1" executed="True" result="Success" success="True" time="0.0097" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstanceReadiness.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstanceRestore.Tests.ps1" executed="True" result="Success" success="True" time="0.4956" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupInstanceRestore.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupVaultNameAvailability.Tests.ps1" executed="True" result="Success" success="True" time="0.4847" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionBackupVaultNameAvailability.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionDppFeatureSupport.Tests.ps1" executed="True" result="Success" success="True" time="0.4618" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionDppFeatureSupport.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionFeatureSupport.Tests.ps1" executed="True" result="Success" success="True" time="0.4782" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Test-AzDataProtectionFeatureSupport.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupParam.Tests.ps1" executed="True" result="Success" success="True" time="0.4813" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupParam.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicy.Tests.ps1" executed="True" result="Success" success="True" time="0.4955" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyRule.Tests.ps1" executed="True" result="Success" success="True" time="0.4804" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyRule.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyTagCriteria.Tests.ps1" executed="True" result="Success" success="True" time="0.496" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyTagCriteria.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyTrigger.Tests.ps1" executed="True" result="Success" success="True" time="0.5346" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslateBackupPolicyTrigger.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslatePolicyRetentionLifeCycle.Tests.ps1" executed="True" result="Success" success="True" time="0.5946" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\TranslatePolicyRetentionLifeCycle.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Undo-AzDataProtectionBackupInstanceDeletion.Tests.ps1" executed="True" result="Success" success="True" time="0.0096" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Undo-AzDataProtectionBackupInstanceDeletion.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Unlock-AzDataProtectionResourceGuardOperation.Tests.ps1" executed="True" result="Success" success="True" time="0.0322" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Unlock-AzDataProtectionResourceGuardOperation.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionBackupInstanceAssociatedPolicy.Tests.ps1" executed="True" result="Success" success="True" time="0.5854" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionBackupInstanceAssociatedPolicy.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionBackupVault.Tests.ps1" executed="True" result="Success" success="True" time="0.5174" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionBackupVault.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyRetentionRule.Tests.ps1" executed="True" result="Success" success="True" time="0.4961" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyRetentionRule.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyTag.Tests.ps1" executed="True" result="Success" success="True" time="0.4624" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyTag.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyTrigger.Tests.ps1" executed="True" result="Success" success="True" time="0.4908" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionPolicyTrigger.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionResourceGuard.Tests.ps1" executed="True" result="Success" success="True" time="0.0138" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionResourceGuard.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionResourceOperationGatekeeper.Tests.ps1" executed="True" result="Success" success="True" time="0.4893" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\Update-AzDataProtectionResourceOperationGatekeeper.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\ValidateBackupSchedule.Tests.ps1" executed="True" result="Success" success="True" time="0.4807" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\ValidateBackupSchedule.Tests.ps1">
+        <results />
+      </test-suite>
+      <test-suite type="TestFixture" name="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\ValidateRestoreOptions.Tests.ps1" executed="True" result="Success" success="True" time="0.5265" asserts="0" description="C:\Source\v2PowerShell\azure-powershell\src\DataProtection\test\ValidateRestoreOptions.Tests.ps1">
+        <results />
+      </test-suite>
+    </results>
+  </test-suite>
+</test-results>

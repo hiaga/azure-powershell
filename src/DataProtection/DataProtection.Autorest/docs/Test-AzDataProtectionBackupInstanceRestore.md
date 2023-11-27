@@ -116,7 +116,7 @@ Restore request object for which to validate
 To construct, see NOTES section for RESTOREREQUEST properties and create a hash table.
 
 ```yaml
-Type: Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230501.IAzureBackupRestoreRequest
+Type: Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801.IAzureBackupRestoreRequest
 Parameter Sets: (All)
 Aliases:
 
@@ -195,26 +195,9 @@ This cmdlet supports the common parameters: -Debug, -ErrorAction, -ErrorVariable
 
 ## OUTPUTS
 
-### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230501.IOperationJobExtendedInfo
+### Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801.IOperationJobExtendedInfo
 
 ## NOTES
-
-ALIASES
-
-COMPLEX PARAMETER PROPERTIES
-
-To create the parameters described below, construct a hash table containing the appropriate properties. For information on hash tables, run Get-Help about_Hash_Tables.
-
-
-`RESTOREREQUEST <IAzureBackupRestoreRequest>`: Restore request object for which to validate
-  - `ObjectType <String>`: 
-  - `RestoreTargetInfo <IRestoreTargetInfoBase>`: Gets or sets the restore target information.
-    - `ObjectType <String>`: Type of Datasource object, used to initialize the right inherited type
-    - `[RestoreLocation <String>]`: Target Restore region
-  - `SourceDataStoreType <SourceDataStoreType>`: Gets or sets the type of the source data store.
-  - `[IdentityDetailUseSystemAssignedIdentity <Boolean?>]`: Specifies if the BI is protected by System Identity.
-  - `[IdentityDetailUserAssignedIdentityArmUrl <String>]`: ARM URL for User Assigned Identity.
-  - `[SourceResourceId <String>]`: Fully qualified Azure Resource Manager ID of the datasource which is being recovered.
 
 ## RELATED LINKS
 
