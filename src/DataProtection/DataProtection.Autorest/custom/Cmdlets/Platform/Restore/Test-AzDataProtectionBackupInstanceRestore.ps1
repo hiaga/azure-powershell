@@ -2,7 +2,7 @@
 
 function Test-AzDataProtectionBackupInstanceRestore
 {   
-	[OutputType('Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.IOperationJobExtendedInfo')]
+	[OutputType('Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.IOperationJobExtendedInfo')]
     [CmdletBinding(PositionalBinding=$false, SupportsShouldProcess)]
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Description('Validates if Restore can be triggered for a DataSource')]
 
@@ -24,7 +24,7 @@ function Test-AzDataProtectionBackupInstanceRestore
         ${VaultName},
 
         [Parameter(ParameterSetName="ValidateRestore", Mandatory, HelpMessage='Restore request object for which to validate')]
-        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.IAzureBackupRestoreRequest]
+        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.IAzureBackupRestoreRequest]
         ${RestoreRequest},
 
         [Parameter()]
@@ -80,7 +80,7 @@ function Test-AzDataProtectionBackupInstanceRestore
 
     process
     {
-        $Parameter = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.ValidateRestoreRequestObject]::new()
+        $Parameter = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.ValidateRestoreRequestObject]::new()
         $Parameter.RestoreRequestObject = $RestoreRequest
         $null = $PSBoundParameters.Remove("RestoreRequest")
 

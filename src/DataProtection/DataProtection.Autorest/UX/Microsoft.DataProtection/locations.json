@@ -1,0 +1,123 @@
+{
+  "resourceType": "locations",
+  "apiVersion": "2023-08-01-preview",
+  "learnMore": {
+    "url": "https://learn.microsoft.com/powershell/module/az.dataprotection"
+  },
+  "commands": [
+    {
+      "name": "Get-AzDataProtectionCrossRegionRestoreJobDetail",
+      "description": "",
+      "path": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/locations/{location}/fetchCrossRegionRestoreJob",
+      "help": {
+        "learnMore": {
+          "url": "https://learn.microsoft.com/powershell/module/az.dataprotection/get-azdataprotectioncrossregionrestorejobdetail"
+        },
+        "parameterSets": [
+          {
+            "parameters": [
+              "-Location <String>",
+              "-ResourceGroupName <String>",
+              "[-SubscriptionId <String[]>]"
+            ]
+          }
+        ]
+      },
+      "examples": [
+        {
+          "description": "",
+          "parameters": [
+            {
+              "name": "-Location",
+              "value": "[Path.location]"
+            },
+            {
+              "name": "-ResourceGroupName",
+              "value": "[Path.resourceGroupName]"
+            },
+            {
+              "name": "-SubscriptionId",
+              "value": "[Path.subscriptionId]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Start-AzDataProtectionBackupInstanceCrossRegionRestore",
+      "description": "",
+      "path": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/locations/{location}/crossRegionRestore",
+      "help": {
+        "learnMore": {
+          "url": "https://learn.microsoft.com/powershell/module/az.dataprotection/start-azdataprotectionbackupinstancecrossregionrestore"
+        },
+        "parameterSets": [
+          {
+            "parameters": [
+              "-Location <String>",
+              "-ResourceGroupName <String>",
+              "[-SubscriptionId <String>]"
+            ]
+          }
+        ]
+      },
+      "examples": [
+        {
+          "description": "",
+          "parameters": [
+            {
+              "name": "-Location",
+              "value": "[Path.location]"
+            },
+            {
+              "name": "-ResourceGroupName",
+              "value": "[Path.resourceGroupName]"
+            },
+            {
+              "name": "-SubscriptionId",
+              "value": "[Path.subscriptionId]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Test-AzDataProtectionBackupInstanceCrossRegionRestore",
+      "description": "",
+      "path": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/locations/{location}/validateCrossRegionRestore",
+      "help": {
+        "learnMore": {
+          "url": "https://learn.microsoft.com/powershell/module/az.dataprotection/test-azdataprotectionbackupinstancecrossregionrestore"
+        },
+        "parameterSets": [
+          {
+            "parameters": [
+              "-Location <String>",
+              "-ResourceGroupName <String>",
+              "[-SubscriptionId <String>]"
+            ]
+          }
+        ]
+      },
+      "examples": [
+        {
+          "description": "",
+          "parameters": [
+            {
+              "name": "-Location",
+              "value": "[Path.location]"
+            },
+            {
+              "name": "-ResourceGroupName",
+              "value": "[Path.resourceGroupName]"
+            },
+            {
+              "name": "-SubscriptionId",
+              "value": "[Path.subscriptionId]"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "resourceType": "backupVaults/backupJobs",
-  "apiVersion": "2023-08-01",
+  "apiVersion": "2023-08-01-preview",
   "learnMore": {
     "url": "https://learn.microsoft.com/powershell/module/az.dataprotection"
   },
@@ -30,6 +30,49 @@
           "parameters": [
             {
               "name": "-Id",
+              "value": "[Path.jobId]"
+            },
+            {
+              "name": "-ResourceGroupName",
+              "value": "[Path.resourceGroupName]"
+            },
+            {
+              "name": "-SubscriptionId",
+              "value": "[Path.subscriptionId]"
+            },
+            {
+              "name": "-VaultName",
+              "value": "[Path.vaultName]"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Start-AzDataProtectionJobCancel",
+      "description": "Triggers cancellation of Job and returns an OperationID to track.",
+      "path": "/subscriptions/{subscriptionId}/resourceGroups/{resourceGroupName}/providers/Microsoft.DataProtection/backupVaults/{vaultName}/backupJobs/{jobId}/triggerCancel",
+      "help": {
+        "learnMore": {
+          "url": "https://learn.microsoft.com/powershell/module/az.dataprotection/start-azdataprotectionjobcancel"
+        },
+        "parameterSets": [
+          {
+            "parameters": [
+              "-JobId <String>",
+              "-ResourceGroupName <String>",
+              "[-SubscriptionId <String>]",
+              "-VaultName <String>"
+            ]
+          }
+        ]
+      },
+      "examples": [
+        {
+          "description": "Triggers cancellation of Job and returns an OperationID to track.",
+          "parameters": [
+            {
+              "name": "-JobId",
               "value": "[Path.jobId]"
             },
             {

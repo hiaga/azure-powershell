@@ -29,6 +29,10 @@
         [System.DateTime]
         ${EndTime},
 
+        [Parameter(Mandatory=$false, HelpMessage='Switch parameter to fetch recovery points from secondary region')]
+        [Switch]
+        ${UseSecondaryRegion},
+
         [Parameter()]
         [Alias('AzureRMContext', 'AzureCredential')]
         [ValidateNotNull()]
@@ -102,7 +106,14 @@
             $null = $PSBoundParameters.Add("Filter", $filter)
         }
 
-        $rps = Az.DataProtection.internal\Get-AzDataProtectionRecoveryPoint @PSBoundParameters
+        if($UseSecondaryRegion){
+            # $vault.Location 
+            $rps = <# Az.DataProtection.internal\#> Invoke-AzDataProtectionFetchSecondaryRp @PSBoundParameters
+        }
+        else{
+            $rps = Az.DataProtection.internal\Get-AzDataProtectionRecoveryPoint @PSBoundParameters
+        }
+        
         return $rps
     }
 }

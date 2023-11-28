@@ -1,12 +1,12 @@
 ﻿function Edit-AzDataProtectionPolicyTagClientObject{
-	[OutputType('Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.IBackupPolicy')]
+	[OutputType('Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.IBackupPolicy')]
     [CmdletBinding(PositionalBinding=$false)]
     [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Description('Adds or removes schedule tag in an existing backup policy.')]
 
     param(
         [Parameter(ParameterSetName='updateTag', Mandatory, HelpMessage='Backup Policy Object.')]
         [Parameter(ParameterSetName='RemoveTag', Mandatory, HelpMessage='Backup Policy Object.')]
-        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.IBackupPolicy]
+        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.IBackupPolicy]
         ${Policy},
 
         [Parameter(ParameterSetName='updateTag', Mandatory, HelpMessage='Name of the Schedule tag.')]
@@ -19,7 +19,7 @@
         ${RemoveRule},
 
         [Parameter(ParameterSetName='updateTag', Mandatory, HelpMessage='Criterias to be associated with the schedule tag.')]
-        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.IScheduleBasedBackupCriteria[]]
+        [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.IScheduleBasedBackupCriteria[]]
         ${Criteria}
     )
 
@@ -83,7 +83,7 @@
                 
                 if($tagIndex -eq -1)
                 {
-                    $tagCriteria = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20231101.TaggingCriteria]::new()
+                    $tagCriteria = [Microsoft.Azure.PowerShell.Cmdlets.DataProtection.Models.Api20230801Preview.TaggingCriteria]::new()
                     $tagCriteria.TaggingPriority = GetTaggingPriority -Name $Name
                     $tagCriteria.Criterion = $Criteria
                     $tagCriteria.TagInfoTagName = $Name
