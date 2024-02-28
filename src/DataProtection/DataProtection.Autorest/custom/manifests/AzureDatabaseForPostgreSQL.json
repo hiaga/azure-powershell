@@ -1,5 +1,6 @@
 ﻿{
   "datasourcePermissions": [ "Reader" ],
+  "datasourceRGPermissions": [],
   "snapshotRGPermissions": [],
   "keyVaultPermissions": [ "Key Vault Secrets User" ],
   "dataSourceOverSnapshotRGPermissions": [],
@@ -15,6 +16,7 @@
   "backupConfigurationRequired": false,
   "addDataStoreParametersList": false,
   "friendlyNameRequired": false,
+  "customFriendlyNameAllowed": false,
   "supportSecretStoreAuthentication": true,
   "supportCrossRegionRestore": true,
   "policySettings": {

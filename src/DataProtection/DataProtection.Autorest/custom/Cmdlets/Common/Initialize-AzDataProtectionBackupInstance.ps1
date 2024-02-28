@@ -70,12 +70,15 @@ function Initialize-AzDataProtectionBackupInstance {
                 $backupInstance.DataSourceSetInfo = GetDatasourceSetInfo -DatasourceInfo $backupInstance.DataSourceInfo -DatasourceType $DatasourceType
             }
 
-            if(-not($manifest.friendlyNameRequired) -and $FriendlyName -ne ""){
+            if(-not($manifest.friendlyNameRequired) -and -not($manifest.customFriendlyNameAllowed) -and $FriendlyName -ne ""){
                 $errormsg = "FriendlyName parameter is not expected for the given DatasourceType"
                 throw $errormsg
             }
-            
-            if($backupInstance.DataSourceSetInfo.ResourceId -eq $null){
+
+            if($manifest.customFriendlyNameAllowed -and $FriendlyName -ne ""){
+                $backupInstance.FriendlyName = $FriendlyName
+            }
+            elseif($backupInstance.DataSourceSetInfo.ResourceId -eq $null -or $manifest.customFriendlyNameAllowed){
                 $backupInstance.FriendlyName = $backupInstance.DataSourceInfo.ResourceName
             }
             elseif($manifest.friendlyNameRequired){

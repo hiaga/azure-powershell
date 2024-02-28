@@ -385,6 +385,32 @@
                       Write-Host "Assigned $($Permission) permission to the backup vault over DataSource with Id $($DataSourceId)"
                   }
               }
+
+              foreach($Permission in $manifest.datasourceRGPermissions)
+              {
+                  $AllRoles = Az.Resources\Get-AzRoleAssignment -ObjectId $vault.Identity.PrincipalId
+                  $CheckPermission = $AllRoles | Where-Object { ($_.Scope -eq $ResourceRG -or  $_.Scope -eq $SubscriptionName) -and $_.RoleDefinitionName -eq $Permission}
+              
+                  if($CheckPermission -ne $null)
+                  {
+                      Write-Host "Required permission $($Permission) is already assigned to backup vault over DataSource resource group with name $($ResourceRG)"
+                  }
+
+                  else
+                  {
+                      $MissingRolesInitially = $true
+                      
+                      # "Resource","ResourceGroup","Subscription"
+                      $DatasourceRGScope = $PermissionsScope
+                      if($PermissionsScope -eq "Resource"){
+                          $DatasourceRGScope = "ResourceGroup"
+                      }
+
+                      AssignMissingRoles -ObjectId $vault.Identity.PrincipalId -Permission $Permission -PermissionsScope $DatasourceRGScope -Resource $DataSourceId -ResourceGroup $ResourceRG -Subscription $SubscriptionName
+
+                      Write-Host "Assigned $($Permission) permission to the backup vault over DataSource resource group with name $($ResourceRG)"
+                  }
+              }
           }
 
           if($MissingRolesInitially -eq $true)

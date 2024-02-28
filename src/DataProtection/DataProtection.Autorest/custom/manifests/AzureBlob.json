@@ -1,5 +1,6 @@
 ﻿{
   "datasourcePermissions": [ "Storage Account Backup Contributor" ],
+  "datasourceRGPermissions": [],
   "snapshotRGPermissions": [],
   "keyVaultPermissions": [],
   "dataSourceOverSnapshotRGPermissions": [],
@@ -15,6 +16,7 @@
   "backupConfigurationRequired": false,
   "addDataStoreParametersList": false,
   "friendlyNameRequired": false,
+  "customFriendlyNameAllowed": false,
   "supportSecretStoreAuthentication": false,
   "supportCrossRegionRestore": false,
   "policySettings": {
