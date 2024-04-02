@@ -47,10 +47,10 @@ namespace Microsoft.Azure.Commands.RecoveryServices
                 try
                 {
                     var response = RecoveryServicesClient.DeleteVault(this.Vault.ResourceGroupName, this.Vault.Name);
-                    // TODO: track LRO
+                    
                     VaultOperationOutput output = new VaultOperationOutput()
                     {
-                        Response = response.Response.StatusCode == HttpStatusCode.OK ? Resources.VaultDeletionSuccessMessage : response.Response.StatusCode.ToString()
+                        Response = (response.Response.StatusCode == HttpStatusCode.OK || response.Response.StatusCode == HttpStatusCode.NotFound || response.Response.StatusCode == HttpStatusCode.NoContent) ? Resources.VaultDeletionSuccessMessage : response.Response.StatusCode.ToString()
                     };
 
                     this.WriteObject(output, true);

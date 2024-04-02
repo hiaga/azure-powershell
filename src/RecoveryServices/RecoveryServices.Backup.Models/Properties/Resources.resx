@@ -743,7 +743,7 @@ Please contact Microsoft for further assistance.</value>
     <value>ProtectedItemURI can't be null as the operation is protected with ResourceGuard</value>
   </data>
   <data name="PolicyUpdateNotCritical" xml:space="preserve">
-    <value>Operation not critical, please try without the Token parameter. MUA currently only protects reducing or disabling retention times</value>
+    <value>Operation not critical, please try without the Token parameter. MUA currently only protects reducing or disabling retention times, increasing RPO for policy schedule</value>
   </data>
   <data name="UnexpectedParameterToken" xml:space="preserve">
     <value>{0} is not protected via MUA, either protect or try without the Token parameter</value>

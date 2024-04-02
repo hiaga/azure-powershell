@@ -2327,7 +2327,7 @@ namespace Microsoft.Azure.Commands.RecoveryServices.Backup.Properties {
         }
 
         /// <summary>
-        /// Looks up a localized string similar to Operation not critical, please try without the Token parameter. MUA currently only protects reducing or disabling retention times
+        /// Looks up a localized string similar to Operation not critical, please try without the Token parameter. MUA currently only protects reducing or disabling retention times, increasing RPO for policy schedule
         /// </summary>
         public static string PolicyUpdateNotCritical
         {
