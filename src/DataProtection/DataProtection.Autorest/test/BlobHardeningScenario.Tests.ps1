@@ -22,9 +22,9 @@ Describe 'BlobHardeningScenario' {
         $storageAccId = $env.TestBlobHardeningScenario.StorageAccId
 
         $vault = Get-AzDataProtectionBackupVault -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName
-        $pol = Get-AzDataProtectionBackupPolicy -SubscriptionId $subId -VaultName $vaultName -ResourceGroupName $resourceGroupName | Where { $_.Name -match $policyName }
+        $pol = Get-AzDataProtectionBackupPolicy -SubscriptionId $subId -VaultName $vaultName -ResourceGroupName $resourceGroupName | Where-Object { $_.Name -match $policyName }
 
-        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where { $_.Name -match $storageAcountName }
+        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where-Object { $_.Name -match $storageAcountName }
 
         # Remove-BI
         if($instance -ne $null){
@@ -56,11 +56,11 @@ Describe 'BlobHardeningScenario' {
         # backup
         $backupnstanceCreate = New-AzDataProtectionBackupInstance -ResourceGroupName $resourceGroupName -VaultName $vaultName -SubscriptionId $subId -BackupInstance $backupInstanceClientObject
 
-        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where { $_.Name -match $storageAcountName }
+        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where-Object { $_.Name -match $storageAcountName }
 
         while($instance.Property.CurrentProtectionState -ne "ProtectionConfigured"){
             Start-TestSleep -Seconds 10
-            $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where { $_.Name -match $storageAcountName }
+            $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where-Object { $_.Name -match $storageAcountName }
         }
 
         $instance[0].Name -match $storageAcountName | Should be $true
@@ -100,7 +100,7 @@ Describe 'BlobHardeningScenario' {
         $targetCrossSubStorageAccountRGName = $env.TestBlobHardeningScenario.TargetCrossSubStorageAccountRGName
 
         $vault = Get-AzDataProtectionBackupVault -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName
-        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where { $_.Name -match $storageAcountName }
+        $instance = Get-AzDataProtectionBackupInstance -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName | Where-Object { $_.Name -match $storageAcountName }
         $rp = Get-AzDataProtectionRecoveryPoint -SubscriptionId $subId -ResourceGroupName $resourceGroupName -VaultName $vaultName -BackupInstanceName $instance.Name
 
         $backedUpContainers = $instance.Property.PolicyInfo.PolicyParameter.BackupDatasourceParametersList[0].ContainersList
@@ -108,7 +108,7 @@ Describe 'BlobHardeningScenario' {
         # remove containers in target cross sub storage account
         Set-AzContext -SubscriptionId $crossSubscriptionId
         $targetCrossSubStorageAccount = Get-AzStorageAccount -ResourceGroupName $targetCrossSubStorageAccountRGName -Name $targetCrossSubStorageAccountName
-        $targetCrossSubContainers = Get-AzStorageContainer -Context $targetCrossSubStorageAccount.Context | Where { $_.Name -match "con" }
+        $targetCrossSubContainers = Get-AzStorageContainer -Context $targetCrossSubStorageAccount.Context | Where-Object { $_.Name -match "con" }
         foreach($crossSubContainerName in $targetCrossSubContainers.Name){
             Remove-AzStorageContainer -Context $targetCrossSubStorageAccount.Context -Name $crossSubContainerName -Confirm:$false -Force
         }
@@ -116,7 +116,7 @@ Describe 'BlobHardeningScenario' {
         # remove containers in target storage account
         Set-AzContext -SubscriptionId $subId
         $targetStorageAccount = Get-AzStorageAccount -ResourceGroupName $targetStorageAccountRGName -Name $targetStorageAccountName
-        $targetContainers = Get-AzStorageContainer -Context $targetStorageAccount.Context | Where { $_.Name -match "con" }
+        $targetContainers = Get-AzStorageContainer -Context $targetStorageAccount.Context | Where-Object { $_.Name -match "con" }
         foreach($containerName in $targetContainers.Name){
             Remove-AzStorageContainer -Context $targetStorageAccount.Context -Name $containerName -Confirm:$false -Force
         }
