@@ -31,8 +31,7 @@ function Update-AzDataProtectionBackupInstance
         [System.String[]]
         ${VaultedBackupContainer},
         
-        # TODO: update help
-        [Parameter(Mandatory=$false, HelpMessage='Resource guard operation request in the format similar to <ResourceGuard-ARMID>/dppDisableStopProtectionRequests/default. Use this parameter when the operation is MUA protected.')]
+        [Parameter(Mandatory=$false, HelpMessage='Resource guard operation request in the format similar to <ResourceGuard-ARMID>/dppModifyPolicy/default. Use this parameter when the operation is MUA protected.')]
         [System.String[]]
         ${ResourceGuardOperationRequest},
 
